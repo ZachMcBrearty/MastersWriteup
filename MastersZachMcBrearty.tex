@@ -7,8 +7,7 @@
 
 \renewcommand{\baselinestretch}{1.15}     % Defines the line spacing
 
-\usepackage[font=small,
-labelfont=bf]{caption}                      % Defines caption font size and caption title bolded
+\usepackage[font=small, labelfont=bf]{caption} % Defines caption font size and caption title bolded
 
 \usepackage{graphics,graphicx,epsfig,ulem}	% Makes sure all graphics works
 \usepackage{amsmath} 						% Adds mathematical features for equations
@@ -27,6 +26,7 @@ labelfont=bf]{caption}                      % Defines caption font size and capt
 \renewcommand{\headrulewidth}{0pt}
 \lhead{\small Zachery McBrearty}                          % Your name
 \rhead{\small Orbital Constraints on Exoplanet Habitability}            % Your report title               
+
 \def\thesection{\arabic{section}}
 
 \def\bibsection{\section*{References}}        % Position reference section correctly
@@ -52,32 +52,85 @@ labelfont=bf]{caption}                      % Defines caption font size and capt
 %\thispagestyle{plain} % produces page number for front page
 
 \tableofcontents
-% \let\toc@pre\relax
-% \let\toc@post\relax
+\let\toc@pre\relax
+\let\toc@post\relax
 
 \newpage
 
 \section{Introduction}
 
 %%% example text follows %%%
-The climate of a planet such as the Earth is many dimensional.
+The climate of a planet such as the Earth is many dimensional and thus very complicated.
+However, understanding and predicting the climate of a planet is essential for predicting the effects of climate change and (to a lesser extent) finding other habitable planets.
+Fully simulating the entire atmosphere, ocean, and land would be extremely difficult without the use of massive supercomputers.
+By reducing degrees of freedom in the model, the simulation can become feasible while still yielding useful and valid results.
 
-The simplest climate model is a 0 dimensional energy balance model.
-The 0-D model is a simple equality of the input energy from the Sun (LHS) to the output energy from the Earth acting as a black body (RHS)
+The simplest climate model is a 0 dimensional energy balance.
+The 0-D model is an equality of the input energy from the Sun (LHS) to the output energy from the Earth acting as a black body (RHS),
 $$
-    \pi r_{Earth}^2 S(1-A) = 4 \pi r_{Earth}^2 \sigma T_{Earth}^4,
+    \pi r^2 S(1-A) = 4 \pi r^2 \sigma T^4,
 $$
-where $r_{Earth}$ is the radius of the Earth, $S$ is the incident solar radiation (insolation), $A$ is the reflectance (albedo) of the Earth, and $\sigma$ is the Stefan-Boltzmann constant.
-This 0-D model is essentially an average over all degrees of freedom of the Earth, including rotation and orbiting of the star.
+where $r$ is the radius of the planet, $T$ is the global average temperature of the planet, $S$ is the incident solar radiation (insolation), $A$ is the reflectance (albedo), and $\sigma$ is the Stefan-Boltzmann constant.
+This 0-D model does not resolve the surface or any features of the planet, and treats the planet as homogeneous.
+This means that the model is quick to compute and provides a good baseline for further computation.
+By plugging in values for the Earth a global temperature of roughly !!! is found; well below the actual value of !!!.
+The reason for this is a lack of greenhouse effect and thermal inertia from oceans, meaning the planet cannot hold onto energy is radiating much more energy than it should be.
 
-A 1-D climate model attempts to resolve the surface of the planet into latitude bands.
-Since rotation of the planet would imply another dimension (namely longitude) the rotation of the planet is still averaged over.
+A 1-D climate model (here on EBCM) attempts to resolve the surface of the planet into latitude bands which have ocean and land with variable heat capacity and albedo.
+Since rotation of the planet would imply another dimension (namely longitude), the rotation of the planet must be averaged over.
+This means that even though a planet could have a latitude band where there is a super continent on one half of the planet and ocean on the other, the average ocean fraction will be (forexample) $1/2$.
 Each of these latitude bands is treated as balancing energy in from the sun and energy out via blackbody radiation, but an additional energy diffusion term is included in the equation for energy transport between latitude bands.
-$$
-    C(x, t)\frac{dT(x, t)}{dt} - \frac{d}{dx} \left(D(x, t)(1-x^2)\frac{dT(x, t)}{dx}\right) + I(x, t) - S(x, t)(1-A(x, t)) = 0
-$$
-where $x=sin(\lambda)$, $\lambda$ is the latitude, $C$ is the heat capacity of the latitude band, $D$ is the diffusion coefficient, $I$ is the IR-emission of the band,
+\begin{equation}
+    C(x, t)\frac{\partial T(x, t)}{\partial t} - \frac{\partial}{\partial x} \left(D(x, t)(1-x^2)\frac{\partial T(x, t)}{\partial x}\right) + I(x, t) - S(x, t)(1-A(x, t)) = 0
+    \label{eq:PDE_in_x}
+\end{equation}
+where $x=\sin\lambda$, $\lambda$ is the latitude, $C$ is the heat capacity of the latitude band,
+$D$ is the diffusion coefficient, $I$ is the IR-emission of the band,
 $S$ is the insolation, and $A$ is the albedo.
+In general all these parameters can be dependent on time and space, in Section \ref{sec:model} the EBCM and parameters are explored in depth.
+
+In Section \ref{sec:solve_PDE} the EBCM is numerically integrated.
+
+In Section \ref{sec:conv_testing} the parameters making up the EBCM are varied to see effects on the temperature profile and habitability ranges.
+
+\section{Model} \label{sec:model}
+
+\subsection{Transforming from $x$ to $\lambda$}
+
+$ x = \sin\lambda $, $\lambda$ is latitude
+
+\begin{equation}
+    \begin{aligned}[b]
+        \frac{\partial}{\partial x} & = \frac{\partial \lambda}{\partial x} \frac {\partial} {\partial \lambda} \\
+                                    & = \frac{1}{\sqrt{1-x^2}} \frac {\partial} {\partial \lambda}              \\
+                                    & = \frac{1}{\cos \lambda} \frac {\partial} {\partial \lambda}
+    \end{aligned}
+    \label{eq:first_deriv}
+\end{equation}
+thus
+\begin{equation}
+    \begin{aligned}[b]
+        \frac{\partial^2}{\partial x^2} & = \frac{1}{\cos\lambda} \frac{\partial}{\partial \lambda} \left( \frac{1}{\cos\lambda} \frac{\partial}{\partial \lambda} \right)     \\
+                                        & = \frac{\tan\lambda}{\cos^2\lambda}\frac{\partial}{\partial \lambda} + \frac{1}{\cos^2\lambda} \frac{\partial^2}{\partial \lambda^2}
+    \end{aligned}
+    \label{eq:second_deriv}
+\end{equation}
+First fully expanding (\ref{eq:PDE_in_x})
+\begin{equation}
+    C \frac{\partial T}{\partial t} = S(1-A) - I
+    + \frac{\partial T}{\partial x}\left[\frac{\partial D}{\partial x}(1-x^2) - 2 x D\right]
+    + D (1-x^2) \frac{\partial^2 T}{\partial x^2}
+    \label{eq:expanded}
+\end{equation}
+subbing (\ref{eq:first_deriv}) and (\ref{eq:second_deriv}) into (\ref{eq:expanded})
+\begin{equation}
+    C \frac{\partial T}{\partial t} = S(1-A) - I
+    + \frac{\partial T}{\partial \lambda}\left[\frac{\partial D}{\partial \lambda} - D \tan\lambda\right]
+    + D \frac{\partial^2 T}{\partial \lambda^2}
+    \label{eq:PDE_in_lat}
+\end{equation}
+
+\subsection{Characterising model parameters} \label{sec:model_params}
 
 In this analysis we adopt the form of the heat capacity given by !!!.
 In short: $C(x, t)$ varies with latitude through the ocean-land fraction, $f_o(x)$, and with Temperature through the ice-ocean fraction, $f_i(T)$, as
@@ -88,8 +141,8 @@ Where $C_{land} = !!!$ and $C_{ocean} = !!!$ are constant, and
 $$
     C_{ice}(T) =
     \begin{cases}
-        !!! & T < 263   \\
-        !!! & T >= 263,
+        !!! & T < 263\text{K}    \\
+        !!! & T \ge 263\text{K},
     \end{cases}
 $$
 
@@ -97,35 +150,74 @@ We use a diffusion coefficient which is constant in space and time, but varies w
 $$
     \frac{D}{D_0} = \frac{p}{p_0} * \frac{c_p}{c_{p,0}} * \left(\frac{m}{28}\right)^{-2} * \left(\frac{\Omega}{1 day^{-1}}\right)^{-2}
 $$
-where $D_0 = 0.56$ J s$^{-1}$ m$^{-2}$ K$^{-1}$ from fitting to an Earth model (see !!!),
+where $D_0 = 0.56$ J s$^{-1}$ m$^{-2}$ K$^{-1}$ is from fitting to an Earth model (see !!!),
 $p$ is the atmospheric pressure relative to $p_0 = 101$ kPa.
 $c_p$ is the heat capacity of the atmosphere, relative to $c_{p,0} = 10^3$ g$^{-1}$ K$^{-1}$.
 $m$ is the (average) mass of the particles in the atmosphere, relative to the Nitrogen molecule.
 $\Omega$ is the rotation rate of the planet, relative to Earth's $1$ rotation per day.
+This also means that $\partial D / \partial \lambda = 0$ in \ref{eq:PDE_in_lat} as the diffusion is constant in space and time.
 
 IR-emission and Albedo functions are taken from !!! and are given by
 $$
-    I(T) = I_2(T) = \sigma T^4 / (1 + 0.5925 (T/273) ^ 3) \\
-    A(T) = A_2(T) = 0.525 - 0.245 \tanh{\frac{T-268}{5}}
+    I(T) = I_2(T) = \sigma T^4 / (1 + 0.5925 (T/273\text{K}) ^ 3)
+$$
+$$
+    A(T) = A_2(T) = 0.525 - 0.245 \tanh((T-268\text{K}) / 5)
 $$
 where this IR-emission is a blackbody radiation term damped the optical thickness of the atmosphere.
 and the albedo is a smooth scaling from low to high reflectivity due to snow and water-vapour reflectance.
 
 Insolation function is defined as the day averaged incident (based on latitude) radiation from the sun,
 $$
-    S(\lambda, t) = \frac{q_0}{\pi} \left(\frac{1 AU}{a}\right)^2 (H \sin{\lambda} \sin{\delta} + \cos{\lambda} \cos{\delta} \sin{H})
+    S(\lambda, t) = \frac{q_0}{\pi} \left(\frac{1 \text{au}}{a}\right)^2 (H \sin{\lambda} \sin{\delta} + \cos{\lambda} \cos{\delta} \sin{H})
 $$
 $q_0 = 1360$ W m$^{-2}$, $\lambda$ is latitude,
 
-\section{Section heading}
+\section{Numerically integrating the EBCM} \label{sec:solve_PDE}
 
-Duis eget tellus tortor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In tellus nulla, sodales eu pulvinar at, accumsan quis magna. Nunc sed lacus diam. Nam enim mauris, imperdiet ut egestas quis, tincidunt at odio. Ut viverra nulla at libero dictum aliquet. Suspendisse lacus lacus, imperdiet nec elit nec, ullamcorper facilisis ex.
+Discretise the temporal derviative using forward difference.
+Discretise the spatial derivatives using central difference and central^2.
+dT/dλ = 0 at the poles, use forward-backward and backward-forward for the edges.
 
-\subsection{Subsection heading}
+\section{Convergence Testing} \label{sec:conv_testing}
 
-Proin sit amet mauris tincidunt, consectetur nisi ultrices, dapibus elit. Nullam vitae faucibus odio, pharetra ultrices tortor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+Define a system to have converged if the global temperature average varies by less than a certain amount between 2 averaging periods,
 
-\section{Conclusions}
+\begin{equation*}
+    \frac{\Delta T}{T} = \frac{T_{\text{avg}}(t_2 \to t_3) - T_{\text{avg}}(t_1 \to t_2)}{T_{\text{avg}}(t_1 \to t_2)}
+    \le \epsilon_{\text{tol}}
+\end{equation*}
+where the global temperature is found from an area-weighted sum over all latitude bands in the time period.
+
+\subsection{Varying a single parameter} \label{sec:single_param}
+
+Varying a single parameter and plotting convergence time, convergent temperature, Area and time averaged habitabilities.
+
+\subsubsection*{Semi-major axis, a}
+
+\subsubsection*{Eccentricity, e}
+
+\subsubsection*{Obliquity, $\delta$}
+
+\subsubsection*{Rotation speed, $\Omega$}
+
+\subsubsection*{Starting temperature}
+
+\subsubsection*{Spatial dimension and separation}
+
+\subsubsection*{Timestep}
+
+\subsection{Varying two parameters} \label{sec:two_param}
+
+varying two parameters at the same time and creating a grid of convergent temperature, convergence time, and total habitability.
+
+\subsubsection*{Semi-major axis and Eccentricity}
+
+\subsubsection*{Semi-major axis and Obliquity}
+
+etc
+
+\section{Conclusions} \label{sec:conclusion}
 
 Donec finibus, tellus sit amet luctus sodales, lectus ante accumsan ligula, at condimentum lorem justo a sapien. Phasellus vel tortor vitae metus lacinia efficitur ac vel ex. Aenean eget congue leo. Aliquam cursus mauris sit amet arcu dignissim, vel condimentum nisi sodales.
 
@@ -134,8 +226,16 @@ Donec finibus, tellus sit amet luctus sodales, lectus ante accumsan ligula, at c
 \end{acknowledgments}
 
 \begin{thebibliography}{}
-    \bibitem{ref01} A.~N.~Other, Title of the book, edition, publishers, place of publication (year of publication), p.~123.  % example book reference 
-    \bibitem{ref02} A.~N.~Other, Title of the article, journal title, volume, 123--456 (year of publication).   % example journal reference
+    % \bibitem{ref01} A.~N.~Other, Title of the book, edition, publishers, place of publication (year of publication), p.~123.  % example book reference 
+    % \bibitem{ref02} A.~N.~Other, Title of the article, journal title, volume, 123--456 (year of publication).   % example journal reference
+    \bibitem{Dressing10} Courtney D. Dressing et al, HABITABLE CLIMATES: THE INFLUENCE OF ECCENTRICITY, ApJ, 721, 1295--1307, 2010
+    \bibitem{HabKepler62f} Aomawa L. Shields et al, The Effect of Orbital Configuration on the Possible Climates and Habitability of Kepler-62f, Astrobiology, 16, 443-464, 2016
+    \bibitem{Roe06} Gerard Roe, In defence of Milankovitch, Geophysical Research Letters, 33, L24703, 2006
+    \bibitem{SMS08} David S. Spiegel et al, Habitable Climates, ApJ, 681, 1609--1623, 2008
+    \bibitem{SMS09} David S. Spiegel et al, Habitable Climates: the influence of Obliquity, ApJ 691, 596--, 2009
+    \bibitem{WK97} Williams and Kasting, Habitable Planets with High Obliquities, Icarus, 129, 254-267, 1997
+    \bibitem{NC79} North and Coakley, Differences between Seasonal and Mean Annual Energy Balance Model Calculations of Climate and Climate Sensitivity, J. Atmos. Sci., 36, 1189--1204, 1979
+    \bibitem{ExoEu} Exoplanet data from http://exoplanet.eu
 \end{thebibliography}
 
 
