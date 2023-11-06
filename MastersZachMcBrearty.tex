@@ -21,6 +21,9 @@
 
 \usepackage{fancyhdr}
 
+\usepackage{siunitx}
+\DeclareSIUnit{\heatcap}{J m^{-2} K^{-1}}
+\DeclareSIUnit{\diffusion}{J m^{-2} K^{-1} s^{-1}}
 
 \pagestyle{fancy}                           % Insert header
 \renewcommand{\headrulewidth}{0pt}
@@ -30,7 +33,6 @@
 \def\thesection{\arabic{section}}
 
 \def\bibsection{\section*{References}}        % Position reference section correctly
-
 
 %%%%% Document %%%%%
 \begin{document}
@@ -52,8 +54,8 @@
 %\thispagestyle{plain} % produces page number for front page
 
 \tableofcontents
-\let\toc@pre\relax
-\let\toc@post\relax
+% \let\toc@pre\relax
+% \let\toc@post\relax
 
 \newpage
 
@@ -76,20 +78,21 @@ This means that the model is quick to compute and provides a good baseline for f
 By plugging in values for the Earth a global temperature of roughly !!! is found; well below the actual value of !!!.
 The reason for this is a lack of greenhouse effect and thermal inertia from oceans, meaning the planet cannot hold onto energy is radiating much more energy than it should be.
 
-A 1-D climate model (here on EBCM) attempts to resolve the surface of the planet into latitude bands which have ocean and land with variable heat capacity and albedo.
+A 1-D climate model (here on EBCM) resolves the surface of the planet into latitude bands which have an (averaged) ocean-land fraction with variable heat capacity and albedo.
 Since rotation of the planet would imply another dimension (namely longitude), the rotation of the planet must be averaged over.
-This means that even though a planet could have a latitude band where there is a super continent on one half of the planet and ocean on the other, the average ocean fraction will be (forexample) $1/2$.
-Each of these latitude bands is treated as balancing energy in from the sun and energy out via blackbody radiation, but an additional energy diffusion term is included in the equation for energy transport between latitude bands.
+This is particularly relevant for the incident solar flux (insolation).
+Each of these latitude bands is treated as balancing incoming flux (insolation) with energy out via blackbody radiation, but an additional energy diffusion term is included in the equation for energy transport between latitude bands.
+Taking the form of the EBCM from Williams and Kasting 1997 (here on WK97)
 \begin{equation}
-    C(x, t)\frac{\partial T(x, t)}{\partial t} - \frac{\partial}{\partial x} \left(D(x, t)(1-x^2)\frac{\partial T(x, t)}{\partial x}\right) + I(x, t) - S(x, t)(1-A(x, t)) = 0
+    C\frac{\partial T(x, t)}{\partial t} - \frac{\partial}{\partial x} \left(D(1-x^2)\frac{\partial T(x, t)}{\partial x}\right) + I - S(1-A) = 0
     \label{eq:PDE_in_x}
 \end{equation}
 where $x=\sin\lambda$, $\lambda$ is the latitude, $C$ is the heat capacity of the latitude band,
-$D$ is the diffusion coefficient, $I$ is the IR-emission of the band,
-$S$ is the insolation, and $A$ is the albedo.
-In general all these parameters can be dependent on time and space, in Section \ref{sec:model} the EBCM and parameters are explored in depth.
+$D$ is the diffusion coefficient determining how effect the diffusion is, $I$ is the IR-emission of the band,
+$S$ is the insolation, and $A$ is the albedo or how much of the insolation is reflected \cite{WK97}.
+In general all these parameters can be dependent on time and space, in Section \ref{sec:model} the EBCM and parameters are explored in more depth.
 
-In Section \ref{sec:solve_PDE} the EBCM is numerically integrated.
+In Section \ref{sec:solve_PDE} how the EBCM is numerically integrated is outlined, including certain edge cases and the theoretical stability of the model.
 
 In Section \ref{sec:conv_testing} the parameters making up the EBCM are varied to see effects on the temperature profile and habitability ranges.
 
@@ -97,87 +100,232 @@ In Section \ref{sec:conv_testing} the parameters making up the EBCM are varied t
 
 \subsection{Transforming from $x$ to $\lambda$}
 
-$ x = \sin\lambda $, $\lambda$ is latitude
+While the EBCM is originally specified in sine of latitude it is better to work and integrate in terms of latitude, this necessitates a change of variables.
 
+The partial derivative operator is given by
 \begin{equation}
-    \begin{aligned}[b]
-        \frac{\partial}{\partial x} & = \frac{\partial \lambda}{\partial x} \frac {\partial} {\partial \lambda} \\
-                                    & = \frac{1}{\sqrt{1-x^2}} \frac {\partial} {\partial \lambda}              \\
-                                    & = \frac{1}{\cos \lambda} \frac {\partial} {\partial \lambda}
-    \end{aligned}
+    \frac{\partial}{\partial x} = \frac{\partial \lambda}{\partial x} \frac {\partial} {\partial \lambda}
+    = \frac{1}{\sqrt{1-x^2}} \frac {\partial} {\partial \lambda}
+    = \frac{1}{\cos \lambda} \frac {\partial} {\partial \lambda},
     \label{eq:first_deriv}
 \end{equation}
-thus
+thus the second order operator is
 \begin{equation}
     \begin{aligned}[b]
-        \frac{\partial^2}{\partial x^2} & = \frac{1}{\cos\lambda} \frac{\partial}{\partial \lambda} \left( \frac{1}{\cos\lambda} \frac{\partial}{\partial \lambda} \right)     \\
-                                        & = \frac{\tan\lambda}{\cos^2\lambda}\frac{\partial}{\partial \lambda} + \frac{1}{\cos^2\lambda} \frac{\partial^2}{\partial \lambda^2}
+        \frac{\partial^2}{\partial x^2} & = \frac{1}{\cos\lambda} \frac{\partial}{\partial \lambda} \left( \frac{1}{\cos\lambda} \frac{\partial}{\partial \lambda} \right)      \\
+                                        & = \frac{\tan\lambda}{\cos^2\lambda}\frac{\partial}{\partial \lambda} + \frac{1}{\cos^2\lambda} \frac{\partial^2}{\partial \lambda^2},
     \end{aligned}
     \label{eq:second_deriv}
 \end{equation}
-First fully expanding (\ref{eq:PDE_in_x})
+
+Fully expanding the derivatives in the EBCM assuming $D$ is a function of space,
 \begin{equation}
     C \frac{\partial T}{\partial t} = S(1-A) - I
     + \frac{\partial T}{\partial x}\left[\frac{\partial D}{\partial x}(1-x^2) - 2 x D\right]
-    + D (1-x^2) \frac{\partial^2 T}{\partial x^2}
+    + D (1-x^2) \frac{\partial^2 T}{\partial x^2},
     \label{eq:expanded}
 \end{equation}
-subbing (\ref{eq:first_deriv}) and (\ref{eq:second_deriv}) into (\ref{eq:expanded})
+and then subbing in \eqref{eq:first_deriv} and \eqref{eq:second_deriv},
 \begin{equation}
     C \frac{\partial T}{\partial t} = S(1-A) - I
     + \frac{\partial T}{\partial \lambda}\left[\frac{\partial D}{\partial \lambda} - D \tan\lambda\right]
     + D \frac{\partial^2 T}{\partial \lambda^2}
     \label{eq:PDE_in_lat}
 \end{equation}
+which obviously diverges to infinity at the North and South poles as $\tan(\lambda \rightarrow \pm \pi/2) \rightarrow \infty$ unless $D(\lambda = \pm \pi/2) = 0$ or $\partial T / \partial \lambda|_{\lambda=\pm \pi/2} = 0$.
+Following Spiegel et al 2008 (here on SMS08), we choose the latter \cite{SMS08}.
 
 \subsection{Characterising model parameters} \label{sec:model_params}
 
-In this analysis we adopt the form of the heat capacity given by !!!.
-In short: $C(x, t)$ varies with latitude through the ocean-land fraction, $f_o(x)$, and with Temperature through the ice-ocean fraction, $f_i(T)$, as
+In this analysis we adopt the form of the heat capacity given by WK97.
+In short: $C(\lambda, t)$ varies with latitude through the ocean-land fraction, $f_o(x)$, and with Temperature through the ice-ocean fraction, $f_i(T)$, as
 $$
-    C(x, T) = (1 - f_o(x)) C_{land} + f_o(x) ((1-f_i(T)) C_{ocean} + f_i(T) C_{ice}(T)),
+    C(\lambda, T) = (1 - f_o(\lambda)) C_{land} + f_o(\lambda) ((1-f_i(T)) C_{ocean} + f_i(T) C_{ice}(T)),
 $$
-Where $C_{land} = !!!$ and $C_{ocean} = !!!$ are constant, and
+Where $C_{\text{land}} = \qty{5.25e6}{\heatcap}$ and $C_{\text{ocean}} = 40 C_{\text{land}}$ are constant, and
 $$
-    C_{ice}(T) =
+    C_{\text{ice}}(T) =
     \begin{cases}
-        !!! & T < 263\text{K}    \\
-        !!! & T \ge 263\text{K},
+        9.2 C_\text{land} & T < 263\text{K}    \\
+        2.0 C_\text{land} & T \ge 263\text{K},
     \end{cases}
 $$
 
-We use a diffusion coefficient which is constant in space and time, but varies with orbital and atmospheric parameters as,
+We also use the diffusion coefficient from WK97 which is constant in space and time, but varies with orbital and atmospheric parameters as,
 $$
-    \frac{D}{D_0} = \frac{p}{p_0} * \frac{c_p}{c_{p,0}} * \left(\frac{m}{28}\right)^{-2} * \left(\frac{\Omega}{1 day^{-1}}\right)^{-2}
+    \frac{D}{D_0} = \frac{p}{p_0} \frac{c_p}{c_{p,0}} \left(\frac{m}{28}\right)^{-2} \left(\frac{\Omega}{1 \text{day}^{-1}}\right)^{-2}
 $$
-where $D_0 = 0.56$ J s$^{-1}$ m$^{-2}$ K$^{-1}$ is from fitting to an Earth model (see !!!),
-$p$ is the atmospheric pressure relative to $p_0 = 101$ kPa.
-$c_p$ is the heat capacity of the atmosphere, relative to $c_{p,0} = 10^3$ g$^{-1}$ K$^{-1}$.
+where $D_0 = \qty{0.56}{\diffusion}$ is from fitting to the time averaged Earth model from North and Coakley 1979 \cite{NC79}.
+$p$ is the atmospheric pressure relative to $p_0 = \qty{101}{kPa}$.
+$c_p$ is the heat capacity of the atmosphere, relative to $c_{p,0} = \qty{1e3}{g^{-1} K^{-1}}$.
 $m$ is the (average) mass of the particles in the atmosphere, relative to the Nitrogen molecule.
 $\Omega$ is the rotation rate of the planet, relative to Earth's $1$ rotation per day.
-This also means that $\partial D / \partial \lambda = 0$ in \ref{eq:PDE_in_lat} as the diffusion is constant in space and time.
+This also means that $\partial D / \partial \lambda = 0$ in \eqref{eq:PDE_in_lat} as the diffusion is constant in space and time.
 
-IR-emission and Albedo functions are taken from !!! and are given by
+IR-emission and Albedo functions are taken from WK97. Following the example of SMS08 and Dressing et al 2010 \cite{Dressing10} the second set of IR and Albedo functions which are given by
 $$
-    I(T) = I_2(T) = \sigma T^4 / (1 + 0.5925 (T/273\text{K}) ^ 3)
+    I(T) = I_2(T) = \sigma T^4 / (1 + 0.5925 (T/\qty{273}{K}) ^ 3)
 $$
 $$
-    A(T) = A_2(T) = 0.525 - 0.245 \tanh((T-268\text{K}) / 5)
+    A(T) = A_2(T) = 0.525 - 0.245 \tanh((T-\qty{268}{K}) / 5)
 $$
-where this IR-emission is a blackbody radiation term damped the optical thickness of the atmosphere.
-and the albedo is a smooth scaling from low to high reflectivity due to snow and water-vapour reflectance.
+are used in all models.
+This IR-emission is a blackbody radiation term (numerator) damped the optical thickness of the atmosphere (denominator) which is roughly equivalent to a greenhouse gas effect.
+The albedo function is a smooth scaling from low to high reflectivity due to snow and water-vapour reflectance.
 
-Insolation function is defined as the day averaged incident (based on latitude) radiation from the sun,
+The insolation function, $S$, is defined in WK97 as the day averaged incident (based on latitude) radiation from the sun,
 $$
-    S(\lambda, t) = \frac{q_0}{\pi} \left(\frac{1 \text{au}}{a}\right)^2 (H \sin{\lambda} \sin{\delta} + \cos{\lambda} \cos{\delta} \sin{H})
+    S(\lambda, t) = \frac{q_0}{\pi} \left(\frac{\qty{1}{au}}{a}\right)^2 (H(t) \sin{\lambda} \sin{\delta(t)} + \cos{\lambda} \cos{\delta(t)} \sin{H(t)})
 $$
-$q_0 = 1360$ W m$^{-2}$, $\lambda$ is latitude,
+where $q_0=1360$ is the insolation from the Sun,
+$a$ is the distance from the Sun in radians,
+$H(t) = \arccos(-\tan\lambda \tan \delta(t))$ is the radian half-day length with $0 < H < \pi$,
+and $\delta(t)$ is the solar declination defined by
+$$
+    \sin\delta(t) = -\sin\delta_0 \cos(L_s(t) + \pi/2)
+$$
+where $\delta_0$ is the obliquity of the planet and $L_s(t) = \omega t$ is orbital longitude from an orbital angular velocity found by Kepler's laws.
 
 \section{Numerically integrating the EBCM} \label{sec:solve_PDE}
 
-Discretise the temporal derviative using forward difference.
-Discretise the spatial derivatives using central difference and central^2.
-dT/dλ = 0 at the poles, use forward-backward and backward-forward for the edges.
+To numerically integrate the EBCM must be transformed into a discrete form. Spatially the the planet can be split into a number of spatial nodes ($S$), each separated by
+\begin{equation*}
+    \Delta\lambda = \frac{\pi^{\unit{\radian}}}{S - 1} = \frac{180\unit{\degree}}{S - 1}
+\end{equation*}
+with spatial indexing of each zone from $m=0, 1, \dots, S-1$.
+Time can also be discretised into steps of $\Delta t$, with temporal indexing $n=0,1,\dots$.
+
+The spatial derivatives can then be approximated by the numerically stable central difference and second order central difference:
+\begin{equation} \label{eq:space_1}
+    \frac{dT^m_n}{d\lambda} = \frac{T^{m+1}_n - T^{m-1}_n}{2 \Delta\lambda},
+\end{equation}
+\begin{equation} \label{eq:space_2}
+    \frac{d^2T^m_n}{d\lambda^2} = \frac{T^{m+2}_n -2T^m_n + T^{m-2}_n}{(2 \Delta\lambda)^2},
+\end{equation}
+and the temporal derivative can be approximated as a forward difference,
+\begin{equation} \label{eq:time_1}
+    \frac{dT^m_n}{dt} = \frac{T^m_{n+1} - T^m_n}{\Delta t},
+\end{equation}
+with numerical instability analysed in Section \ref{sec:numerical_stability}.
+
+Subbing these differences into the EBCM we arrive at,
+\begin{equation} \label{eq:discretised_PDE}
+    \begin{aligned}
+        C^m_n \left[\frac{T^m_{n+1} - T^m_n}{\Delta t}\right] = & S^m_n(1-A^m_n) - I^m_n                                                           \\
+                                                                & - D^m_n \tan \lambda_m \left[\frac{T^{m+1}_n - T^{m-1}_n}{2\Delta\lambda}\right] \\
+                                                                & + D^m_n \left[\frac{T^{m+2}_n - 2T^m_n + T^{m-2}_n}{(2\Delta\lambda)^2}\right]
+    \end{aligned}
+\end{equation}
+This can then be solved for $T^m_{n+1}$, giving the next temperature profile in terms of the previous values.
+
+\subsection{Poles and edges} \label{sec:PolesEdges}
+
+A problem arises however at the poles and edges (one in from the poles) as $i=-1, i=-2, i=S$, and $i=S+1$ are not defined.
+To combat this the poles ($i=0, i=S-1$) and edges ($i=1, i=S-2$) must be handled with more care.
+
+Following the example of SMS08, the first spatial derivative is set to zero at the poles.
+Then the South [$i=0$] (North [$i=S-1$]) pole can be approximated by forward then backward (backward then forward) differences as follows,
+\begin{alignat}{2}
+    \frac{d^2 T^{i=0}_n}{d \lambda ^2}   & = \left(\frac{dT^{i=1}_n}{d\lambda} - \frac{dT^{i=0}_n}{d\lambda}\right) / \Delta\lambda     &  & = \frac{T^{i=1}_n - T^{i=0}_n}{(\Delta\lambda)^2}
+    \label{eq:forward_backward}                                                                                                                                                                    \\
+    \frac{d^2 T^{i=S-1}_n}{d \lambda ^2} & = \left(\frac{dT^{i=S-1}_n}{d\lambda} - \frac{dT^{i=S-2}_n}{d\lambda}\right) / \Delta\lambda &  & = \frac{T^{i=S-2}_n - T^{i=S-1}_n}{(\Delta\lambda)^2}
+    \label{eq:backward_forward}
+\end{alignat}
+where $dT^{i=0}_n/d\lambda = dT^{i=S-1}_n/d\lambda = 0$.
+This treatment addresses the missing indices while still maintaining a suitable level of stability (see \ref{sec:numerical_stability}).
+Similarly, the South edge ($i=1$) uses a central-backward difference, and the North edge ($i=S-2$) uses a central-forward difference.
+
+\subsection{Numerical stability of time forward-difference} \label{sec:numerical_stability}
+
+The general stability of the model can be understood by following the recipe provided in "Numerical Modelling in a nutshell" \cite{NumericalModelling}.
+The model is however quite complex and does not easily yield to the methods provided, so approximations such as requiring an equilibrium state must be used which mean we achieve lowerbounds for the instability.
+
+Assume the PDE can be solved with a planewave solution of the form
+\begin{equation} \label{eq:trial_plane_wave}
+    T^m_n = \xi^n \exp{i k m \Delta\lambda}
+\end{equation}
+where $\xi$ is a (complex) scaling factor which determines the growth characteristics of the plane wave, $n$ and $m$ are the time and space indices respectively, and $k$ is the spatial frequency of the planewave.
+
+Taking this planewave solution and subbing it into \eqref{eq:discretised_PDE}, dividing by the planewave and using the definition of $\sin(x)$ in terms of exponentials we arrive at,
+
+\begin{equation}
+    \xi(k) = 1 + \Delta t \left\{\frac{f^m_n}{t^m_n} + i g^m_n \tan\lambda_m \frac{\sin(k\Delta\lambda)}{\Delta\lambda} - g^m_n\frac{\sin^2(k\Delta\lambda)}{(\Delta\lambda)^2}\right\}
+\end{equation}
+where $f^m_n = (S(1-A) - I) / C$ and $g^m_n = D / C$.
+
+In an equilibrium system the $f^m_n$ term equals $0$ as the input energy and output energy of the system are equal.
+Of course an equilibrium state will not be reached if the integration is unstable, so this analysis will give a lowerbound to where the instabilities of the model should occur.
+
+Instability occurs when the scaling factor has magnitude greater than $1$, $| \xi |^2 > 1$, leading to an instability critera of
+\begin{equation}
+    g \Delta t \left( \tan^2(\lambda_m) + \frac{\sin^2(k\Delta\lambda)}{(\Delta\lambda)^2}\right) > 2,
+\end{equation}
+suggesting that heat capacity, diffusivity, timestep, spatial step, and position on the PDE all contribute to instability.
+
+\subsubsection*{Equatorial stability}
+
+Considering the equator of the model at $\lambda_m=0$. The $\tan\lambda_m$ term equals $0$ so the instability simplifies to
+\begin{equation}
+    g \Delta t \frac{\sin^2(k\Delta \lambda)}{\Delta\lambda} > 2,
+\end{equation}
+it is known that $\sin^2(x) \in [0, 1]$ so if $g \Delta t / (\Delta\lambda)^2 < 2$ then the model will be stable at the equator for all frequencies.
+
+Solving for $\Delta \lambda$ in this case:
+\begin{equation}
+    \Delta\lambda > \sqrt{\frac{\Delta t g}{2}}
+\end{equation}
+
+We may then use this equation to find the lowerbound for the system will be unstable.
+We can set the timestep to $\Delta t = 1$ day and $g = D / C$ with $D = 0.56$ Jm$^{-2}$ s$^{-1}$ K$^{-1}$.
+The heat capacity $C$ will however be variable, depending on land-ocean fraction and ocean-ice fraction.
+
+For the land-only system the heat capacity is at it's lowest at $C=5.25\times10^6 \text{J m}^{-2} \text{K}^{-1}$.
+This gives a value for $g$ of $1.07\times10^{-7} \text{s}^{-1}$, thus
+\begin{equation*}
+    \Delta\lambda \ge \sqrt{\frac{24\times60\times60\times1.07\times10^{-7}}{2}} = 0.068 ^{\text{rad}} = 3.9 ^{\circ}
+\end{equation*}
+is always stable.
+The opposite end of the spectrum is the ocean-only system with no ice, where the heat capacity has value $C = 40 C_{\text{land}}$, reducing the tolerance to $\Delta\lambda \ge 0.6 ^{\circ}$.
+The value for the $f_{\text{ocean}} = 0.7$ ocean to land model is roughly $4 \times 0.3 + 0.6 \times 0.7 = 1.62^{\circ}$.
+The instability in the actual model can be found by varying the spatial dimension (thus $\Delta \lambda$), as seen in Figure \ref{fig:conv_spacedim}.
+The instability occurs around $\Delta\lambda \approx 1.23^{\circ}$ which is reasonably close to the calculated value.
+
+\begin{figure}[h]
+    \includegraphics[width=\linewidth]{convergence_varying_spacedim_140to149.png}
+    \caption{The convergence (Section \ref{sec:conv_testing}) of a series of Earth-like models with varying spatial dimension (x-axis). Top: The time in years for the system to converge to a steady temperature, Bottom: the temperature converged to.
+        The values of time and temperature of $-1$ and $0$ respectively are when the model breaks and diverges to infinity.
+        The model breaks around 1.23$^{\circ}$ separation (146 spatial nodes) in rough agreement with the calaculated value of 1.62$^{\circ}$. }
+    \label{fig:conv_spacedim}
+\end{figure}
+
+\subsubsection*{Polar stability}
+The discretisation of the model at the poles is slightly different (see Section \ref{sec:PolesEdges}, equations \eqref{eq:forward_backward} and \eqref{eq:backward_forward}).
+Looking only at the South pole (though the North pole is much the same) and plugging in \eqref{eq:trial_plane_wave} into \eqref{eq:forward_backward},
+\begin{equation}
+    \frac{\xi^{n+1} - \xi^{n}}{\Delta t} = g\frac{\xi^n \exp(i k \Delta\lambda) - \xi^n}{(\Delta\lambda)^2}
+\end{equation}
+
+Dividing by \eqref{eq:trial_plane_wave} and solving for $\xi$ we find,
+\begin{equation}
+    \xi = 1 + \frac{g\Delta t}{(\Delta \lambda)^2}\left(\exp(i k \Delta \lambda) - 1\right)
+\end{equation}
+
+Leading to an absolute square magnitude given by
+\begin{equation}
+    |\xi|^2 = 1 + 2 (1-\cos(k\Delta\lambda)) \frac{g \Delta t}{\Delta \lambda ^2}\left(\frac{\Delta t g}{\Delta \lambda ^2} - 1\right)
+\end{equation}
+
+Which means the poles of the model are stable when $|\xi|^2 \le 1$:
+\begin{align*}
+    0              & \ge 2(1-\cos(k\Delta\lambda)) \frac{g \Delta t}{\Delta \lambda ^2}\left(\frac{\Delta t g}{\Delta \lambda ^2} - 1\right) \\
+    0              & \ge \frac{g \Delta t}{\Delta \lambda ^2} - 1                                                                            \\
+    1              & \ge \frac{g \Delta t}{\Delta \lambda ^2}                                                                                \\
+    \Delta \lambda & \ge \sqrt{g \Delta t}
+\end{align*}
+using at first that $\cos(x) \in [-1, 1]$ and that $g \Delta t / \Delta\lambda^2 > 0$.
+This is a stricter stability critera than for the equator by a factor of $\sqrt{2}$, which is why the poles are usually the issue causing the model to diverge to infinity when the equator is fine.
+It is also true that if $\cos(k\Delta\lambda) = 1$ then the model is stable at the poles.
+This corresponds to a trivial constant state $k = 0$ or a noncomputational separation of $0$ so is not of interest.
 
 \section{Convergence Testing} \label{sec:conv_testing}
 
@@ -194,8 +342,21 @@ where the global temperature is found from an area-weighted sum over all latitud
 Varying a single parameter and plotting convergence time, convergent temperature, Area and time averaged habitabilities.
 
 \subsubsection*{Semi-major axis, a}
+\begin{figure}
+    \includegraphics[width=\linewidth]{convergence_varying_a_0.5to2_with_temp_lowertol.png}
+    \caption{Convergence of the Earthlike model varying semimajor axis between 0.5 and 2 au in 0.1 increments.
+        There is a drop in the convergent temperature just after 1 au when the insolation from the Sun cannot prevent the model from falling into a snowball state.}
+\end{figure}
+
 
 \subsubsection*{Eccentricity, e}
+\begin{figure}
+    \includegraphics[width=\linewidth]{eccentricity_fit_lowtol.png}
+    \caption{Convergence of the Earthlike model varying eccentricity 0 and 0.9 in 0.1 increments.
+        Overlaid on the data are 2 fits, $T \propto (1-e^2)^{-1/4}$ and $T \propto (1-e^2)^{-1/8}$.
+        The former fit comes from Dressing10 under a physical reasoning from insolation.
+        The latter is a better fit but without the reasoning.}
+\end{figure}
 
 \subsubsection*{Obliquity, $\delta$}
 
@@ -236,6 +397,7 @@ Donec finibus, tellus sit amet luctus sodales, lectus ante accumsan ligula, at c
     \bibitem{WK97} Williams and Kasting, Habitable Planets with High Obliquities, Icarus, 129, 254-267, 1997
     \bibitem{NC79} North and Coakley, Differences between Seasonal and Mean Annual Energy Balance Model Calculations of Climate and Climate Sensitivity, J. Atmos. Sci., 36, 1189--1204, 1979
     \bibitem{ExoEu} Exoplanet data from http://exoplanet.eu
+    \bibitem{NumericalModelling} Viggo H. Hansteen, Numerical Modelling in a nutshell, University of Oslo, Institute of Theoretical Astrophysics, AST5110 Lecture materials 2011, accessed 6/11/2023: https://www.uio.no/studier/emner/matnat/astro/AST5110/h11/undervisningsmateriale/numerics\_intro.pdf
 \end{thebibliography}
 
 
