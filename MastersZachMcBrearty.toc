@@ -14,7 +14,7 @@
 \contentsline {subsubsection}{\numberline {}Polar stability}{7}{}
 \contentsline {section}{\numberline {4}Convergence Testing}{8}{}
 \contentsline {subsection}{\numberline {A}Varying a single parameter}{8}{}
-\contentsline {subsubsection}{\numberline {}Semi-major axis, a}{9}{}
+\contentsline {subsubsection}{\numberline {}Semi-major axis, a}{8}{}
 \contentsline {subsubsection}{\numberline {}Eccentricity, e}{9}{}
 \contentsline {subsubsection}{\numberline {}Obliquity, $\delta $}{9}{}
 \contentsline {subsubsection}{\numberline {}Rotation speed, $\Omega $}{9}{}
@@ -25,5 +25,5 @@
 \contentsline {subsubsection}{\numberline {}Semi-major axis and Eccentricity}{9}{}
 \contentsline {subsubsection}{\numberline {}Semi-major axis and Obliquity}{9}{}
 \contentsline {section}{\numberline {5}Conclusions}{10}{}
-\contentsline {section}{\numberline {}Acknowledgments}{10}{}
-\contentsline {section}{\numberline {}References}{10}{}
+\contentsline {section}{\numberline {}Acknowledgments}{11}{}
+\contentsline {section}{\numberline {}References}{11}{}

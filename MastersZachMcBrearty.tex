@@ -41,7 +41,7 @@
 \title{Orbital Constraints on Exoplanet Habitability}
 \date{Submitted: \today{}}
 \author{Zachery McBrearty}
-\affiliation{\normalfont Level 4 Project, MPhys Physics with Astronomy\\ Supervisor: Doctor R. Wilman \\ Second Supervisor: Dr Craig Testrow \\ Department of Physics, Durham University}
+\affiliation{\normalfont Level 4 Project, MPhys Physics with Astronomy\\ Supervisor: Dr Richard Wilman \\ Second Supervisor: Dr Craig Testrow \\ Department of Physics, Durham University}
 
 \begin{abstract}
 
@@ -88,7 +88,7 @@ Taking the form of the EBCM from Williams and Kasting 1997 (here on WK97)
     \label{eq:PDE_in_x}
 \end{equation}
 where $x=\sin\lambda$, $\lambda$ is the latitude, $C$ is the heat capacity of the latitude band,
-$D$ is the diffusion coefficient determining how effect the diffusion is, $I$ is the IR-emission of the band,
+$D$ is the diffusion coefficient determining how effective the diffusion is, $I$ is the IR-emission of the band,
 $S$ is the insolation, and $A$ is the albedo or how much of the insolation is reflected \cite{WK97}.
 In general all these parameters can be dependent on time and space, in Section \ref{sec:model} the EBCM and parameters are explored in more depth.
 
@@ -162,7 +162,7 @@ $m$ is the (average) mass of the particles in the atmosphere, relative to the Ni
 $\Omega$ is the rotation rate of the planet, relative to Earth's $1$ rotation per day.
 This also means that $\partial D / \partial \lambda = 0$ in \eqref{eq:PDE_in_lat} as the diffusion is constant in space and time.
 
-IR-emission and Albedo functions are taken from WK97. Following the example of SMS08 and Dressing et al 2010 \cite{Dressing10} the second set of IR and Albedo functions which are given by
+IR-emission and Albedo functions are taken from WK97. Following the example of SMS08 and Dressing et al 2010 (here on Dressing10) \cite{Dressing10} the second set of IR and Albedo functions which are given by
 $$
     I(T) = I_2(T) = \sigma T^4 / (1 + 0.5925 (T/\qty{273}{K}) ^ 3)
 $$
@@ -294,7 +294,7 @@ The instability occurs around $\Delta\lambda \approx 1.23^{\circ}$ which is reas
     \includegraphics[width=\linewidth]{convergence_varying_spacedim_140to149.png}
     \caption{The convergence (Section \ref{sec:conv_testing}) of a series of Earth-like models with varying spatial dimension (x-axis). Top: The time in years for the system to converge to a steady temperature, Bottom: the temperature converged to.
         The values of time and temperature of $-1$ and $0$ respectively are when the model breaks and diverges to infinity.
-        The model breaks around 1.23$^{\circ}$ separation (146 spatial nodes) in rough agreement with the calaculated value of 1.62$^{\circ}$. }
+        The model breaks around 1.23$^{\circ}$ separation (146 spatial nodes) in rough agreement with the calculated value of 1.62$^{\circ}$. }
     \label{fig:conv_spacedim}
 \end{figure}
 
@@ -312,20 +312,20 @@ Dividing by \eqref{eq:trial_plane_wave} and solving for $\xi$ we find,
 
 Leading to an absolute square magnitude given by
 \begin{equation}
-    |\xi|^2 = 1 + 2 (1-\cos(k\Delta\lambda)) \frac{g \Delta t}{\Delta \lambda ^2}\left(\frac{\Delta t g}{\Delta \lambda ^2} - 1\right)
+    |\xi|^2 = 1 + 2 (1-\cos(k\Delta\lambda)) \frac{g \Delta t}{\Delta \lambda ^2}\left(\frac{g\Delta t}{\Delta \lambda ^2} - 1\right)
 \end{equation}
 
 Which means the poles of the model are stable when $|\xi|^2 \le 1$:
 \begin{align*}
-    0              & \ge 2(1-\cos(k\Delta\lambda)) \frac{g \Delta t}{\Delta \lambda ^2}\left(\frac{\Delta t g}{\Delta \lambda ^2} - 1\right) \\
+    0              & \ge 2(1-\cos(k\Delta\lambda)) \frac{g \Delta t}{\Delta \lambda ^2}\left(\frac{g\Delta t }{\Delta \lambda ^2} - 1\right) \\
     0              & \ge \frac{g \Delta t}{\Delta \lambda ^2} - 1                                                                            \\
     1              & \ge \frac{g \Delta t}{\Delta \lambda ^2}                                                                                \\
     \Delta \lambda & \ge \sqrt{g \Delta t}
 \end{align*}
 using at first that $\cos(x) \in [-1, 1]$ and that $g \Delta t / \Delta\lambda^2 > 0$.
 This is a stricter stability critera than for the equator by a factor of $\sqrt{2}$, which is why the poles are usually the issue causing the model to diverge to infinity when the equator is fine.
-It is also true that if $\cos(k\Delta\lambda) = 1$ then the model is stable at the poles.
-This corresponds to a trivial constant state $k = 0$ or a noncomputational separation of $0$ so is not of interest.
+It is also true that if $\cos(k\Delta\lambda) = 1$ then the model is always stable at the poles.
+However, this corresponds to a trivial constant state $k = 0$ or a noncomputational separation of $0$ so is not of interest.
 
 \section{Convergence Testing} \label{sec:conv_testing}
 
@@ -335,27 +335,54 @@ Define a system to have converged if the global temperature average varies by le
     \frac{\Delta T}{T} = \frac{T_{\text{avg}}(t_2 \to t_3) - T_{\text{avg}}(t_1 \to t_2)}{T_{\text{avg}}(t_1 \to t_2)}
     \le \epsilon_{\text{tol}}
 \end{equation*}
-where the global temperature is found from an area-weighted sum over all latitude bands in the time period.
+where the global temperature is found from an area-weighted sum over all latitude bands in the time period,
+\begin{equation}
+    T_{\text{avg}}(t_i \to t_j) = \frac{\sum_{n = i}^{j} \sum_{m = 0}^{S-1} T^m_n \Delta t \cos(\lambda_m)\Delta \lambda}{\sum_{q = i}^{j} \Delta t \sum_{m=0}^{S-1} \cos(\lambda_m)\Delta \lambda},
+\end{equation}
+the denominator evaluates to $t_j - t_i$ in most cases as $\Delta t$ is constant.
 
 \subsection{Varying a single parameter} \label{sec:single_param}
 
 Varying a single parameter and plotting convergence time, convergent temperature, Area and time averaged habitabilities.
 
+Subbing the time-averaged solar flux (equation (17) in \cite{Mendez2017}) into \ref{eq:zeroDCM},
+\begin{equation}
+    \pi r^2 \frac{L}{a^2 \sqrt{1-e^2}} (1-A) = 4\pi r^2 \sigma T^4,
+    \label{eq:Temp_eccent}
+\end{equation}
+we can see that temperature $T$ is proportional to $(1-e^2)^{-1/8}$ for constant semimajoraxis. This is confirmed in the model in Fig. \ref{fig:temperature_eccentricity}.
+we can see that temperature $T$ is proportional to $a^{-1/4}$ for constant eccentricity. This relation is confirmed in the model in Fig. \ref{fig:temperature_semimajoraxis}
+
+We can also see that for a constant temperature $a \propto (1-e^2)^{-1/4}$.
+This proportionality can be used to find how the inner and outer habitable zones scale with increasing eccentricity.
+
 \subsubsection*{Semi-major axis, a}
 \begin{figure}
-    \includegraphics[width=\linewidth]{convergence_varying_a_0.5to2_with_temp_lowertol.png}
-    \caption{Convergence of the Earthlike model varying semimajor axis between 0.5 and 2 au in 0.1 increments.
-        There is a drop in the convergent temperature just after 1 au when the insolation from the Sun cannot prevent the model from falling into a snowball state.}
+    \includegraphics[width=\linewidth]{semimajoraxis_fit_lowtol.png}
+    \caption{Convergent global temperature of the Earthlike model varying semimajor axis between 0.5 and 2 au in 0.1 increments.
+        There is a drop in the convergent temperature just after 1 au when the insolation from the Sun cannot prevent the model from falling into a snowball state.
+        The "temperate" zone before 1.1 au fits the expected $T\propto a^{-1/2}$ very well.
+        The "snowball" zone after 1 au instead better fits a $T\propto a^{-1/4}$ law much better, though there is no physical backing to this relation.}
+    \label{fig:temperature_semimajoraxis}
 \end{figure}
+\begin{figure}
+    \includegraphics[width=\linewidth]{time_hab_a.png}
+    \caption{
+        Time-averaged habitability for each latitude band for semi major axis between 0.5 and 2 au.
+        The model becomes too hot at the equator when too close to the star (0.6 au) and too cold at the poles when too far away (1 au).
+        The middle of these two bounds has extremely high habitability across the entire planet.
+    }
+\end{figure}
+No pattern in the convergence time, but temperature decreases fairly linearly until just after 1 au where the planet drops into a snowball state.
 
 
 \subsubsection*{Eccentricity, e}
 \begin{figure}
     \includegraphics[width=\linewidth]{eccentricity_fit_lowtol.png}
     \caption{Convergence of the Earthlike model varying eccentricity 0 and 0.9 in 0.1 increments.
-        Overlaid on the data are 2 fits, $T \propto (1-e^2)^{-1/4}$ and $T \propto (1-e^2)^{-1/8}$.
-        The former fit comes from Dressing10 under a physical reasoning from insolation.
-        The latter is a better fit but without the reasoning.}
+        Overlaid on the data is equation \eqref{eq:Temp_eccent}, $T \propto (1-e^2)^{-1/8}$ with the first point taken as the proportionality factor.
+        The fit is excellent with residuals of less than 0.1\%}
+    \label{fig:temperature_eccentricity}
 \end{figure}
 
 \subsubsection*{Obliquity, $\delta$}
