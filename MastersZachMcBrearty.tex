@@ -78,7 +78,7 @@ This means that the model is quick to compute and provides a good baseline for f
 By plugging in values for the Earth a global temperature of roughly !!! is found; well below the actual value of !!!.
 The reason for this is a lack of greenhouse effect and thermal inertia from oceans, meaning the planet cannot hold onto energy is radiating much more energy than it should be.
 
-A 1-D climate model (here on EBCM) resolves the surface of the planet into latitude bands which have an (averaged) ocean-land fraction with variable heat capacity and albedo.
+A 1-D Energy Balance Climate Model (here on EBCM) resolves the surface of the planet into latitude bands which have an (averaged) ocean-land fraction with variable heat capacity and albedo.
 Since rotation of the planet would imply another dimension (namely longitude), the rotation of the planet must be averaged over.
 This is particularly relevant for the incident solar flux (insolation).
 Each of these latitude bands is treated as balancing incoming flux (insolation) with energy out via blackbody radiation, but an additional energy diffusion term is included in the equation for energy transport between latitude bands.
@@ -142,12 +142,12 @@ In short: $C(\lambda, t)$ varies with latitude through the ocean-land fraction, 
 $$
     C(\lambda, T) = (1 - f_o(\lambda)) C_{land} + f_o(\lambda) ((1-f_i(T)) C_{ocean} + f_i(T) C_{ice}(T)),
 $$
-Where $C_{\text{land}} = \qty{5.25e6}{\heatcap}$ and $C_{\text{ocean}} = 40 C_{\text{land}}$ are constant, and
+Where $C_{\text{land}} = \qty{5.25e6}{\heatcap}$ and $C_{\text{ocean}} = 40 \times C_{\text{land}}$ are constant, and
 $$
     C_{\text{ice}}(T) =
     \begin{cases}
-        9.2 C_\text{land} & T < 263\text{K}    \\
-        2.0 C_\text{land} & T \ge 263\text{K},
+        9.2 C_\text{land} & T \ge 263\text{K} \\
+        2.0 C_\text{land} & T < 263\text{K},
     \end{cases}
 $$
 
@@ -177,7 +177,7 @@ The insolation function, $S$, is defined in WK97 as the day averaged incident (b
 $$
     S(\lambda, t) = \frac{q_0}{\pi} \left(\frac{\qty{1}{au}}{a}\right)^2 (H(t) \sin{\lambda} \sin{\delta(t)} + \cos{\lambda} \cos{\delta(t)} \sin{H(t)})
 $$
-where $q_0=1360$ is the insolation from the Sun,
+where $q_0=1360 $W m$^-2$ is the insolation from the Sun,
 $a$ is the distance from the Sun in radians,
 $H(t) = \arccos(-\tan\lambda \tan \delta(t))$ is the radian half-day length with $0 < H < \pi$,
 and $\delta(t)$ is the solar declination defined by
@@ -272,7 +272,7 @@ it is known that $\sin^2(x) \in [0, 1]$ so if $g \Delta t / (\Delta\lambda)^2 < 
 
 Solving for $\Delta \lambda$ in this case:
 \begin{equation}
-    \Delta\lambda > \sqrt{\frac{\Delta t g}{2}}
+    \Delta\lambda > \sqrt{\frac{g \Delta t}{2}}
 \end{equation}
 
 We may then use this equation to find the lowerbound for the system will be unstable.
@@ -361,8 +361,8 @@ This proportionality can be used to find how the inner and outer habitable zones
     \includegraphics[width=\linewidth]{semimajoraxis_fit_lowtol.png}
     \caption{Convergent global temperature of the Earthlike model varying semimajor axis between 0.5 and 2 au in 0.1 increments.
         There is a drop in the convergent temperature just after 1 au when the insolation from the Sun cannot prevent the model from falling into a snowball state.
-        The "temperate" zone before 1.1 au fits the expected $T\propto a^{-1/2}$ very well.
-        The "snowball" zone after 1 au instead better fits a $T\propto a^{-1/4}$ law much better, though there is no physical backing to this relation.}
+        The "temperate" zone before 1 au fits the expected $T\propto a^{-1/2}$ very well.
+        The "snowball" zone after 1 au instead fits a $T\propto a^{-1/4}$ law much better, though there is no physical backing to this relation.}
     \label{fig:temperature_semimajoraxis}
 \end{figure}
 \begin{figure}
