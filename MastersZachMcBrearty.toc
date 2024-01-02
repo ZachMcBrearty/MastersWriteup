@@ -4,26 +4,18 @@
 \contentsline {section}{\numberline {}Contents}{1}{}
 \tocdepth@restore 
 \contentsline {section}{\numberline {1}Introduction}{2}{}
-\contentsline {section}{\numberline {2}Model}{3}{}
+\contentsline {section}{\numberline {2}1D Energy Balance Climate model (EBCM)}{3}{}
 \contentsline {subsection}{\numberline {A}Transforming from $x$ to $\lambda $}{3}{}
 \contentsline {subsection}{\numberline {B}Characterising model parameters}{3}{}
-\contentsline {section}{\numberline {3}Numerically integrating the EBCM}{4}{}
-\contentsline {subsection}{\numberline {A}Poles and edges}{5}{}
-\contentsline {subsection}{\numberline {B}Numerical stability of time forward-difference}{5}{}
-\contentsline {subsubsection}{\numberline {}Equatorial stability}{6}{}
-\contentsline {subsubsection}{\numberline {}Polar stability}{7}{}
-\contentsline {section}{\numberline {4}Convergence Testing}{8}{}
-\contentsline {subsection}{\numberline {A}Varying a single parameter}{8}{}
-\contentsline {subsubsection}{\numberline {}Semi-major axis, a}{8}{}
-\contentsline {subsubsection}{\numberline {}Eccentricity, e}{9}{}
-\contentsline {subsubsection}{\numberline {}Obliquity, $\delta $}{9}{}
-\contentsline {subsubsection}{\numberline {}Rotation speed, $\Omega $}{9}{}
-\contentsline {subsubsection}{\numberline {}Starting temperature}{9}{}
-\contentsline {subsubsection}{\numberline {}Spatial dimension and separation}{9}{}
-\contentsline {subsubsection}{\numberline {}Timestep}{9}{}
-\contentsline {subsection}{\numberline {B}Varying two parameters}{9}{}
-\contentsline {subsubsection}{\numberline {}Semi-major axis and Eccentricity}{9}{}
-\contentsline {subsubsection}{\numberline {}Semi-major axis and Obliquity}{9}{}
-\contentsline {section}{\numberline {5}Conclusions}{10}{}
-\contentsline {section}{\numberline {}Acknowledgments}{11}{}
-\contentsline {section}{\numberline {}References}{11}{}
+\contentsline {subsection}{\numberline {C}Discretisation of the PDE}{4}{}
+\contentsline {subsection}{\numberline {D}Numerical stability of time forward-difference}{5}{}
+\contentsline {section}{\numberline {3}Exomoons and Tidal heating}{7}{}
+\contentsline {section}{\numberline {4}Convergence Testing of 1D EBCM}{8}{}
+\contentsline {subsection}{\numberline {A}Investigating time-averaged solar flux}{9}{}
+\contentsline {section}{\numberline {5}Obliquity and Rotation speed}{11}{}
+\contentsline {section}{\numberline {6}1D Energy Balance Depth Model}{11}{}
+\contentsline {section}{\numberline {7}Conclusions}{13}{}
+\contentsline {section}{\numberline {}References}{13}{}
+\appendix 
+\contentsline {section}{\numberline {A}Numerical Stability Calculations}{15}{}
+\contentsline {section}{\numberline {}Scientific Summary for a General Audience}{17}{}

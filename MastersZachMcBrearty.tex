@@ -6,6 +6,7 @@
  top=2.5cm, bottom=2.5cm]{geometry}       % Defines paper size and margin length
 
 \renewcommand{\baselinestretch}{1.15}     % Defines the line spacing
+% \setlength{\parindent}{0pt}
 
 \usepackage[font=small, labelfont=bf]{caption} % Defines caption font size and caption title bolded
 
@@ -24,6 +25,8 @@
 \usepackage{siunitx}
 \DeclareSIUnit{\heatcap}{J m^{-2} K^{-1}}
 \DeclareSIUnit{\diffusion}{J m^{-2} K^{-1} s^{-1}}
+
+\usepackage{multirow}
 
 \pagestyle{fancy}                           % Insert header
 \renewcommand{\headrulewidth}{0pt}
@@ -61,42 +64,53 @@
 
 \section{Introduction}
 
-%%% example text follows %%%
 The climate of a planet such as the Earth is many dimensional and thus very complicated.
-However, understanding and predicting the climate of a planet is essential for predicting the effects of climate change and (to a lesser extent) finding other habitable planets.
+However, understanding and predicting the climate of a planet is essential for predicting the effects of climate change and finding habitable exo-planets.
 Fully simulating the entire atmosphere, ocean, and land would be extremely difficult without the use of massive supercomputers.
 By reducing degrees of freedom in the model, the simulation can become feasible while still yielding useful and valid results.
 
 The simplest climate model is a 0 dimensional energy balance.
 The 0-D model is an equality of the input energy from the Sun (LHS) to the output energy from the Earth acting as a black body (RHS),
-$$
-    \pi r^2 S(1-A) = 4 \pi r^2 \sigma T^4,
-$$
+\begin{equation}
+    \pi r^2 S(1-A) = 4 \pi r^2 \sigma T^4, \label{eq:0DEBCM}
+\end{equation}
 where $r$ is the radius of the planet, $T$ is the global average temperature of the planet, $S$ is the incident solar radiation (insolation), $A$ is the reflectance (albedo), and $\sigma$ is the Stefan-Boltzmann constant.
 This 0-D model does not resolve the surface or any features of the planet, and treats the planet as homogeneous.
 This means that the model is quick to compute and provides a good baseline for further computation.
-By plugging in values for the Earth a global temperature of roughly !!! is found; well below the actual value of !!!.
-The reason for this is a lack of greenhouse effect and thermal inertia from oceans, meaning the planet cannot hold onto energy is radiating much more energy than it should be.
+By plugging in values for the Earth, a global temperature of $-18 ^{\circ}$C is found; well below the global average value of $14^{\circ}$C from 1951 to 1980 \cite{NASAGlobTemp}.
+One reason for this is a lack of greenhouse effect, meaning the planet emits much more radiation than it should.
+Another problem with the model is that it is not dynamic.
 
-A 1-D Energy Balance Climate Model (here on EBCM) resolves the surface of the planet into latitude bands which have an (averaged) ocean-land fraction with variable heat capacity and albedo.
-Since rotation of the planet would imply another dimension (namely longitude), the rotation of the planet must be averaged over.
-This is particularly relevant for the incident solar flux (insolation).
-Each of these latitude bands is treated as balancing incoming flux (insolation) with energy out via blackbody radiation, but an additional energy diffusion term is included in the equation for energy transport between latitude bands.
+A 1-D Energy Balance Climate Model (here on EBCM) resolves the surface of the planet into latitude bands which have an (longitude-averaged) ocean-land fraction with variable heat capacity and albedo.
+% The rotation of the planet must be averaged over to remove the longitude dimension.
+% This means that the model cannot handle tidally locked planets which are too close to the parent star, as one side of the planet will be hot while the other is cold.
+Each of these latitude bands is treated as balancing incoming solar flux (insolation) with energy out via blackbody radiation, but an additional energy diffusion term is included in the equation for energy transport between latitude bands.
 Taking the form of the EBCM from Williams and Kasting 1997 (here on WK97)
 \begin{equation}
-    C\frac{\partial T(x, t)}{\partial t} - \frac{\partial}{\partial x} \left(D(1-x^2)\frac{\partial T(x, t)}{\partial x}\right) + I - S(1-A) = 0
+    C\frac{\partial T(x, t)}{\partial t} - D \frac{\partial}{\partial x} \left((1-x^2)\frac{\partial T(x, t)}{\partial x}\right) + I - S(1-A) = 0
     \label{eq:PDE_in_x}
 \end{equation}
 where $x=\sin\lambda$, $\lambda$ is the latitude, $C$ is the heat capacity of the latitude band,
 $D$ is the diffusion coefficient determining how effective the diffusion is, $I$ is the IR-emission of the band,
-$S$ is the insolation, and $A$ is the albedo or how much of the insolation is reflected \cite{WK97}.
+$S$ is the insolation, and $A$ is the planetary albedo.
 In general all these parameters can be dependent on time and space, in Section \ref{sec:model} the EBCM and parameters are explored in more depth.
+
+This EBCM can be extended very easily for other heat sources.
+In Section \ref{sec:tidal_heating} the parameterisation and habitability of an exomoon around a gas giant is explored.
+This requires additional parameters for the energy input due to emission from the gas giant and tidal heating due to the moon's orbit.
+
+It is expected that moons around gas giants which are close to the parent star (hot jupiters, hot neptunes etc.) could have warm and potentially habitable exomoons.
+This is bolstered by the potential for an exomoon to be tidally heated, thus not dependent on the central star for life to exist.
+We see this in our own solar system in the investigations of Io and Enceladus \cite{SAB22}.
+Tidal heating is also important for the discovery of exomoons.
+The high temperatures of these tidally heated moons can create peak emission temperatures different from the star and gas giant.
+Furthermore, the volcanic activity of these moons can also eject plumes of material giving indication of the physical makeup of the moon \cite{RN21}.
 
 In Section \ref{sec:solve_PDE} how the EBCM is numerically integrated is outlined, including certain edge cases and the theoretical stability of the model.
 
 In Section \ref{sec:conv_testing} the parameters making up the EBCM are varied to see effects on the temperature profile and habitability ranges.
 
-\section{Model} \label{sec:model}
+\section{1D Energy Balance Climate model (EBCM)} \label{sec:ebcmodel}
 
 \subsection{Transforming from $x$ to $\lambda$}
 
@@ -118,17 +132,17 @@ thus the second order operator is
     \label{eq:second_deriv}
 \end{equation}
 
-Fully expanding the derivatives in the EBCM assuming $D$ is a function of space,
+Fully expanding the derivatives in the EBCM assuming $D$ is not a function of space,
 \begin{equation}
     C \frac{\partial T}{\partial t} = S(1-A) - I
-    + \frac{\partial T}{\partial x}\left[\frac{\partial D}{\partial x}(1-x^2) - 2 x D\right]
+    - 2 x D \frac{\partial T}{\partial x}
     + D (1-x^2) \frac{\partial^2 T}{\partial x^2},
     \label{eq:expanded}
 \end{equation}
 and then subbing in \eqref{eq:first_deriv} and \eqref{eq:second_deriv},
 \begin{equation}
     C \frac{\partial T}{\partial t} = S(1-A) - I
-    + \frac{\partial T}{\partial \lambda}\left[\frac{\partial D}{\partial \lambda} - D \tan\lambda\right]
+    - D \tan\lambda \frac{\partial T}{\partial \lambda}
     + D \frac{\partial^2 T}{\partial \lambda^2}
     \label{eq:PDE_in_lat}
 \end{equation}
@@ -138,7 +152,7 @@ Following Spiegel et al 2008 (here on SMS08), we choose the latter \cite{SMS08}.
 \subsection{Characterising model parameters} \label{sec:model_params}
 
 In this analysis we adopt the form of the heat capacity given by WK97.
-In short: $C(\lambda, t)$ varies with latitude through the ocean-land fraction, $f_o(x)$, and with Temperature through the ice-ocean fraction, $f_i(T)$, as
+In short: $C(\lambda, t)$ varies with latitude through the ocean-land fraction, $f_o(\lambda)$, and with Temperature through the ice-ocean fraction, $f_i(T)$, as
 $$
     C(\lambda, T) = (1 - f_o(\lambda)) C_{land} + f_o(\lambda) ((1-f_i(T)) C_{ocean} + f_i(T) C_{ice}(T)),
 $$
@@ -161,6 +175,7 @@ $c_p$ is the heat capacity of the atmosphere, relative to $c_{p,0} = \qty{1e3}{g
 $m$ is the (average) mass of the particles in the atmosphere, relative to the Nitrogen molecule.
 $\Omega$ is the rotation rate of the planet, relative to Earth's $1$ rotation per day.
 This also means that $\partial D / \partial \lambda = 0$ in \eqref{eq:PDE_in_lat} as the diffusion is constant in space and time.
+This can be extended to be time variable, such as having CO$_2$ emissions increase partial pressure $p$.
 
 IR-emission and Albedo functions are taken from WK97. Following the example of SMS08 and Dressing et al 2010 (here on Dressing10) \cite{Dressing10} the second set of IR and Albedo functions which are given by
 $$
@@ -182,15 +197,15 @@ $a$ is the distance from the Sun in radians,
 $H(t) = \arccos(-\tan\lambda \tan \delta(t))$ is the radian half-day length with $0 < H < \pi$,
 and $\delta(t)$ is the solar declination defined by
 $$
-    \sin\delta(t) = -\sin\delta_0 \cos(L_s(t) + \pi/2)
+    \sin(\delta(t)) = -\sin(\delta_0) \cos(L_s(t) + \pi/2)
 $$
 where $\delta_0$ is the obliquity of the planet and $L_s(t) = \omega t$ is orbital longitude from an orbital angular velocity found by Kepler's laws.
 
-\section{Numerically integrating the EBCM} \label{sec:solve_PDE}
+\subsection{Discretisation of the PDE} \label{sec:solve_PDE}
 
-To numerically integrate the EBCM must be transformed into a discrete form. Spatially the the planet can be split into a number of spatial nodes ($S$), each separated by
+To numerically integrate the EBCM must be transformed into a discrete form. Spatially the planet can be split into a number of nodes, $S$, each separated by
 \begin{equation*}
-    \Delta\lambda = \frac{\pi^{\unit{\radian}}}{S - 1} = \frac{180\unit{\degree}}{S - 1}
+    \Delta\lambda = \frac{\pi^{\unit{\radian}}}{S - 1} = \frac{180\unit{\degree}}{S - 1},
 \end{equation*}
 with spatial indexing of each zone from $m=0, 1, \dots, S-1$.
 Time can also be discretised into steps of $\Delta t$, with temporal indexing $n=0,1,\dots$.
@@ -207,129 +222,194 @@ and the temporal derivative can be approximated as a forward difference,
     \frac{dT^m_n}{dt} = \frac{T^m_{n+1} - T^m_n}{\Delta t},
 \end{equation}
 with numerical instability analysed in Section \ref{sec:numerical_stability}.
+The PDE can then be numerically integrated by solving for $T^{m}_{n+1}$ using the parameters at timestep $n$.
 
-Subbing these differences into the EBCM we arrive at,
-\begin{equation} \label{eq:discretised_PDE}
-    \begin{aligned}
-        C^m_n \left[\frac{T^m_{n+1} - T^m_n}{\Delta t}\right] = & S^m_n(1-A^m_n) - I^m_n                                                           \\
-                                                                & - D^m_n \tan \lambda_m \left[\frac{T^{m+1}_n - T^{m-1}_n}{2\Delta\lambda}\right] \\
-                                                                & + D^m_n \left[\frac{T^{m+2}_n - 2T^m_n + T^{m-2}_n}{(2\Delta\lambda)^2}\right]
-    \end{aligned}
-\end{equation}
-This can then be solved for $T^m_{n+1}$, giving the next temperature profile in terms of the previous values.
+% Subbing these differences into the EBCM we arrive at,
+% \begin{equation} \label{eq:discretised_PDE}
+%     \begin{aligned}
+%         C^m_n \left[\frac{T^m_{n+1} - T^m_n}{\Delta t}\right] = & S^m_n(1-A^m_n) - I^m_n                                                           \\
+%                                                                 & - D^m_n \tan \lambda_m \left[\frac{T^{m+1}_n - T^{m-1}_n}{2\Delta\lambda}\right] \\
+%                                                                 & + D^m_n \left[\frac{T^{m+2}_n - 2T^m_n + T^{m-2}_n}{(2\Delta\lambda)^2}\right]
+%     \end{aligned}
+% \end{equation}
+% This can then be solved for $T^m_{n+1}$, giving the next temperature profile in terms of the previous values.
 
-\subsection{Poles and edges} \label{sec:PolesEdges}
+% \subsection{Poles and edges} \label{sec:PolesEdges}
 
-A problem arises however at the poles and edges (one in from the poles) as $i=-1, i=-2, i=S$, and $i=S+1$ are not defined.
-To combat this the poles ($i=0, i=S-1$) and edges ($i=1, i=S-2$) must be handled with more care.
+However, a problem arises at the poles and edges (one in from the poles) as $m=-1, m=-2, m=S$, and $m=S+1$ are not defined.
+To combat this the poles ($m=0, m=S-1$) and edges ($m=1, m=S-2$) must be handled with more care.
 
+% !!! REPETITION !!!
 Following the example of SMS08, the first spatial derivative is set to zero at the poles.
-Then the South [$i=0$] (North [$i=S-1$]) pole can be approximated by forward then backward (backward then forward) differences as follows,
+Then the south [$m=0$] (north [$m=S-1$]) pole can be approximated by forward then backward (backward then forward) differences as follows,
 \begin{alignat}{2}
-    \frac{d^2 T^{i=0}_n}{d \lambda ^2}   & = \left(\frac{dT^{i=1}_n}{d\lambda} - \frac{dT^{i=0}_n}{d\lambda}\right) / \Delta\lambda     &  & = \frac{T^{i=1}_n - T^{i=0}_n}{(\Delta\lambda)^2}
+    \frac{d^2 T^{m=0}_n}{d \lambda ^2}   & = \left(\frac{dT^{m=1}_n}{d\lambda} - \frac{dT^{m=0}_n}{d\lambda}\right) / \Delta\lambda     &  & = \frac{T^{m=1}_n - T^{m=0}_n}{(\Delta\lambda)^2}
     \label{eq:forward_backward}                                                                                                                                                                    \\
-    \frac{d^2 T^{i=S-1}_n}{d \lambda ^2} & = \left(\frac{dT^{i=S-1}_n}{d\lambda} - \frac{dT^{i=S-2}_n}{d\lambda}\right) / \Delta\lambda &  & = \frac{T^{i=S-2}_n - T^{i=S-1}_n}{(\Delta\lambda)^2}
+    \frac{d^2 T^{m=S-1}_n}{d \lambda ^2} & = \left(\frac{dT^{m=S-1}_n}{d\lambda} - \frac{dT^{m=S-2}_n}{d\lambda}\right) / \Delta\lambda &  & = \frac{T^{m=S-2}_n - T^{m=S-1}_n}{(\Delta\lambda)^2}
     \label{eq:backward_forward}
 \end{alignat}
-where $dT^{i=0}_n/d\lambda = dT^{i=S-1}_n/d\lambda = 0$.
+where $dT^{m=0}_n/d\lambda = dT^{m=S-1}_n/d\lambda = 0$.
 This treatment addresses the missing indices while still maintaining a suitable level of stability (see \ref{sec:numerical_stability}).
-Similarly, the South edge ($i=1$) uses a central-backward difference, and the North edge ($i=S-2$) uses a central-forward difference.
+Similarly, the south edge ($i=1$) uses a central-backward difference, and the north edge ($i=S-2$) uses a central-forward difference.
 
 \subsection{Numerical stability of time forward-difference} \label{sec:numerical_stability}
 
-The general stability of the model can be understood by following the recipe provided in "Numerical Modelling in a nutshell" \cite{NumericalModelling}.
-The model is however quite complex and does not easily yield to the methods provided, so approximations such as requiring an equilibrium state must be used which mean we achieve lowerbounds for the instability.
-
-Assume the PDE can be solved with a planewave solution of the form
-\begin{equation} \label{eq:trial_plane_wave}
-    T^m_n = \xi^n \exp{i k m \Delta\lambda}
-\end{equation}
-where $\xi$ is a (complex) scaling factor which determines the growth characteristics of the plane wave, $n$ and $m$ are the time and space indices respectively, and $k$ is the spatial frequency of the planewave.
-
-Taking this planewave solution and subbing it into \eqref{eq:discretised_PDE}, dividing by the planewave and using the definition of $\sin(x)$ in terms of exponentials we arrive at,
-
-\begin{equation}
-    \xi(k) = 1 + \Delta t \left\{\frac{f^m_n}{t^m_n} + i g^m_n \tan\lambda_m \frac{\sin(k\Delta\lambda)}{\Delta\lambda} - g^m_n\frac{\sin^2(k\Delta\lambda)}{(\Delta\lambda)^2}\right\}
-\end{equation}
-where $f^m_n = (S(1-A) - I) / C$ and $g^m_n = D / C$.
-
-In an equilibrium system the $f^m_n$ term equals $0$ as the input energy and output energy of the system are equal.
-Of course an equilibrium state will not be reached if the integration is unstable, so this analysis will give a lowerbound to where the instabilities of the model should occur.
-
-Instability occurs when the scaling factor has magnitude greater than $1$, $| \xi |^2 > 1$, leading to an instability critera of
-\begin{equation}
-    g \Delta t \left( \tan^2(\lambda_m) + \frac{\sin^2(k\Delta\lambda)}{(\Delta\lambda)^2}\right) > 2,
-\end{equation}
-suggesting that heat capacity, diffusivity, timestep, spatial step, and position on the PDE all contribute to instability.
-
-\subsubsection*{Equatorial stability}
-
-Considering the equator of the model at $\lambda_m=0$. The $\tan\lambda_m$ term equals $0$ so the instability simplifies to
-\begin{equation}
-    g \Delta t \frac{\sin^2(k\Delta \lambda)}{\Delta\lambda} > 2,
-\end{equation}
-it is known that $\sin^2(x) \in [0, 1]$ so if $g \Delta t / (\Delta\lambda)^2 < 2$ then the model will be stable at the equator for all frequencies.
-
-Solving for $\Delta \lambda$ in this case:
-\begin{equation}
-    \Delta\lambda > \sqrt{\frac{g \Delta t}{2}}
-\end{equation}
-
-We may then use this equation to find the lowerbound for the system will be unstable.
-We can set the timestep to $\Delta t = 1$ day and $g = D / C$ with $D = 0.56$ Jm$^{-2}$ s$^{-1}$ K$^{-1}$.
-The heat capacity $C$ will however be variable, depending on land-ocean fraction and ocean-ice fraction.
-
-For the land-only system the heat capacity is at it's lowest at $C=5.25\times10^6 \text{J m}^{-2} \text{K}^{-1}$.
-This gives a value for $g$ of $1.07\times10^{-7} \text{s}^{-1}$, thus
-\begin{equation*}
-    \Delta\lambda \ge \sqrt{\frac{24\times60\times60\times1.07\times10^{-7}}{2}} = 0.068 ^{\text{rad}} = 3.9 ^{\circ}
-\end{equation*}
-is always stable.
-The opposite end of the spectrum is the ocean-only system with no ice, where the heat capacity has value $C = 40 C_{\text{land}}$, reducing the tolerance to $\Delta\lambda \ge 0.6 ^{\circ}$.
-The value for the $f_{\text{ocean}} = 0.7$ ocean to land model is roughly $4 \times 0.3 + 0.6 \times 0.7 = 1.62^{\circ}$.
-The instability in the actual model can be found by varying the spatial dimension (thus $\Delta \lambda$), as seen in Figure \ref{fig:conv_spacedim}.
-The instability occurs around $\Delta\lambda \approx 1.23^{\circ}$ which is reasonably close to the calculated value.
-
-\begin{figure}[h]
-    \includegraphics[width=\linewidth]{convergence_varying_spacedim_140to149.png}
+\begin{figure}[ht]
+    \includegraphics[width=\linewidth]{images/convergence_varying_spacedim_140to149.png}
     \caption{The convergence (Section \ref{sec:conv_testing}) of a series of Earth-like models with varying spatial dimension (x-axis). Top: The time in years for the system to converge to a steady temperature, Bottom: the temperature converged to.
-        The values of time and temperature of $-1$ and $0$ respectively are when the model breaks and diverges to infinity.
-        The model breaks around 1.23$^{\circ}$ separation (146 spatial nodes) in rough agreement with the calculated value of 1.62$^{\circ}$. }
+        The values of time and temperature of $-1$ are when the model breaks and diverges to infinity.
+        The temperatures and times taken to converge are roughly constant until the numerical instability.
+        This instability occurs around $1.23^{\circ}$ separation (146 spatial nodes) in rough agreement with the calculated value of $2.26^{\circ}$. }
     \label{fig:conv_spacedim}
 \end{figure}
 
-\subsubsection*{Polar stability}
-The discretisation of the model at the poles is slightly different (see Section \ref{sec:PolesEdges}, equations \eqref{eq:forward_backward} and \eqref{eq:backward_forward}).
-Looking only at the South pole (though the North pole is much the same) and plugging in \eqref{eq:trial_plane_wave} into \eqref{eq:forward_backward},
-\begin{equation}
-    \frac{\xi^{n+1} - \xi^{n}}{\Delta t} = g\frac{\xi^n \exp(i k \Delta\lambda) - \xi^n}{(\Delta\lambda)^2}
+The general stability of the model can be understood by following the recipe for Von Neumann Stability Analysis provided in "Numerical Modelling in a nutshell" \cite{NumericalModelling}.
+The model is however quite complex and does not easily yield to the methods provided.
+Therefore the model is approximated to be in an equilibrium such that the energy input and output which are not from diffusion are equal.
+When unstable the model will not reach this equilibrium, meaning the following is a lowerbound for instability.
+
+First, assume that the equilibrum PDE can be solved with a planewave solution of the form
+\begin{equation} \label{eq:trial_plane_wave}
+    T^m_n = \xi^n \exp{(i k m \Delta\lambda)}
+\end{equation}
+where $\xi$ is a (complex) scaling factor which determines the growth characteristics of the plane wave, and $k$ is the spatial frequency of the planewave.
+There are three cases for the value of $\xi$:
+\begin{equation}\label{eq:stability_cases}
+    |\xi|^2
+    \begin{cases}
+        > 1 & \text{growing mode, unstable} \\
+        = 1 & \text{completely stable}      \\
+        < 1 & \text{decaying mode, stable}
+    \end{cases}
 \end{equation}
 
-Dividing by \eqref{eq:trial_plane_wave} and solving for $\xi$ we find,
-\begin{equation}
-    \xi = 1 + \frac{g\Delta t}{(\Delta \lambda)^2}\left(\exp(i k \Delta \lambda) - 1\right)
-\end{equation}
+In appendix \ref{app:numstabworkings} the EBCM is set to an equilibrium, discretised, and then \eqref{eq:trial_plane_wave} is plugged in and $\xi$ is solved for.
 
-Leading to an absolute square magnitude given by
-\begin{equation}
-    |\xi|^2 = 1 + 2 (1-\cos(k\Delta\lambda)) \frac{g \Delta t}{\Delta \lambda ^2}\left(\frac{g\Delta t}{\Delta \lambda ^2} - 1\right)
+The standard stability condition is given by \eqref{appeq:normalstability} and is repeated here:
+\begin{equation}\label{eq:normalstability}
+    g\Delta t\left(\tan^2(\lambda_m) + \frac{\sin^2(k\Delta\lambda)}{\Delta\lambda^2}\right)
+    \begin{cases}
+        > 2 & \text{growing mode, unstable} \\
+        = 2 & \text{completely stable}      \\
+        < 2 & \text{decaying mode, stable}
+    \end{cases}
 \end{equation}
+where $g = D / C$ with diffusion $D$ and heat capacity $C$ and $k$ is the wavenumber of a planewave solution.
 
-Which means the poles of the model are stable when $|\xi|^2 \le 1$:
+At the equator $\lambda_m = 0$, thus $\tan(\lambda_m) = 0$. This gives a stability condition of
+\begin{equation}
+    g\Delta t\left(\frac{\sin^2(k\Delta\lambda)}{\Delta\lambda^2}\right) \le 2
+\end{equation}
+and, since $|\sin(x)| \le 1$, the model is always stable at the equator for
 \begin{align*}
-    0              & \ge 2(1-\cos(k\Delta\lambda)) \frac{g \Delta t}{\Delta \lambda ^2}\left(\frac{g\Delta t }{\Delta \lambda ^2} - 1\right) \\
-    0              & \ge \frac{g \Delta t}{\Delta \lambda ^2} - 1                                                                            \\
-    1              & \ge \frac{g \Delta t}{\Delta \lambda ^2}                                                                                \\
-    \Delta \lambda & \ge \sqrt{g \Delta t}
+    % \frac{g\Delta t}{\Delta\lambda^2} & \le 2               \\
+    % \frac{g\Delta t}{2}               & \le \Delta\lambda^2 \\
+    \Delta\lambda \ge \sqrt{\frac{g\Delta t}{2}}
 \end{align*}
-using at first that $\cos(x) \in [-1, 1]$ and that $g \Delta t / \Delta\lambda^2 > 0$.
-This is a stricter stability critera than for the equator by a factor of $\sqrt{2}$, which is why the poles are usually the issue causing the model to diverge to infinity when the equator is fine.
-It is also true that if $\cos(k\Delta\lambda) = 1$ then the model is always stable at the poles.
-However, this corresponds to a trivial constant state $k = 0$ or a noncomputational separation of $0$ so is not of interest.
 
-\section{Convergence Testing} \label{sec:conv_testing}
 
-Define a system to have converged if the global temperature average varies by less than a certain amount between 2 averaging periods,
+It should be noted that due to the $\tan(\lambda_m)$ term the required $\Delta\lambda$ increases moving from the equator to poles.
+Stability at the poles is never achieved in \eqref{eq:normalstability}, but can be recovered by the imposition that the first spatial derivative is $0$ at the poles.
+This gives a polar stability condition given by \eqref{appeq:polarstability} and is also repeated here:
+\begin{equation} \label{eq:polarstability}
+    \frac{g\Delta t}{\Delta \lambda ^2}
+    \begin{cases}
+        > 1 & \text{growing mode, unstable} \\
+        = 1 & \text{completely stable}      \\
+        < 1 & \text{decaying mode, stable}
+    \end{cases}
+\end{equation}
+where again $g = D / C$ with diffusion $D$ and heat capacity $C$, and $k$ is the wavenumber of a planewave solution.
+Some simple manipulation gives that the poles are always stable for
+\begin{equation}
+    \Delta\lambda \ge \sqrt{g\Delta t},
+\end{equation}
+which is a stricter criteria than for the equator by a factor of $\sqrt{2}$.
+This stricter criteria, moving from equator to pole, is why the model tends to go break and go to infinity at the poles first.
+
+Equations \eqref{eq:normalstability} and \eqref{eq:polarstability} may be used to find the lowerbound for when the system will be unstable.
+Standard values for the system include a timestep of $\Delta t = 1$ day and $D = 0.56$ $\unit{\diffusion}$.
+The heat capacity $C$ will however be variable, depending on land-ocean fraction and ocean-ice fraction.
+
+The heat capacity is at it's lowest for the land-only system at $C=5.25\times10^6$ $\unit{\heatcap}$.
+This gives a value for $g$ of $1.07\times10^{-7} \text{s}^{-1}$, thus
+\begin{equation*}
+    \Delta\lambda \ge \sqrt{24\times60\times60\times1.07\times10^{-7}} = 0.096 ^{\text{rad}} = 5.5 ^{\circ}
+\end{equation*}
+is always stable when using the stricter polar condition.
+The opposite end of the spectrum is the ocean-only system with no ice, where the heat capacity has value $C = 40 C_{\text{land}}$.
+This reduces the tolerance to $\Delta\lambda \ge 0.87 ^{\circ}$.
+
+Most models considered in this paper have a land-ocean fraction of $f_{\text{ocean}} = 0.7$.
+This corresponds to a value $\Delta\lambda = 5.5 \times 0.3 + 0.87 \times 0.7 = 2.26^{\circ}$.
+The instability in the actual model can be found by varying the spatial dimension (thus $\Delta \lambda$), as seen in Figure \ref{fig:conv_spacedim}.
+The instability occurs around $\Delta\lambda \approx 1.23^{\circ}$ which is reasonably close to the calculated value with the assumptions used.
+
+\section{Exomoons and Tidal heating} \label{sec:tidal_heating}
+
+Habitable exomoons have a number of additional energy sources and sinks which can be added to the model to investigate their properties.
+We assume the exomoon is in orbit around a gas giant.
+
+The first energy source is emission from the body they are orbiting,
+\begin{equation}
+    F_{\text{gas}} = \frac{\sigma T_{\text{gas}}^4}{4 \pi a_{\text{moon}}^2},
+\end{equation}
+where $T_{\text{gas}}$ is the temperature of the gas giant, and $a_{\text{moon}}$ is the semimajoraxis of the moon around the giant.
+The temperature of the giant can be determined from \eqref{eq:0DEBCM}.
+In the case of a giant such as Jupiter the temperature will actually be higher due to the excess heat of formation, though not by much \cite{LJW2018}.
+
+The moon may also experience tidal heating, where due to the eccentricity of the orbit the forces on the moon produce stresses which heat the core and mantle of the planet.
+This heating can be quantified in two main methods.
+
+The first and more simple method is Fixed-Q tidal heating.
+This is a constant heatflux through the surface of the moon and is given by,
+\begin{equation}
+    F_{\text{fQ}} = \frac{21}{2} \frac{k}{Q} \frac{G^{3/2}M_{\text{gas}}^{5/2}R_{\text{moon}}^5 e_{\text{moon}}^2} {a_{\text{moon}}^{15/2}}
+\end{equation}
+with $k$ being the rigidity of the moon rock, $Q$ is the quality coefficient.
+In this model the values of $k$ and $Q$ are fixed, hence fixed-Q model.
+A deficiency of this model is a prediction of tidal heat no matter how far away the moon is from the giant, and that the heatflux is constant no matter what happens to the moon.
+
+The viscoelastic tidal heating model addresses these deficiencies by replacing the constant $k/Q$ factor with the imaginary part of the second complex Love number, $\text{Im}(k_2)$:
+\begin{equation}
+    F_{\text{tidal}} = \frac{21}{2} \text{Im}(k_2) \frac{G^{3/2}M_{\text{gas}}^{5/2}R_{\text{moon}}^5 e_{\text{moon}}^2} {a_{\text{moon}}^{15/2}}.
+\end{equation} \cite{YP1981} \cite{Segatz1988} \cite{DHT2015}.
+Finding the value of $\text{Im}(k_2)$ is difficult however.
+Henning et al \cite{Henning2009} introduce four different viscoelastic response models: Maxwell, Voigt-Kelvin, SAS, Burgers.
+This paper focuses on the Maxwell model, due to the inherent simplicity.
+However the code as written can be easily extended to work with the other more complicated models.
+
+The third addition to the EBCM is a energy sink due to eclipsing of the moon by the giant.
+A 3 body gravity simulation can be used to find the average fraction of light eclipsed.
+Figure \ref{fig:eclipsing} shows how the amount of eclipsing varies with the semimajor axes and eccentricities of the moon and gas giant.
+The eclipsing is modelled as being 100\% light blocked in the umbra, 50\% light blocked in the penumbra, and 0\% light blocked otherwise.
+
+There is a linear relationship between Gas semimajor axis meaning there is more light eclipsed as the gas giant moves further from the star.
+This has a doubled effect as solar flux is decreasing by the square of the semimajor axis and an increasing amount of that light is being eclipsed.
+
+Moon semimajor axis has the opposite relationship.
+As the moon's separation increases less light is blocked.
+This variablility is much more significant than the others, ranging from 15\% blocked down to nearly 0\%.
+The largest drop is when the moon's orbit is far enough away that it is only ever in the penumbra of the gas giant.
+
+In both cases varying eccentricity appears to have an effect which is an order of magnitude smaller than varying the semimajor axis.
+This is probably due to the averaging of many short and long eclipses to the same average eclipse time for 0 eccentricity.
+
+\begin{figure}
+    \includegraphics[width=\linewidth]{images/eclipsing_allfour.png}
+    \caption{
+        Top Left: There is a positive correlation between the amount of light eclipsed and the distance of the gas giant from the star.
+        Top Right: Negative correlation between the amount of light eclipsed and the distance of the moon to gas giant.
+        Goes nearly to 0 but is still occasionally eclipsed but only the penumbra of the gas giant.
+        Bottom Left and Bottom Right: Variations due to changing eccentricity, which are an order of magnitude smaller than the semimajor axis variations.
+        This is due to averaging over many variable length eclipses to give a much smaller overall variation in eclipse length.
+    }
+    \label{fig:eclipsing}
+\end{figure}
+
+\section{Convergence Testing of 1D EBCM} \label{sec:conv_testing}
+
+Define a system to have converged if the global temperature average varies by less than a certain amount, $\epsilon_{\text{tol}}$, between 2 averaging periods,
 
 \begin{equation*}
     \frac{\Delta T}{T} = \frac{T_{\text{avg}}(t_2 \to t_3) - T_{\text{avg}}(t_1 \to t_2)}{T_{\text{avg}}(t_1 \to t_2)}
@@ -339,79 +419,154 @@ where the global temperature is found from an area-weighted sum over all latitud
 \begin{equation}
     T_{\text{avg}}(t_i \to t_j) = \frac{\sum_{n = i}^{j} \sum_{m = 0}^{S-1} T^m_n \Delta t \cos(\lambda_m)\Delta \lambda}{\sum_{q = i}^{j} \Delta t \sum_{m=0}^{S-1} \cos(\lambda_m)\Delta \lambda},
 \end{equation}
-the denominator evaluates to $t_j - t_i$ in most cases as $\Delta t$ is constant.
+the denominator evaluates to $2 (t_j - t_i)$. The variables $\Delta t$ and $\Delta \lambda$ can in general be variable for this expression, but in these simulations are constant.
 
-\subsection{Varying a single parameter} \label{sec:single_param}
+The orbital parameters of the model can then be varied to find habitable regions. The default parameters of the model are Earth-like, and are given in Table \ref{tab:default_params}.
 
-Varying a single parameter and plotting convergence time, convergent temperature, Area and time averaged habitabilities.
+\begin{table*}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+        \hline
+        \multirow{2}{*}{Model Type} & \multicolumn{2}{|c|}{Semimajoraxis, $\unit{au}$} & \multicolumn{2}{|c|}{Eccentricity} & Obliquity        & No. spatial nodes & Timestep      & \multirow{2}{*}{Land fraction type}                                         \\
+        \cline{2-5}
+                                    & $a_{\text{gas}}$                                 & $a_{\text{moon}}$                  & $e_{\text{gas}}$ & $e_{\text{moon}}$ & $\delta$, deg & $S$                                 & $\Delta t$, days &                    \\
+        \hline
+        Earth-like                  & 1                                                & -                                  & 0.0167           & -                 & 23.5          & 61                                  & 1                & Uniform 70\% Ocean \\
+        \hline
+        Tidal-heating               & 1                                                & 0.01                               & 0.05             & 0.001             & 23.5          & 61                                  & 1                & Uniform 70\% Ocean \\
+        \hline
+    \end{tabular}
+    \caption{The default parameters for the models used in the analyses in the paper.
+        A dashed entry, "-", indicates the value does not exist in the model.
+        A "Uniform" land fraction indicates that the model has the same ratio of land to ocean across the entire planet.
+        An "Earth-like" land fraction is not used, but is given in WK97 \cite{WK97} and is an option in the code configuration file.
+        The odd number of spatial nodes means there is a true equator with $\lambda = 0$ as well as poles with $\lambda = \pm 90^{\circ}$}
+    \label{tab:default_params}
+\end{table*}
 
-Subbing the time-averaged solar flux (equation (17) in \cite{Mendez2017}) into \ref{eq:zeroDCM},
+\subsection{Investigating time-averaged solar flux} \label{sec:single_param}
+
+% Varying a single parameter and plotting convergence time, convergent temperature, Area and time averaged habitabilities.
+In their 2017 paper, Méndez and Rivera-Valentín show that for a planet in orbit with semimajoraxis $a$ and eccentricity $e$ the average solar flux in an orbit is given by,
+\begin{equation} \label{eq:fluxavg}
+    \langle F\rangle = \frac{L}{a^2 \sqrt{1-e^2}},
+\end{equation}
+where $L$ is the luminosity of the star, assumed to be constant (equation (14) in \cite{Mendez2017}).
+Subbing \eqref{eq:fluxavg} into \eqref{eq:0DEBCM} we can find a temperature relation as follows,
 \begin{equation}
-    \pi r^2 \frac{L}{a^2 \sqrt{1-e^2}} (1-A) = 4\pi r^2 \sigma T^4,
+    \frac{L}{a^2 \sqrt{1-e^2}} (1-A) = 4 \sigma T^4,
     \label{eq:Temp_eccent}
 \end{equation}
-we can see that temperature $T$ is proportional to $(1-e^2)^{-1/8}$ for constant semimajoraxis. This is confirmed in the model in Fig. \ref{fig:temperature_eccentricity}.
-we can see that temperature $T$ is proportional to $a^{-1/4}$ for constant eccentricity. This relation is confirmed in the model in Fig. \ref{fig:temperature_semimajoraxis}
+where $A$ is albedo and $T$ is the temperature of the planet.
+Assuming that $L$ and $A$ are constant, we can see that $T$ is proportional to $(1-e^2)^{-1/8}$ for constant semimajoraxis and that $T$ is proportional to $a^{-1/2}$ for constant eccentricity.
+These relations are confirmed by the model in Fig. \ref{fig:temperature_eccentricity} and Fig. \ref{fig:temperature_semimajoraxis} respectively.
 
 We can also see that for a constant temperature $a \propto (1-e^2)^{-1/4}$.
 This proportionality can be used to find how the inner and outer habitable zones scale with increasing eccentricity.
 
-\subsubsection*{Semi-major axis, a}
 \begin{figure}
-    \includegraphics[width=\linewidth]{semimajoraxis_fit_lowtol.png}
-    \caption{Convergent global temperature of the Earthlike model varying semimajor axis between 0.5 and 2 au in 0.1 increments.
-        There is a drop in the convergent temperature just after 1 au when the insolation from the Sun cannot prevent the model from falling into a snowball state.
-        The "temperate" zone before 1 au fits the expected $T\propto a^{-1/2}$ very well.
-        The "snowball" zone after 1 au instead fits a $T\propto a^{-1/4}$ law much better, though there is no physical backing to this relation.}
+    \includegraphics[width=\linewidth]{images/semimajoraxis_fits_highres_bothhalf.png}
+    \caption{Convergent global temperature of the Earthlike model varying semimajor axis and fitting to the theory prediction of $T \propto a^{-1/2}$ by the equation $T = p_i a^{-q_i}$.
+        Also shown are 2 horizontal lines for the boiling and freezing points of water to roughly indicate habitability.
+        There is a drop in the convergent temperature just after 1 au where the reduced insolation cannot prevent the planet from falling into a snowball state.
+        The "temperate" zone before 1 au fits with parameters $p_1 = 294.37 \pm 0.08$, $q_1 = 0.5026 \pm 0.0007$.
+        The "snowball" zone after 1 au instead fits parameters $p_2 = 203.5 \pm 0.6$, $q_2 = 0.5650 \pm 0.0009$.
+        While the temperate zone follows the negative-half powerlaw very well, the snowball zone follows a slightly more negative powerlaw.}
     \label{fig:temperature_semimajoraxis}
 \end{figure}
+
 \begin{figure}
-    \includegraphics[width=\linewidth]{time_hab_a.png}
+    \includegraphics[width=\linewidth]{images/semimajoraxis_timeavghabitability.png}
     \caption{
-        Time-averaged habitability for each latitude band for semi major axis between 0.5 and 2 au.
-        The model becomes too hot at the equator when too close to the star (0.6 au) and too cold at the poles when too far away (1 au).
+        Time-averaged habitability for each latitude band for semi major axis between 0.5 and 1.5 au.
+        The model becomes too hot to sustain life at the equator when too close to the star ($<0.7$ au) and too cold at the poles when too far away ($>0.95$ au).
         The middle of these two bounds has extremely high habitability across the entire planet.
+        Beyond 1 au the entire planet falls into a snowball state and is completely uninhabitable.
     }
 \end{figure}
-No pattern in the convergence time, but temperature decreases fairly linearly until just after 1 au where the planet drops into a snowball state.
 
-
-\subsubsection*{Eccentricity, e}
 \begin{figure}
-    \includegraphics[width=\linewidth]{eccentricity_fit_lowtol.png}
-    \caption{Convergence of the Earthlike model varying eccentricity 0 and 0.9 in 0.1 increments.
-        Overlaid on the data is equation \eqref{eq:Temp_eccent}, $T \propto (1-e^2)^{-1/8}$ with the first point taken as the proportionality factor.
-        The fit is excellent with residuals of less than 0.1\%}
+    \includegraphics[width=\linewidth]{images/eccentricity_fits_highres.png}
+    \includegraphics[width=0.495\linewidth]{images/eccentricity_timeavghabitability_square.png}
+    \includegraphics[width=0.495\linewidth]{images/eccentricity_areaavghabitability_square.png}
+    \caption{Top: Convergent Temperature of the Earthlike model varying eccentricity between 0 and 0.9.
+        Overlaid on the data is a fit to the theory equation $T\propto(1-e^2)^{-1/8}$, with proportionality constant $p=293.89 \pm 0.10$ K.
+        The fit is very good, with the extreme eccentricities diverging from the model slightly.
+        Bottom left: Time-averaged habitability for each latitude band in the final year of simulation.
+        As eccentricity increases the poles become hotter, thus more habitable.
+        At the same time the equator becomes too hot and loses habitability.
+        Bottom right: Area-averaged habitability for the final 10 years of simulation.
+        The cyclical temperature fluctuations due to eccentricity of the orbit are evident, especially at high eccentricities where the planet becomes globally uninhabitable for portions of the year.
+    }
     \label{fig:temperature_eccentricity}
 \end{figure}
 
-\subsubsection*{Obliquity, $\delta$}
+\section{Obliquity and Rotation speed}
 
-\subsubsection*{Rotation speed, $\Omega$}
+Understanding how the obliquity and rotation speed of the planet effects climate is also useful.
+Varying the obliquity can maximise or minimise the average temperature of the planet by changing how the energy is distributed over the planet's surface.
 
-\subsubsection*{Starting temperature}
 
-\subsubsection*{Spatial dimension and separation}
+\begin{figure}
+    \includegraphics[width=0.495\linewidth]{images/obliquity_highres_square.png}
+    \includegraphics[width=0.495\linewidth]{images/obliquity_timeavghabitability_square.png}
+    \caption{Convergent Temperature of the Earthlike model varying obliquity between 0 and 180$^{\circ}$.
+        The data are symmetrical about 90$^{\circ}$, as expected for a planet with a uniform surface.
+        The plot indicates that there are optimal obliquities at $\delta \approx 20^{\circ}$ and $\approx 50^{\circ}$ for a minimum and maximum temperature respectively.
+    }
+    \label{fig:temperature_obliquity}
+\end{figure}
 
-\subsubsection*{Timestep}
+% \begin{figure}
+%     
+%     \includegraphics[width=0.495\linewidth]{images/obliquity_areaavghabitability_square.png}
+%     \caption{
+%         Left: Time-averaged habitability for each latitude band in the final year of simulation.
+%         Higher obliquities allow for more energy input into the poles
+%         Right: Area-averaged habitability for the final 10 years of simulation.
+%         The cyclical temperature fluctuations due to obliquity of the orbit are evident.
+%         It is worth noting that though there are habitability fluctuations in time, they vary by only ~20\% from maximum habitability.
+%     }
+%     \label{fig:timeareahab_obliquity}
+% \end{figure}
 
-\subsection{Varying two parameters} \label{sec:two_param}
 
-varying two parameters at the same time and creating a grid of convergent temperature, convergence time, and total habitability.
+\section{1D Energy Balance Depth Model}
 
-\subsubsection*{Semi-major axis and Eccentricity}
+So far the tidal heating has been found by balancing convection with tidal heat input, then allowing this tidal heat to flow through the surface of the planet.
+Now the tidal heat is allowed to flow through the bottom layer of a depth model.
+This investigates whether a planet with a cold frozen surface could harbour habitable temperatures below it's surface.
 
-\subsubsection*{Semi-major axis and Obliquity}
+The depth model can be found by first considering the standard heat equation
 
-etc
+\begin{equation}
+    \frac{\partial T}{\partial t} = \alpha \nabla^2 T,
+\end{equation}
+
+and subbing the spherical form for the lapacian,
+
+\begin{equation}
+    \frac{\partial T}{\partial t}  = \alpha \left[\frac{1}{r} \frac{\partial^2 }{\partial r^2} (r T)
+        + \frac{1}{r^2 \sin\theta} \frac{\partial}{\partial \theta}\left(\sin\theta \frac{\partial T}{\partial\theta}\right)
+        + \frac{1}{r^2 \sin\theta} \frac{\partial^2 T}{\partial \phi^2} \right]
+\end{equation}
+where $r$ is the distance to the center of the planet, $\theta = \pi - \lambda$ is the co-latitude $\theta$ related to the latitude $\lambda$, and $\phi$ is longitude.
+In the latitude-band surface case $T(r, \theta, \phi) = T(\theta)$ and the equation is transformed into $\lambda$, whereas in the depth case $T(r, \theta, \phi) = T(r)$.
+
+Thus the depth model is given by
+
+\begin{equation}
+    \frac{\partial T}{\partial t} = \alpha \left[\frac{\partial^2 T}{\partial r^2} + \frac{2}{r}\frac{\partial T}{\partial r}\right]
+\end{equation}
+
+...
 
 \section{Conclusions} \label{sec:conclusion}
 
 Donec finibus, tellus sit amet luctus sodales, lectus ante accumsan ligula, at condimentum lorem justo a sapien. Phasellus vel tortor vitae metus lacinia efficitur ac vel ex. Aenean eget congue leo. Aliquam cursus mauris sit amet arcu dignissim, vel condimentum nisi sodales.
 
-\begin{acknowledgments}
-    (OPTIONAL) The author would like to thank...
-\end{acknowledgments}
+% \begin{acknowledgments}
+%     (OPTIONAL) The author would like to thank...
+% \end{acknowledgments}
 
 \begin{thebibliography}{}
     % \bibitem{ref01} A.~N.~Other, Title of the book, edition, publishers, place of publication (year of publication), p.~123.  % example book reference 
@@ -423,9 +578,108 @@ Donec finibus, tellus sit amet luctus sodales, lectus ante accumsan ligula, at c
     \bibitem{SMS09} David S. Spiegel et al, Habitable Climates: the influence of Obliquity, ApJ 691, 596--, 2009
     \bibitem{WK97} Williams and Kasting, Habitable Planets with High Obliquities, Icarus, 129, 254-267, 1997
     \bibitem{NC79} North and Coakley, Differences between Seasonal and Mean Annual Energy Balance Model Calculations of Climate and Climate Sensitivity, J. Atmos. Sci., 36, 1189--1204, 1979
+    \bibitem{Mendez2017} Abel Méndez and Edgard G. Rivera-Valentín, The Equilibrium Temperature of Planets in Elliptical Orbits, ApJL, 837, 2017
     \bibitem{ExoEu} Exoplanet data from http://exoplanet.eu
     \bibitem{NumericalModelling} Viggo H. Hansteen, Numerical Modelling in a nutshell, University of Oslo, Institute of Theoretical Astrophysics, AST5110 Lecture materials 2011, accessed 6/11/2023: https://www.uio.no/studier/emner/matnat/astro/AST5110/h11/undervisningsmateriale/numerics\_intro.pdf
+    \bibitem{NASAGlobTemp} https://earthobservatory.nasa.gov/world-of-change/global-temperatures, paragraph 3, accessed 08/12/2023
+    \bibitem{SAB22} Sulaiman, Achilleos, Bertucci et al, Enceladus and Titan: emerging worlds of the Solar System, Exp Astron 54, 849--876, 2022
+    \bibitem{RN21} Marc Rovira-Navarro et al, Tidally Heated Exomoons around Gas Giants, Planet. Sci. J., 2 119, 2021
+    \bibitem{Segatz1988} Segatz et al, Tidal dissipation, surface heat flow, and figure of viscoelastic models of Io, ICARUS 75, 187--206, 1988
+    \bibitem{YP1981} Charles F. Yoder, Stanton J. Peale, The tides of Io, Icarus, 47 1, 1--35, 1981
+    \bibitem{DHT2015} Vera Dobos, René Heller, Edwin L. Turner, The effect of multiple heat sources on exomoon habitable zones, A\&A 601 A91, 2017
+    \bibitem{LJW2018} L. Li, X. Jiang, R.A. West et al, Less absorbed solar energy and more internal heat for Jupiter. Nat Commun 9, 3709, 2018
+    \bibitem{Henning2009} Wade G. Henning et al, TIDALLY HEATED TERRESTRIAL EXOPLANETS: VISCOELASTIC RESPONSE MODELS, ApJ 707 1000, 2009
 \end{thebibliography}
 
+\clearpage
+
+\appendix
+
+\section{Numerical Stability Calculations} \label{app:numstabworkings}
+
+Take \eqref{eq:PDE_in_lat}, set $S(1-A) - I = 0$ and $\partial D / \partial \lambda = 0$,
+let $D / C = g$, thus:
+\begin{equation*}
+    \frac{\partial T}{\partial t} = g \left(\frac{\partial^2 T}{\partial \lambda^2} - \tan(\lambda)\frac{\partial T}{\partial \lambda}\right)
+\end{equation*}
+subbing in the discretisations, \eqref{eq:space_1} \eqref{eq:space_2} \eqref{eq:time_1}:
+\begin{equation*}
+    \frac{T^m_{n+1}-T^m_n}{\Delta t} = g \left(\frac{T^{m+2}_{n} - 2T^{m}_{n} + T^{m-2}_{n}}{(2\Delta \lambda)^2} - \tan(\lambda_m)\frac{T^{m+1}_{n} - T^{m-1}_{n}}{2 \Delta \lambda}\right)
+\end{equation*}
+Then the planewave solution \eqref{eq:trial_plane_wave} can be plugged in and $\xi$ solved for by dividing by \eqref{eq:trial_plane_wave}:
+\begin{equation*}
+    \xi = 1 + g \Delta t \left( \frac{e^{2ik\Delta\lambda} - 2 + e^{-2ik\Delta\lambda}}{(2\Delta\lambda)^2} - \tan(\lambda_m) \frac{e^{ik\Delta\lambda} - e^{-ik\Delta\lambda}}{2\Delta\lambda} \right)
+\end{equation*}
+the first term in the brackets is equal to $-\sin^2(k\Delta\lambda) / \Delta\lambda^2$ and the second term is equal to $i\tan(\lambda_m)\sin(k\Delta\lambda) / \Delta\lambda$.
+
+The absolute square can then be found as:
+\begin{equation*}
+    |\xi|^2 = 1 + \frac{g \Delta t \sin(k\Delta\lambda)^2}{\Delta \lambda^2}\left(g\Delta t\left(\tan(\lambda_m)^2 + \frac{\sin^2(k\Delta\lambda)}{\Delta\lambda^2}\right) - 2 \right)
+\end{equation*}
+subbing this into \eqref{eq:stability_cases}, the normal stability conditions are as follows:
+\begin{equation}\label{appeq:normalstability}
+    g\Delta t\left(\tan(\lambda_m)^2 + \frac{\sin^2(k\Delta\lambda)}{\Delta\lambda^2}\right)
+    \begin{cases}
+        > 2 & \text{growing mode, unstable} \\
+        = 2 & \text{completely stable}      \\
+        < 2 & \text{decaying mode, stable}
+    \end{cases}
+    .
+\end{equation}
+
+
+The method to find the polar stability is much the same.
+subbing in discretisations \eqref{eq:forward_backward} (or equally \eqref{eq:backward_forward}) and \eqref{eq:time_1}, as well as the plane wave \eqref{eq:trial_plane_wave}:
+\begin{equation*}
+    \frac{\xi^{n+1} - \xi^{n}}{\Delta t} = g\frac{\xi^n \exp(i k \Delta\lambda) - \xi^n}{(\Delta\lambda)^2}
+\end{equation*}
+where the exponential term in the plane wave is either $1$ ($m=0$) or $\exp(i k \Delta\lambda)$ ($m=1$).
+
+Dividing by $\xi^n$, and then solving for $\xi$:
+\begin{equation*}
+    \xi = 1 + \frac{g\Delta t}{(\Delta \lambda)^2}\left(\exp(i k \Delta \lambda) - 1\right)
+\end{equation*}
+Leading to an absolute square magnitude given by
+\begin{equation*}
+    |\xi|^2 = 1 + 2 (1-\cos(k\Delta\lambda)) \frac{g \Delta t}{\Delta \lambda ^2}\left(\frac{g\Delta t}{\Delta \lambda ^2} - 1\right)
+\end{equation*}
+And thus a polar stability condition of
+\begin{equation*}
+    (1-\cos(k\Delta\lambda)) \frac{g \Delta t}{\Delta \lambda ^2}\left(\frac{g\Delta t}{\Delta \lambda ^2} - 1\right)
+    \begin{cases}
+        > 0 & \text{growing mode, unstable} \\
+        = 0 & \text{completely stable}      \\
+        < 0 & \text{decaying mode, stable}
+    \end{cases}
+    .
+\end{equation*}
+The first term $\cos(k\Delta\lambda) - 1$ is equal to $0$ when $k\Delta\lambda = 2\pi n$ for integer $n$.
+This implies that planewaves whose wavelengths are integer divisors of the node spacing are always stable at the poles.
+
+Taking these solutions away, aswell as using that $\frac{g \Delta t}{\Delta \lambda ^2} > 0$, the polar stability condition can be simplified to
+\begin{equation} \label{appeq:polarstability}
+    \frac{g\Delta t}{\Delta \lambda ^2}
+    \begin{cases}
+        > 1 & \text{growing mode, unstable} \\
+        = 1 & \text{completely stable}      \\
+        < 1 & \text{decaying mode, stable}
+    \end{cases}
+    .
+\end{equation}
+
+\clearpage
+
+\section*{Scientific Summary for a General Audience}
+
+Energy from Sun in but not equally distributed over Earth.
+Energy can flow across surface of planet.
+Orbital parameters effect how this flow occurs.
+Can cause seasons, snowballs, overheating etc.
+
+Tidal heating is similar to stretching an elastic band.
+Stretching and relaxing an elastic band many times can cause the band to warm up.
+The moon of a gas planet is stretched slightly by unequal forces of gravity as one part of the moon is further away than the other.
+If the moon's orbit is not circular then the moon is stretched and relaxed, thus heats up in a similar way to the elastic band.
+This additional energy can move where the habitable zones are.
 
 \end{document}
