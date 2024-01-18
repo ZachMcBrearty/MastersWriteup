@@ -73,13 +73,13 @@
 
 \section{Introduction}
 
-The climate of a planet such as the Earth is many dimensional and thus very complicated.
+The climate of a planet such as the Earth is 3D and thus very complex.
 However, understanding and predicting the climate of a planet is essential for predicting the effects of climate change and finding habitable exo-planets.
 Fully simulating the entire atmosphere, ocean, and land would be extremely difficult without the use of massive supercomputers.
 By reducing degrees of freedom in the model, the simulation can become feasible while still yielding useful and valid results.
 
 The simplest climate model is a 0 dimensional energy balance.
-The 0-D model is an equality of the input energy from the Sun (LHS) to the output energy from the Earth acting as a black body (RHS),
+The 0-D model is an equality of the input energy from the Sun to the output energy from the Earth acting as a black body,
 \begin{equation}
     \pi r^2 S(1-A) = 4 \pi r^2 \sigma T^4, \label{eq:0DEBCM}
 \end{equation}
@@ -93,7 +93,10 @@ Another problem with the model is that it is not dynamic, meaning seasonal chang
 A 1-D Energy Balance Climate Model (here on EBCM) resolves the surface of the planet into latitude bands which have an (longitude-averaged) ocean-land fraction with variable heat capacity and albedo.
 % The rotation of the planet must be averaged over to remove the longitude dimension.
 % This means that the model cannot handle tidally locked planets which are too close to the parent star, as one side of the planet will be hot while the other is cold.
-Each of these latitude bands is treated as balancing incoming solar flux (insolation) with energy out via blackbody radiation.
+
+% It could be said that the model is not balancing these quantities;
+% Instead it is finding the net heat flux in/out of the band and then revaluing the temperature
+Each of these latitude bands is treated as !!!balancing!!! incoming solar flux (insolation) with energy out via blackbody radiation.
 There is also an additional energy diffusion term for energy transport between latitude bands.
 The form of the EBCM from Williams and Kasting 1997 (here on WK97) is given as
 \begin{equation}
@@ -101,10 +104,15 @@ The form of the EBCM from Williams and Kasting 1997 (here on WK97) is given as
     \label{eq:PDE_in_x}
 \end{equation}
 where $x=\sin\lambda$, $\lambda$ is the latitude, $C$ is the heat capacity of the latitude band,
-$D$ is the diffusion coefficient determining how effective the diffusion is, $I$ is the IR-emission of the band,
-$S$ is the insolation, and $A$ is the planetary albedo.
+$D$ is the diffusion coefficient determining how effective the diffusion between bands is,
+$I$ is the outgoing IR-emission of the band,
+$S$ is the diurnally-averaged insolation,
+and $A$ is the planetary albedo.
 All these parameters can be dependent on time and space, but generally in the program only a few are.
 These parameters, as well has the numerical integration of the EBCM, are explored in Section \ref{sec:ebcmodel}.
+
+% Give more background on exoplanets, exoplanet habitability and climate in the intro to properly set the scene.
+% describe how you build and verify an Earth model, then apply it to exoplanets and exomoons.
 
 This EBCM can be extended very easily for other heat sources.
 In Section \ref{sec:tidal_heating} the parameterisation and habitability of an exomoon around a gas giant is explored.
@@ -127,15 +135,13 @@ Additionally, the work with an extra heat source such as tidal heating informs h
 Section \ref{sec:ebdmodel} deals with developing and working with an Energy Balance Depth Model (EBDM) to investigate if a planet could sustain life under a frozen surface due to tidal heating.
 
 
-
-
-
 \section{1D Energy Balance Climate model} \label{sec:ebcmodel}
 
-\subsection{Transforming from $x$ to $\lambda$} \label{ssec:transxlambda}
+\subsection{Transforming from sin(latitude) to latitude} \label{ssec:transxlambda}
 
 While the EBCM is originally specified in sine of latitude it is better to work and integrate in terms of latitude, this necessitates a change of variables.
 
+% Could be appendix'ed
 The partial derivative operator is given by
 \begin{equation}
     \frac{\partial}{\partial x} = \frac{\partial \lambda}{\partial x} \frac {\partial} {\partial \lambda}
@@ -159,14 +165,14 @@ Fully expanding the derivatives in the EBCM assuming $D$ is not a function of sp
     + D (1-x^2) \frac{\partial^2 T}{\partial x^2},
     \label{eq:expanded}
 \end{equation}
-and then subbing in eqns. \eqref{eq:first_deriv} and \eqref{eq:second_deriv},
+and then substituting in eqns. \eqref{eq:first_deriv} and \eqref{eq:second_deriv},
 \begin{equation}
     C \frac{\partial T}{\partial t} = S(1-A) - I
     - D \tan\lambda \frac{\partial T}{\partial \lambda}
     + D \frac{\partial^2 T}{\partial \lambda^2}
     \label{eq:PDE_in_lat}
 \end{equation}
-which obviously diverges to infinity at the North and South poles as $\tan(\lambda \rightarrow \pm \pi/2) \rightarrow \infty$ unless $D(\lambda = \pm \pi/2) = 0$ or $\partial T / \partial \lambda|_{\lambda=\pm \pi/2} = 0$.
+which diverges to infinity at the North and South poles as $\tan(\lambda \rightarrow \pm \pi/2) \rightarrow \infty$ unless $D(\lambda = \pm \pi/2) = 0$ or $\partial T / \partial \lambda|_{\lambda=\pm \pi/2} = 0$.
 Following Spiegel et al 2008 (here on SMS08), we choose the latter \cite{SMS08}.
 
 \subsection{Characterising model parameters} \label{ssec:model_params}
@@ -245,7 +251,7 @@ and the temporal derivative can be approximated as a forward difference,
 with numerical instability analysed in Section \ref{sec:numerical_stability}.
 The PDE can then be numerically integrated by solving for $T^{m}_{n+1}$ using the parameters at timestep $n$.
 
-% Subbing these differences into the EBCM we arrive at,
+% substituting these differences into the EBCM we arrive at,
 % \begin{equation} \label{eq:discretised_PDE}
 %     \begin{aligned}
 %         C^m_n \left[\frac{T^m_{n+1} - T^m_n}{\Delta t}\right] = & S^m_n(1-A^m_n) - I^m_n                                                           \\
@@ -520,7 +526,7 @@ In their 2017 paper, Méndez and Rivera-Valentín show that for a planet in orbi
     \langle F\rangle = \frac{L}{a^2 \sqrt{1-e^2}},
 \end{equation}
 where $L$ is the luminosity of the star, assumed to be constant (equation (14) in \cite{Mendez2017}).
-Subbing eqn. \eqref{eq:fluxavg} into eqn. \eqref{eq:0DEBCM} the following temperature relation is found,
+substituting eqn. \eqref{eq:fluxavg} into eqn. \eqref{eq:0DEBCM} the following temperature relation is found,
 \begin{equation}
     \frac{L}{a^2 \sqrt{1-e^2}} (1-A) = 4 \sigma T^4,
     \label{eq:Temp_eccent}
@@ -592,7 +598,7 @@ The depth model can be found by first considering the standard heat equation
     \frac{\partial T}{\partial t} = \alpha \nabla^2 T,
 \end{equation}
 
-and subbing the spherical form for the lapacian,
+and substituting the spherical form for the lapacian,
 
 \begin{equation}
     \frac{\partial T}{\partial t}  = \alpha \left[\frac{1}{r} \frac{\partial^2 }{\partial r^2} (r T)
@@ -652,7 +658,7 @@ and let $D / C = g$, thus:
 \begin{equation*}
     \frac{\partial T}{\partial t} = g \left(\frac{\partial^2 T}{\partial \lambda^2} - \tan(\lambda)\frac{\partial T}{\partial \lambda}\right)
 \end{equation*}
-subbing in the discretisations, \eqref{eq:space_1} \eqref{eq:space_2} \eqref{eq:time_1}:
+substituting in the discretisations, \eqref{eq:space_1} \eqref{eq:space_2} \eqref{eq:time_1}:
 \begin{equation*}
     \frac{T^m_{n+1}-T^m_n}{\Delta t} = g \left(\frac{T^{m+2}_{n} - 2T^{m}_{n} + T^{m-2}_{n}}{(2\Delta \lambda)^2} - \tan(\lambda_m)\frac{T^{m+1}_{n} - T^{m-1}_{n}}{2 \Delta \lambda}\right)
 \end{equation*}
@@ -666,7 +672,7 @@ The absolute square can then be found as:
 \begin{equation*}
     |\xi|^2 = 1 + \frac{g \Delta t \sin(k\Delta\lambda)^2}{\Delta \lambda^2}\left(g\Delta t\left(\tan(\lambda_m)^2 + \frac{\sin^2(k\Delta\lambda)}{\Delta\lambda^2}\right) - 2 \right)
 \end{equation*}
-subbing this into \eqref{eq:stability_cases}, the normal stability conditions are as follows:
+substituting this into \eqref{eq:stability_cases}, the normal stability conditions are as follows:
 \begin{equation}\label{appeq:normalstability}
     g\Delta t\left(\tan(\lambda_m)^2 + \frac{\sin^2(k\Delta\lambda)}{\Delta\lambda^2}\right)
     \begin{cases}
@@ -679,7 +685,7 @@ subbing this into \eqref{eq:stability_cases}, the normal stability conditions ar
 
 
 The method to find the polar stability is much the same.
-subbing in discretisations \eqref{eq:forward_backward} (or equally \eqref{eq:backward_forward}) and \eqref{eq:time_1}, as well as the plane wave \eqref{eq:trial_plane_wave}:
+substituting in discretisations \eqref{eq:forward_backward} (or equally \eqref{eq:backward_forward}) and \eqref{eq:time_1}, as well as the plane wave \eqref{eq:trial_plane_wave}:
 \begin{equation*}
     \frac{\xi^{n+1} - \xi^{n}}{\Delta t} = g\frac{\xi^n \exp(i k \Delta\lambda) - \xi^n}{(\Delta\lambda)^2}
 \end{equation*}
