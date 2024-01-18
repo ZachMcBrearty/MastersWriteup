@@ -8,15 +8,15 @@
 \contentsline {subsection}{\numberline {A}Transforming from sin(latitude) to latitude}{3}{}
 \contentsline {subsection}{\numberline {B}Characterising model parameters}{4}{}
 \contentsline {subsection}{\numberline {C}Discretisation of the PDE}{5}{}
-\contentsline {subsection}{\numberline {D}Numerical stability of time forward-difference}{5}{}
-\contentsline {section}{\numberline {3}Exomoons and Tidal heating}{7}{}
-\contentsline {section}{\numberline {4}Convergence Testing of 1D EBCM}{9}{}
-\contentsline {subsection}{\numberline {A}Investigating time-averaged solar flux}{11}{}
-\contentsline {subsection}{\numberline {B}Obliquity and Rotation speed}{12}{}
-\contentsline {section}{\numberline {5}1D Energy Balance Depth Model}{13}{}
-\contentsline {section}{\numberline {6}Conclusions}{13}{}
-\contentsline {section}{\numberline {}References}{14}{}
+\contentsline {section}{\numberline {3}Exomoons and Tidal heating}{5}{}
+\contentsline {section}{\numberline {4}Convergence Testing of 1D EBCM}{7}{}
+\contentsline {subsection}{\numberline {A}Investigating time-averaged solar flux}{9}{}
+\contentsline {subsection}{\numberline {B}Obliquity and Rotation speed}{10}{}
+\contentsline {section}{\numberline {5}1D Energy Balance Depth Model}{11}{}
+\contentsline {section}{\numberline {6}Conclusions}{11}{}
+\contentsline {section}{\numberline {}References}{12}{}
 \appendix 
+\contentsline {subsection}{\numberline {1}Numerical stability of time forward-difference}{13}{}
 \contentsline {section}{\numberline {A}Numerical Stability Calculations}{15}{}
 \contentsline {section}{\numberline {B}Tidal heating and convective cooling}{16}{}
 \contentsline {section}{\numberline {}Scientific Summary for a General Audience}{17}{}

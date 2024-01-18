@@ -178,7 +178,7 @@ Following Spiegel et al 2008 (here on SMS08), we choose the latter \cite{SMS08}.
 \subsection{Characterising model parameters} \label{ssec:model_params}
 
 In this analysis we adopt the form of the heat capacity given by WK97.
-In short: $C(\lambda, t)$ varies with latitude through the ocean-land fraction, $f_o(\lambda)$, and with Temperature through the ice-ocean fraction, $f_i(T)$, as
+In short: $C(\lambda, t)$ varies with latitude through the ocean-land fraction, $f_o(\lambda)$, and with temperature through the ice-ocean fraction, $f_i(T)$, as
 $$
     C(\lambda, T) = (1 - f_o(\lambda)) C_{land} + f_o(\lambda) ((1-f_i(T)) C_{ocean} + f_i(T) C_{ice}(T)),
 $$
@@ -191,7 +191,7 @@ $$
     \end{cases}
 $$
 
-We also use the diffusion coefficient from WK97 which is constant in space and time, but varies with orbital and atmospheric parameters as,
+The diffusion coefficient being used is also from WK97. The diffusion varies with orbital and atmospheric parameters as,
 $$
     \frac{D}{D_0} = \frac{p}{p_0} \frac{c_p}{c_{p,0}} \left(\frac{m}{28}\right)^{-2} \left(\frac{\Omega}{1 \text{day}^{-1}}\right)^{-2}
 $$
@@ -212,7 +212,7 @@ $$
     A(T) = A_2(T) = 0.525 - 0.245 \tanh\left(\frac{T - 268 \text{K}}{5}\right),
 $$
 are used in all models.
-This IR-emission is a blackbody radiation term (numerator) damped the optical thickness of the atmosphere (denominator) which is roughly equivalent to a greenhouse gas effect.
+This IR-emission is a blackbody radiation term (numerator) damped by the optical thickness of the atmosphere (denominator) which is roughly equivalent to a greenhouse gas effect.
 The albedo function is a smooth scaling from low to high reflectivity due to snow and water-vapour reflectance.
 
 The insolation function, $S$, is defined in WK97 as the day averaged incident (based on latitude) radiation from the sun,
@@ -220,11 +220,11 @@ $$
     S(\lambda, t) = \frac{q_0}{\pi} \left(\frac{1 \ \text{au}}{a}\right)^2 (H(t) \sin{\lambda} \sin{\delta(t)} + \cos{\lambda} \cos{\delta(t)} \sin{H(t)})
 $$
 where $q_0=1360 \ \text{Wm}^{-2}$ is the insolation from the Sun,
-$a$ is the distance from the Sun in radians,
-$\cos(H(t)) = -\tan\lambda \tan \delta(t)$ is the radian half-day length with $0 < H < \pi$,
+$a$ is the distance from the Sun,
+$\cos H(t) = -\tan \lambda \tan \delta(t)$ is the radian half-day length with $0 < H < \pi$,
 and $\delta(t)$ is the solar declination defined by
 $$
-    \sin(\delta(t)) = -\sin(\delta_0) \cos(L_s(t) + \pi/2)
+    \sin \delta(t) = -\sin \delta_0 \cos(L_s(t) + \pi/2)
 $$
 where $\delta_0$ is the obliquity of the planet and $L_s(t) = \omega t$ is orbital longitude from an orbital angular velocity found by Kepler's laws.
 
@@ -237,16 +237,16 @@ To numerically integrate the EBCM must be transformed into a discrete form. Spat
 with spatial indexing of each zone from $m=0, 1, \dots, S-1$.
 A temporal indexing of $n=0,1,\dots$ is used to discretise time into steps of $\Delta t$.
 
-The spatial derivatives can then be approximated by the numerically stable central difference and second order central difference:
+The spatial derivatives can then be approximated by the central difference and second order central difference:
 \begin{equation} \label{eq:space_1}
-    \frac{dT^m_n}{d\lambda} = \frac{T^{m+1}_n - T^{m-1}_n}{2 \Delta\lambda},
+    \frac{\partial T^m_n}{\partial \lambda} = \frac{T^{m+1}_n - T^{m-1}_n}{2 \Delta\lambda},
 \end{equation}
 \begin{equation} \label{eq:space_2}
-    \frac{d^2T^m_n}{d\lambda^2} = \frac{T^{m+2}_n -2T^m_n + T^{m-2}_n}{(2 \Delta\lambda)^2},
+    \frac{\partial^2T^m_n}{\partial \lambda^2} = \frac{T^{m+2}_n -2T^m_n + T^{m-2}_n}{(2 \Delta\lambda)^2},
 \end{equation}
 and the temporal derivative can be approximated as a forward difference,
 \begin{equation} \label{eq:time_1}
-    \frac{dT^m_n}{dt} = \frac{T^m_{n+1} - T^m_n}{\Delta t},
+    \frac{\partial T^m_n}{\partial t} = \frac{T^m_{n+1} - T^m_n}{\Delta t},
 \end{equation}
 with numerical instability analysed in Section \ref{sec:numerical_stability}.
 The PDE can then be numerically integrated by solving for $T^{m}_{n+1}$ using the parameters at timestep $n$.
@@ -278,6 +278,299 @@ Then the south [$m=0$] (north [$m=S-1$]) pole can be approximated by forward the
 where $dT^{m=0}_n/d\lambda = dT^{m=S-1}_n/d\lambda = 0$.
 This treatment addresses the missing indices while still maintaining a suitable level of stability (see \ref{sec:numerical_stability}).
 Similarly, the south edge ($i=1$) uses a central-backward difference, and the north edge ($i=S-2$) uses a central-forward difference.
+
+\section{Exomoons and Tidal heating} \label{sec:tidal_heating}
+
+%%% TODO: much of this is introduction / explanation which can be moved to the introduction %%%
+
+Habitable exomoons have a number of additional energy sources and sinks which can be added to the model to investigate their properties.
+We assume the exomoon is an Earth-like planet in orbit around a Jupiter-like gas giant.
+
+The first energy source is emission from the body they are orbiting,
+\begin{equation}
+    F_{\text{gas}} = \frac{L_{\text{gas}}}{4 \pi a_{\text{moon}}^2} = \frac{r_{\text{gas}}^2 \sigma T_{\text{gas}}^4}{a_{\text{moon}}^2},
+\end{equation}
+where $L_{\text{gas}} = 4 \pi r_{\text{gas}}^2 \sigma T_{\text{gas}}^4$ is the luminosity of the gas giant, with Temperature $T_{\text{gas}}$ and radius $r_{\text{gas}}$, and $a_{\text{moon}}$ is the semimajoraxis of the moon around the giant.
+The temperature of the giant can be determined from eqn. \eqref{eq:0DEBCM}.
+In the case of a giant such as Jupiter the temperature will actually be higher due to the excess heat of formation, though not by much \cite{LJW2018}.
+
+The moon may also experience tidal heating, where due to the eccentricity of the orbit the forces on the moon produce stresses which heat the core and mantle of the planet.
+This heating can be quantified in two main methods.
+
+The first and more simple method is Fixed-Q tidal heating.
+This is a constant heatflux through the surface of the moon and is given by,
+\begin{equation}
+    F_{\text{fQ}} = \frac{21}{2} \frac{k}{Q} \frac{G^{3/2}M_{\text{gas}}^{5/2}R_{\text{moon}}^5 e_{\text{moon}}^2} {a_{\text{moon}}^{15/2}}
+\end{equation} %%% TODO: reference %%%
+with $k$ being the rigidity of the moon rock, $Q$ is the quality coefficient.
+In this model the values of $k$ and $Q$ are fixed, hence fixed-Q model.
+A deficiency of this model is a prediction of tidal heat no matter how far away the moon is from the giant, and that the heatflux is constant no matter what happens to the moon.
+
+The viscoelastic tidal heating model addresses these deficiencies by replacing the constant $k/Q$ factor with the imaginary part of the second complex Love number, $\text{Im}(k_2)$:
+\begin{equation}
+    F_{\text{tidal}} = \frac{21}{2} \text{Im}(k_2) \frac{G^{3/2}M_{\text{gas}}^{5/2}R_{\text{moon}}^5 e_{\text{moon}}^2} {a_{\text{moon}}^{15/2}}.
+\end{equation} \cite{YP1981} \cite{Segatz1988} \cite{DHT2015}.
+Finding the value of $\text{Im}(k_2)$ is difficult however as it is dependent on the Im$(k_2)$ function and the value of the temperature of the mantle of the planet.
+
+The value of the tidal heating is calculated for a range of mantle temperatures and the convective cooling rate is also found for a range of mantle temperatures.
+The point at which these overlap is the mantle temperature where all the tidal heat flows through the surface of the planet.
+Finding the convective cooling rate involves an iterative process described in Henning et al 2009 \cite{Henning2009}.
+
+Henning et al introduce four different viscoelastic response models: Maxwell, Voigt-Kelvin, SAS, Burgers.
+These models determine the Im$(k_2)$ function.
+Both the Im$(k_2)$ function and all associated functions are in appendix \ref{app:convcooling}.
+This paper focuses on the Maxwell model, due to the inherent simplicity.
+However, the code as written can be easily extended to work with the other more complicated models.
+
+\begin{figure}
+    \includegraphics[width=\linewidth]{images/eclipsing_allfour.png}
+    \caption{
+        %%% TODO: what are the fixed parameters when the others are varying? %%%
+        Top Left: There is a positive correlation between the amount of light eclipsed and the distance of the gas giant from the star.
+        Top Right: Negative correlation between the amount of light eclipsed and the distance of the moon to gas giant.
+        Goes nearly to 0 but is still occasionally eclipsed but only the penumbra of the gas giant.
+        Bottom Left and Bottom Right: Variations due to changing eccentricity, which are an order of magnitude smaller than the semimajor axis variations.
+        This is due to averaging over many variable length eclipses to give a much smaller overall variation in eclipse length.
+    }
+    \label{fig:eclipsing}
+\end{figure}
+
+The third addition to the EBCM is a energy sink due to eclipsing of the moon by the giant.
+A 3 body gravity simulation can be used to find the average fraction of light eclipsed.
+Figure \ref{fig:eclipsing} shows how the amount of eclipsing varies with the semimajor axes and eccentricities of the moon and gas giant.
+The eclipsing is modelled as being 100\% light blocked in the umbra, 50\% light blocked in the penumbra, and 0\% light blocked otherwise.
+
+There is a linear relationship between gas giant semimajor axis meaning there is more light eclipsed as the gas giant moves further from the star.
+This has a doubled effect as solar flux is decreasing by the square of the semimajor axis and an increasing amount of that light is being eclipsed.
+
+Moon semimajor axis has the opposite relationship.
+As the moon's separation increases less light is blocked.
+This variablility is much more significant than the others, ranging from 15\% blocked down to nearly 0\%.
+The largest drop is when the moon's orbit is far enough away that it is only ever in the penumbra of the gas giant.
+
+In both cases varying eccentricity appears to have an effect which is an order of magnitude smaller than varying the semimajor axis.
+This is probably due to the averaging of many short and long eclipses to the same average eclipse time for 0 eccentricity.
+
+Overall the effect of the eclipsing is minor except in instances where the orbit is extremely close to the gas giant, which would mostlikely result in large tidal heating which overpowers the small dip in flux.
+
+
+%%% TODO: rename section %%%
+\section{Convergence Testing of 1D EBCM} \label{sec:conv_testing}
+
+%%% TODO: move definition of convergent temperature to the appendix, then focus more the results %%%
+Define a system to have converged if the global temperature average varies by less than a certain amount, $\epsilon_{\text{tol}}$, between 2 averaging periods,
+
+\begin{equation*}
+    \frac{\Delta T}{T} = \frac{T_{\text{avg}}(t_2 \to t_3) - T_{\text{avg}}(t_1 \to t_2)}{T_{\text{avg}}(t_1 \to t_2)}
+    \le \epsilon_{\text{tol}}
+\end{equation*}
+where the global temperature is found from an area-weighted sum over all latitude bands in the time period,
+\begin{equation}
+    T_{\text{avg}}(t_i \to t_j) = \frac{\sum_{n = i}^{j} \sum_{m = 0}^{S-1} T^m_n \Delta t \cos(\lambda_m)\Delta \lambda}{\sum_{q = i}^{j} \Delta t \sum_{m=0}^{S-1} \cos(\lambda_m)\Delta \lambda},
+\end{equation}
+the denominator evaluates to $2 (t_j - t_i)$. The variables $\Delta t$ and $\Delta \lambda$ can in general be variable for this expression, but in these simulations are constant.
+
+The orbital parameters of the model can then be varied to find habitable regions. The default parameters of the model are Earth-like, and are given in Table \ref{tab:default_params}.
+
+\begin{table*}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+        \hline
+        \multirow{2}{*}{Model Type} & \multicolumn{2}{|c|}{Semimajoraxis, au} & \multicolumn{2}{|c|}{Eccentricity} & Obliquity        & No. spatial nodes & Timestep      & \multirow{2}{*}{Land fraction type}                                         \\
+        \cline{2-5}
+                                    & $a_{\text{gas}}$                        & $a_{\text{moon}}$                  & $e_{\text{gas}}$ & $e_{\text{moon}}$ & $\delta$, deg & $S$                                 & $\Delta t$, days &                    \\
+        \hline
+        Earth-like                  & 1                                       & -                                  & 0.0167           & -                 & 23.5          & 61                                  & 1                & Uniform 70\% Ocean \\
+        \hline
+        Tidal-heating               & 1                                       & 0.01                               & 0.05             & 0.001             & 23.5          & 61                                  & 1                & Uniform 70\% Ocean \\
+        \hline
+    \end{tabular}
+    \caption{The default parameters for the models used in the analyses in the paper.
+        A dashed entry, `-', indicates the value does not exist in the model.
+        A `Uniform' land fraction indicates that the model has the same ratio of land to ocean across the entire planet.
+        An `Earth-like' land fraction is not used, but is given in WK97 \cite{WK97} and is an option in the code configuration file.
+        The odd number of spatial nodes means there is a true equator with $\lambda = 0$ as well as poles with $\lambda = \pm 90^{\circ}$}
+    \label{tab:default_params}
+\end{table*}
+
+\subsection{Investigating time-averaged solar flux} \label{ssec:tavgsolflux}
+
+\begin{figure}
+    \includegraphics[width=\linewidth]{images/semimajoraxis_fits_highres_bothhalf.png}
+    \caption{Convergent global temperature of the Earthlike model varying semimajor axis and fitting to the theory prediction (section \ref{ssec:tavgsolflux}) of $T \propto a^{-1/2}$ by the equation $T = p_i a^{-q_i}$.
+        Also shown are 2 horizontal lines for the boiling and freezing points of water to roughly indicate habitability.
+        %%% TODO: move the rest of the caption into the main text %%%
+        There is a drop in the convergent temperature just after 1 au where the reduced insolation cannot prevent the planet from falling into a snowball state.
+        The `temperate' zone before 1 au fits with parameters $p_1 = 294.37 \pm 0.08$, $q_1 = 0.5026 \pm 0.0007$.
+        The `snowball' zone after 1 au instead fits parameters $p_2 = 203.5 \pm 0.6$, $q_2 = 0.5650 \pm 0.0009$.
+        While the temperate zone follows the negative-half powerlaw very well, the snowball zone follows a slightly more negative powerlaw.}
+    \label{fig:temperature_semimajoraxis}
+\end{figure}
+
+\begin{figure}
+    \includegraphics[width=\linewidth]{images/eccentricity_fits_highres.png}
+    % \includegraphics[width=0.495\linewidth]{images/eccentricity_timeavghabitability_square.png}
+    % \includegraphics[width=0.495\linewidth]{images/eccentricity_areaavghabitability_square.png}
+    \caption{
+        % Top:
+        Convergent Temperature of the Earthlike model varying eccentricity between 0 and 0.9.
+        Overlaid on the data is a fit to the theory equation $T\propto(1-e^2)^{-1/8}$, with proportionality constant $p=293.89 \pm 0.10$ K.
+        %%% TODO: chi2? %%%
+        The fit is very good, with the extreme eccentricities diverging from the model slightly.
+        % Bottom left: Time-averaged habitability for each latitude band in the final year of simulation.
+        % As eccentricity increases the poles become hotter, thus more habitable.
+        % At the same time the equator becomes too hot and loses habitability.
+        % Bottom right: Area-averaged habitability for the final 10 years of simulation.
+        % The cyclical temperature fluctuations due to eccentricity of the orbit are evident, especially at high eccentricities where the planet becomes globally uninhabitable for portions of the year.
+    }
+    \label{fig:temperature_eccentricity}
+\end{figure}
+
+% \begin{figure}
+%     \includegraphics[width=\linewidth]{images/semimajoraxis_timeavghabitability.png}
+%     \caption{
+%         Time-averaged habitability for each latitude band for semi major axis between 0.5 and 1.5 au.
+%         The model becomes too hot to sustain life at the equator when too close to the star ($<0.7$ au) and too cold at the poles when too far away ($>0.95$ au).
+%         The middle of these two bounds has extremely high habitability across the entire planet.
+%         Beyond 1 au the entire planet falls into a snowball state and is completely uninhabitable.
+%     }
+% \end{figure}
+
+% Varying a single parameter and plotting convergence time, convergent temperature, Area and time averaged habitabilities.
+In their 2017 paper, Méndez and Rivera-Valentín \cite{Mendez2017} show that for a planet in orbit with semimajoraxis $a$ and eccentricity $e$ the average solar flux in an orbit is given by,
+\begin{equation} \label{eq:fluxavg}
+    \langle F\rangle = \frac{L}{a^2 \sqrt{1-e^2}},
+\end{equation}
+where $L$ is the luminosity of the star, assumed to be constant (equation (14) in \cite{Mendez2017}).
+substituting eqn. \eqref{eq:fluxavg} into eqn. \eqref{eq:0DEBCM} the following temperature relation is found,
+\begin{equation}
+    \frac{L}{a^2 \sqrt{1-e^2}} (1-A) = 4 \sigma T^4,
+    \label{eq:Temp_eccent}
+\end{equation}
+where $A$ is albedo and $T$ is the temperature of the planet.
+Assuming that $L$ and $A$ are constant, we can see that $T$ is proportional to $(1-e^2)^{-1/8}$ for constant semimajoraxis and that $T$ is proportional to $a^{-1/2}$ for constant eccentricity.
+These relations are confirmed by the model in Fig. \ref{fig:temperature_eccentricity} and Fig. \ref{fig:temperature_semimajoraxis} respectively.
+
+\begin{figure}
+    \includegraphics[width=\linewidth]{images/dual_convergence_agas_0.5to2.0_eccgas_0to0.9_with_fits.png}
+    \includegraphics[width=\linewidth]{images/total_habitability_agas_0.5to2.0_eccgas_0to0.9_with_fits.png}
+    \caption{Top: A heatmap of global average temperature, varying semimajoraxis and eccentricity of a uniform planet.
+        Bottom: The same information but processed as global average habitability.
+        Overlaid on both are the lines of constant temperature given by $a \propto (1-e^2)^{-1/4}$ for $T = 273$ K and $T = 373$ K which represent the inner and outer habitable zones respectively.
+        Since the temperature is never exactly 373 K or 273 K, a range of values are used to approximate the region.
+        The three $-1$ K cells in the top right did not reach an equilibrium within 100 years of simulation.
+        %%% TODO: should also be moved into the main body of text %%%
+        While the temperature line for 373 K is below the expected values, the corresponding line on the habitability graph follows the outer edge of the habitable region very well.
+        This is indicative that global average temperature is not a good measure of habitability.
+    }
+    \label{fig:semiecc_temphab}
+\end{figure}
+
+We can also see that for a constant temperature $a \propto (1-e^2)^{-1/4}$.
+This proportionality can be used to find how the inner (T = 273 K) and outer (T = 373 K) habitable zones scale with increasing eccentricity.
+It has been noted in Dressing10 that inner habitable zone follows this law quite closely but the outer zone has much greater variability due to other factors such as obliquity and ocean fraction.
+%%% TODO: define how the time averaged, space averaged, and total habitability are defined -> appendix %%%
+As shown in the left of Fig. \ref{fig:semiecc_temphab}, looking only at the temperature relation can lead to large deviations from the relation.
+However the scaling relation holds more closely by looking at the time and space averaged habitability on the right of the figure.
+This is due to the habitability calculation taking temperature extremes into account which the global average temperature would not.
+
+\subsection{Obliquity and Rotation speed} \label{ssec:obliqrotat}
+
+Understanding how the obliquity and rotation speed of the planet effects climate is also useful.
+Varying the obliquity can maximise or minimise the average temperature of the planet by changing how the energy is distributed over the planet's surface.
+
+
+\begin{figure}
+    \includegraphics[width=0.495\linewidth]{images/obliquity_highres_square.png}
+    \includegraphics[width=0.495\linewidth]{images/obliquity_timeavghabitability_square.png}
+    \caption{Convergent Temperature of the Earthlike model varying obliquity between 0 and 180$^{\circ}$.
+        The data are symmetrical about 90$^{\circ}$, as expected for a planet with a uniform surface.
+        %%% TODO: move into main body of text %%%
+        The plot indicates that there are optimal obliquities at $\delta \approx 20^{\circ}$ and $\approx 50^{\circ}$ for a minimum and maximum temperature respectively.
+    }
+    \label{fig:temperature_obliquity}
+\end{figure}
+
+% \begin{figure}
+%     
+%     \includegraphics[width=0.495\linewidth]{images/obliquity_areaavghabitability_square.png}
+%     \caption{
+%         Left: Time-averaged habitability for each latitude band in the final year of simulation.
+%         Higher obliquities allow for more energy input into the poles
+%         Right: Area-averaged habitability for the final 10 years of simulation.
+%         The cyclical temperature fluctuations due to obliquity of the orbit are evident.
+%         It is worth noting that though there are habitability fluctuations in time, they vary by only ~20\% from maximum habitability.
+%     }
+%     \label{fig:timeareahab_obliquity}
+% \end{figure}
+
+%%% TODO: make as subsection of exoplanet / tidal heating section %%% 
+\section{1D Energy Balance Depth Model} \label{sec:ebdmodel}
+
+So far the tidal heating has been found by balancing convection with tidal heat input, then allowing this tidal heat to flow through the surface of the planet.
+Now the tidal heat is allowed to flow through the bottom layer of a depth model.
+This investigates whether a planet with a cold frozen surface could harbour habitable temperatures below it's surface.
+
+The depth model can be found by first considering the standard heat equation
+
+\begin{equation}
+    \frac{\partial T}{\partial t} = \alpha \nabla^2 T,
+\end{equation}
+
+and substituting the spherical form for the lapacian,
+
+\begin{equation}
+    \frac{\partial T}{\partial t}  = \alpha \left[\frac{1}{r} \frac{\partial^2 }{\partial r^2} (r T)
+        + \frac{1}{r^2 \sin\theta} \frac{\partial}{\partial \theta}\left(\sin\theta \frac{\partial T}{\partial\theta}\right)
+        + \frac{1}{r^2 \sin\theta} \frac{\partial^2 T}{\partial \phi^2} \right]
+\end{equation}
+where $r$ is the distance to the center of the planet, $\theta = \pi - \lambda$ is the co-latitude $\theta$ related to the latitude $\lambda$, and $\phi$ is longitude.
+In the latitude-band surface case $T(r, \theta, \phi) = T(\theta)$ and the equation is transformed into $\lambda$, whereas in the depth case $T(r, \theta, \phi) = T(r)$.
+
+Thus the depth model is given by
+
+\begin{equation}
+    \frac{\partial T}{\partial t} = \alpha \left[\frac{\partial^2 T}{\partial r^2} + \frac{2}{r}\frac{\partial T}{\partial r}\right]
+\end{equation}
+
+...
+
+\section{Conclusions} \label{sec:conclusion}
+
+Donec finibus, tellus sit amet luctus sodales, lectus ante accumsan ligula, at condimentum lorem justo a sapien. Phasellus vel tortor vitae metus lacinia efficitur ac vel ex. Aenean eget congue leo. Aliquam cursus mauris sit amet arcu dignissim, vel condimentum nisi sodales.
+
+% \begin{acknowledgments}
+%     (OPTIONAL) The author would like to thank...
+% \end{acknowledgments}
+
+%%% TODO: figureout bibtex %%%
+\begin{thebibliography}{MastersZachMcBrearty.bib}
+    % \bibitem{ref01} A.~N.~Other, Title of the book, edition, publishers, place of publication (year of publication), p.~123.  % example book reference 
+    % \bibitem{ref02} A.~N.~Other, Title of the article, journal title, volume, 123--456 (year of publication).   % example journal reference
+    \bibitem{Dressing10} Courtney D. Dressing et al, HABITABLE CLIMATES: THE INFLUENCE OF ECCENTRICITY, ApJ, 721, 1295--1307, 2010
+    \bibitem{HabKepler62f} Aomawa L. Shields et al, The Effect of Orbital Configuration on the Possible Climates and Habitability of Kepler-62f, Astrobiology, 16, 443-464, 2016
+    \bibitem{Roe06} Gerard Roe, In defence of Milankovitch, Geophysical Research Letters, 33, L24703, 2006
+    \bibitem{SMS08} David S. Spiegel et al, Habitable Climates, ApJ, 681, 1609--1623, 2008
+    \bibitem{SMS09} David S. Spiegel et al, Habitable Climates: the influence of Obliquity, ApJ 691, 596--, 2009
+    \bibitem{WK97} Williams and Kasting, Habitable Planets with High Obliquities, Icarus, 129, 254-267, 1997
+    \bibitem{NC79} North and Coakley, Differences between Seasonal and Mean Annual Energy Balance Model Calculations of Climate and Climate Sensitivity, J. Atmos. Sci., 36, 1189--1204, 1979
+    \bibitem{Mendez2017} Abel Méndez and Edgard G. Rivera-Valentín, The Equilibrium Temperature of Planets in Elliptical Orbits, ApJL, 837, 2017
+    % \bibitem{ExoEu} Exoplanet data from http://exoplanet.eu
+    \bibitem{NumericalModelling} Viggo H. Hansteen, Numerical Modelling in a nutshell, University of Oslo, Institute of Theoretical Astrophysics, AST5110 Lecture materials 2011, accessed 6/11/2023: https://www.uio.no/studier/emner/matnat/astro/AST5110/h11/undervisningsmateriale/numerics\_intro.pdf
+    \bibitem{NASAGlobTemp} https://earthobservatory.nasa.gov/world-of-change/global-temperatures, paragraph 3, accessed 08/12/2023
+    \bibitem{SAB22} Sulaiman, Achilleos, Bertucci et al, Enceladus and Titan: emerging worlds of the Solar System, Exp Astron 54, 849--876, 2022
+    \bibitem{RN21} Marc Rovira-Navarro et al, Tidally Heated Exomoons around Gas Giants, Planet. Sci. J., 2 119, 2021
+    \bibitem{Segatz1988} Segatz et al, Tidal dissipation, surface heat flow, and figure of viscoelastic models of Io, ICARUS 75, 187--206, 1988
+    \bibitem{YP1981} Charles F. Yoder, Stanton J. Peale, The tides of Io, Icarus, 47 1, 1--35, 1981
+    \bibitem{DHT2015} Vera Dobos, René Heller, Edwin L. Turner, The effect of multiple heat sources on exomoon habitable zones, A\&A 601 A91, 2017
+    \bibitem{LJW2018} L. Li, X. Jiang, R.A. West et al, Less absorbed solar energy and more internal heat for Jupiter. Nat Commun 9, 3709, 2018
+    \bibitem{Henning2009} Wade G. Henning et al, TIDALLY HEATED TERRESTRIAL EXOPLANETS: VISCOELASTIC RESPONSE MODELS, ApJ 707 1000, 2009
+\end{thebibliography}
+
+\clearpage
+
+\appendix
+
+%%% TODO: merge the two following sections into one %%%
 
 \subsection{Numerical stability of time forward-difference} \label{sec:numerical_stability}
 
@@ -371,285 +664,6 @@ Most models considered in this paper have a land-ocean fraction of $f_{\text{oce
 This corresponds to a value $\Delta\lambda = 0.018\radians = 1.03\degrees$.
 The instability in the actual model can be found by varying the spatial dimension (thus $\Delta \lambda$), as seen in Fig. \ref{fig:conv_spacedim}.
 The instability occurs around $\Delta\lambda \approx 1.23\degrees$ which is reasonably close to the calculated value with the assumptions used.
-
-\section{Exomoons and Tidal heating} \label{sec:tidal_heating}
-
-Habitable exomoons have a number of additional energy sources and sinks which can be added to the model to investigate their properties.
-We assume the exomoon is an Earth-like planet in orbit around a Jupiter-like gas giant.
-
-The first energy source is emission from the body they are orbiting,
-\begin{equation}
-    F_{\text{gas}} = \frac{\sigma T_{\text{gas}}^4}{4 \pi a_{\text{moon}}^2},
-\end{equation}
-where $T_{\text{gas}}$ is the temperature of the gas giant, and $a_{\text{moon}}$ is the semimajoraxis of the moon around the giant.
-The temperature of the giant can be determined from eqn. \eqref{eq:0DEBCM}.
-In the case of a giant such as Jupiter the temperature will actually be higher due to the excess heat of formation, though not by much \cite{LJW2018}.
-
-The moon may also experience tidal heating, where due to the eccentricity of the orbit the forces on the moon produce stresses which heat the core and mantle of the planet.
-This heating can be quantified in two main methods.
-
-The first and more simple method is Fixed-Q tidal heating.
-This is a constant heatflux through the surface of the moon and is given by,
-\begin{equation}
-    F_{\text{fQ}} = \frac{21}{2} \frac{k}{Q} \frac{G^{3/2}M_{\text{gas}}^{5/2}R_{\text{moon}}^5 e_{\text{moon}}^2} {a_{\text{moon}}^{15/2}}
-\end{equation}
-with $k$ being the rigidity of the moon rock, $Q$ is the quality coefficient.
-In this model the values of $k$ and $Q$ are fixed, hence fixed-Q model.
-A deficiency of this model is a prediction of tidal heat no matter how far away the moon is from the giant, and that the heatflux is constant no matter what happens to the moon.
-
-The viscoelastic tidal heating model addresses these deficiencies by replacing the constant $k/Q$ factor with the imaginary part of the second complex Love number, $\text{Im}(k_2)$:
-\begin{equation}
-    F_{\text{tidal}} = \frac{21}{2} \text{Im}(k_2) \frac{G^{3/2}M_{\text{gas}}^{5/2}R_{\text{moon}}^5 e_{\text{moon}}^2} {a_{\text{moon}}^{15/2}}.
-\end{equation} \cite{YP1981} \cite{Segatz1988} \cite{DHT2015}.
-Finding the value of $\text{Im}(k_2)$ is difficult however as it is dependent on the Im$(k_2)$ function and the value of the temperature of the mantle of the planet.
-
-The value of the tidal heating is calculated for a range of mantle temperatures and the convective cooling rate is also found for a range of mantle temperatures.
-The point at which these overlap is the mantle temperature where all the tidal heat flows through the surface of the planet.
-Finding the convective cooling rate involves an iterative process described in Henning et al 2009 \cite{Henning2009}.
-
-Henning et al introduce four different viscoelastic response models: Maxwell, Voigt-Kelvin, SAS, Burgers.
-These models determine the Im$(k_2)$ function.
-Both the Im$(k_2)$ function and all associated functions are in appendix \ref{app:convcooling}.
-This paper focuses on the Maxwell model, due to the inherent simplicity.
-However, the code as written can be easily extended to work with the other more complicated models.
-
-\begin{figure}
-    \includegraphics[width=\linewidth]{images/eclipsing_allfour.png}
-    \caption{
-        Top Left: There is a positive correlation between the amount of light eclipsed and the distance of the gas giant from the star.
-        Top Right: Negative correlation between the amount of light eclipsed and the distance of the moon to gas giant.
-        Goes nearly to 0 but is still occasionally eclipsed but only the penumbra of the gas giant.
-        Bottom Left and Bottom Right: Variations due to changing eccentricity, which are an order of magnitude smaller than the semimajor axis variations.
-        This is due to averaging over many variable length eclipses to give a much smaller overall variation in eclipse length.
-    }
-    \label{fig:eclipsing}
-\end{figure}
-
-The third addition to the EBCM is a energy sink due to eclipsing of the moon by the giant.
-A 3 body gravity simulation can be used to find the average fraction of light eclipsed.
-Figure \ref{fig:eclipsing} shows how the amount of eclipsing varies with the semimajor axes and eccentricities of the moon and gas giant.
-The eclipsing is modelled as being 100\% light blocked in the umbra, 50\% light blocked in the penumbra, and 0\% light blocked otherwise.
-
-There is a linear relationship between Gas semimajor axis meaning there is more light eclipsed as the gas giant moves further from the star.
-This has a doubled effect as solar flux is decreasing by the square of the semimajor axis and an increasing amount of that light is being eclipsed.
-
-Moon semimajor axis has the opposite relationship.
-As the moon's separation increases less light is blocked.
-This variablility is much more significant than the others, ranging from 15\% blocked down to nearly 0\%.
-The largest drop is when the moon's orbit is far enough away that it is only ever in the penumbra of the gas giant.
-
-In both cases varying eccentricity appears to have an effect which is an order of magnitude smaller than varying the semimajor axis.
-This is probably due to the averaging of many short and long eclipses to the same average eclipse time for 0 eccentricity.
-
-Overall the effect of the eclipsing is minor except in instances where the orbit is extremely close to the gas giant, which would mostlikely result in large tidal heating which overpowers the small dip in flux.
-
-\section{Convergence Testing of 1D EBCM} \label{sec:conv_testing}
-
-Define a system to have converged if the global temperature average varies by less than a certain amount, $\epsilon_{\text{tol}}$, between 2 averaging periods,
-
-\begin{equation*}
-    \frac{\Delta T}{T} = \frac{T_{\text{avg}}(t_2 \to t_3) - T_{\text{avg}}(t_1 \to t_2)}{T_{\text{avg}}(t_1 \to t_2)}
-    \le \epsilon_{\text{tol}}
-\end{equation*}
-where the global temperature is found from an area-weighted sum over all latitude bands in the time period,
-\begin{equation}
-    T_{\text{avg}}(t_i \to t_j) = \frac{\sum_{n = i}^{j} \sum_{m = 0}^{S-1} T^m_n \Delta t \cos(\lambda_m)\Delta \lambda}{\sum_{q = i}^{j} \Delta t \sum_{m=0}^{S-1} \cos(\lambda_m)\Delta \lambda},
-\end{equation}
-the denominator evaluates to $2 (t_j - t_i)$. The variables $\Delta t$ and $\Delta \lambda$ can in general be variable for this expression, but in these simulations are constant.
-
-The orbital parameters of the model can then be varied to find habitable regions. The default parameters of the model are Earth-like, and are given in Table \ref{tab:default_params}.
-
-\begin{table*}
-    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
-        \hline
-        \multirow{2}{*}{Model Type} & \multicolumn{2}{|c|}{Semimajoraxis, au} & \multicolumn{2}{|c|}{Eccentricity} & Obliquity        & No. spatial nodes & Timestep      & \multirow{2}{*}{Land fraction type}                                         \\
-        \cline{2-5}
-                                    & $a_{\text{gas}}$                        & $a_{\text{moon}}$                  & $e_{\text{gas}}$ & $e_{\text{moon}}$ & $\delta$, deg & $S$                                 & $\Delta t$, days &                    \\
-        \hline
-        Earth-like                  & 1                                       & -                                  & 0.0167           & -                 & 23.5          & 61                                  & 1                & Uniform 70\% Ocean \\
-        \hline
-        Tidal-heating               & 1                                       & 0.01                               & 0.05             & 0.001             & 23.5          & 61                                  & 1                & Uniform 70\% Ocean \\
-        \hline
-    \end{tabular}
-    \caption{The default parameters for the models used in the analyses in the paper.
-        A dashed entry, `-', indicates the value does not exist in the model.
-        A `Uniform' land fraction indicates that the model has the same ratio of land to ocean across the entire planet.
-        An `Earth-like' land fraction is not used, but is given in WK97 \cite{WK97} and is an option in the code configuration file.
-        The odd number of spatial nodes means there is a true equator with $\lambda = 0$ as well as poles with $\lambda = \pm 90^{\circ}$}
-    \label{tab:default_params}
-\end{table*}
-
-\subsection{Investigating time-averaged solar flux} \label{ssec:single_param}
-
-\begin{figure}
-    \includegraphics[width=\linewidth]{images/semimajoraxis_fits_highres_bothhalf.png}
-    \caption{Convergent global temperature of the Earthlike model varying semimajor axis and fitting to the theory prediction of $T \propto a^{-1/2}$ by the equation $T = p_i a^{-q_i}$.
-        Also shown are 2 horizontal lines for the boiling and freezing points of water to roughly indicate habitability.
-        There is a drop in the convergent temperature just after 1 au where the reduced insolation cannot prevent the planet from falling into a snowball state.
-        The `temperate' zone before 1 au fits with parameters $p_1 = 294.37 \pm 0.08$, $q_1 = 0.5026 \pm 0.0007$.
-        The `snowball' zone after 1 au instead fits parameters $p_2 = 203.5 \pm 0.6$, $q_2 = 0.5650 \pm 0.0009$.
-        While the temperate zone follows the negative-half powerlaw very well, the snowball zone follows a slightly more negative powerlaw.}
-    \label{fig:temperature_semimajoraxis}
-\end{figure}
-
-\begin{figure}
-    \includegraphics[width=\linewidth]{images/eccentricity_fits_highres.png}
-    % \includegraphics[width=0.495\linewidth]{images/eccentricity_timeavghabitability_square.png}
-    % \includegraphics[width=0.495\linewidth]{images/eccentricity_areaavghabitability_square.png}
-    \caption{
-        % Top:
-        Convergent Temperature of the Earthlike model varying eccentricity between 0 and 0.9.
-        Overlaid on the data is a fit to the theory equation $T\propto(1-e^2)^{-1/8}$, with proportionality constant $p=293.89 \pm 0.10$ K.
-        The fit is very good, with the extreme eccentricities diverging from the model slightly.
-        % Bottom left: Time-averaged habitability for each latitude band in the final year of simulation.
-        % As eccentricity increases the poles become hotter, thus more habitable.
-        % At the same time the equator becomes too hot and loses habitability.
-        % Bottom right: Area-averaged habitability for the final 10 years of simulation.
-        % The cyclical temperature fluctuations due to eccentricity of the orbit are evident, especially at high eccentricities where the planet becomes globally uninhabitable for portions of the year.
-    }
-    \label{fig:temperature_eccentricity}
-\end{figure}
-
-% \begin{figure}
-%     \includegraphics[width=\linewidth]{images/semimajoraxis_timeavghabitability.png}
-%     \caption{
-%         Time-averaged habitability for each latitude band for semi major axis between 0.5 and 1.5 au.
-%         The model becomes too hot to sustain life at the equator when too close to the star ($<0.7$ au) and too cold at the poles when too far away ($>0.95$ au).
-%         The middle of these two bounds has extremely high habitability across the entire planet.
-%         Beyond 1 au the entire planet falls into a snowball state and is completely uninhabitable.
-%     }
-% \end{figure}
-
-% Varying a single parameter and plotting convergence time, convergent temperature, Area and time averaged habitabilities.
-In their 2017 paper, Méndez and Rivera-Valentín show that for a planet in orbit with semimajoraxis $a$ and eccentricity $e$ the average solar flux in an orbit is given by,
-\begin{equation} \label{eq:fluxavg}
-    \langle F\rangle = \frac{L}{a^2 \sqrt{1-e^2}},
-\end{equation}
-where $L$ is the luminosity of the star, assumed to be constant (equation (14) in \cite{Mendez2017}).
-substituting eqn. \eqref{eq:fluxavg} into eqn. \eqref{eq:0DEBCM} the following temperature relation is found,
-\begin{equation}
-    \frac{L}{a^2 \sqrt{1-e^2}} (1-A) = 4 \sigma T^4,
-    \label{eq:Temp_eccent}
-\end{equation}
-where $A$ is albedo and $T$ is the temperature of the planet.
-Assuming that $L$ and $A$ are constant, we can see that $T$ is proportional to $(1-e^2)^{-1/8}$ for constant semimajoraxis and that $T$ is proportional to $a^{-1/2}$ for constant eccentricity.
-These relations are confirmed by the model in Fig. \ref{fig:temperature_eccentricity} and Fig. \ref{fig:temperature_semimajoraxis} respectively.
-
-\begin{figure}
-    \includegraphics[width=\linewidth]{images/dual_convergence_agas_0.5to2.0_eccgas_0to0.9_with_fits.png}
-    \includegraphics[width=\linewidth]{images/total_habitability_agas_0.5to2.0_eccgas_0to0.9_with_fits.png}
-    \caption{Left: A heatmap of global average temperature, varying semimajoraxis and eccentricity of a uniform planet.
-        Right: The same information but processed as global average habitability.
-        Overlaid on both are the lines of constant temperature given by $a \propto (1-e^2)^{-1/4}$ for $T = 273$ and $T = 373$ which represent the inner and outer habitable zones respectively.
-        Since the temperature is never exactly 373 K or 273 K, a range of values are used to approximate the region.
-        The three $-1$ K cells in the top left did not reach an equilibrium within 100 years of simulation.
-        While the temperature line for 373 K is below the expected values, the corresponding line on the habitability graph follows the outer edge of the habitable region very well.
-        This is indicative that global average temperature is not a good measure of habitability.
-    }
-    \label{fig:semiecc_temphab}
-\end{figure}
-
-We can also see that for a constant temperature $a \propto (1-e^2)^{-1/4}$.
-This proportionality can be used to find how the inner (T = 273 K) and outer (T = 373 K) habitable zones scale with increasing eccentricity.
-It has been noted in Dressing10 that inner habitable zone follows this law quite closely but the outer zone has much greater variability due to other factors such as obliquity and ocean fraction.
-As shown in the left of Fig. \ref{fig:semiecc_temphab}, looking only at the temperature relation can lead to large deviations from the relation.
-However the scaling relation holds more closely by looking at the time and space averaged habitability on the right of the figure.
-This is due to the habitability calculation taking temperature extremes into account which the global average temperature would not.
-
-\subsection{Obliquity and Rotation speed} \label{ssec:obliqrotat}
-
-Understanding how the obliquity and rotation speed of the planet effects climate is also useful.
-Varying the obliquity can maximise or minimise the average temperature of the planet by changing how the energy is distributed over the planet's surface.
-
-
-\begin{figure}
-    \includegraphics[width=0.495\linewidth]{images/obliquity_highres_square.png}
-    \includegraphics[width=0.495\linewidth]{images/obliquity_timeavghabitability_square.png}
-    \caption{Convergent Temperature of the Earthlike model varying obliquity between 0 and 180$^{\circ}$.
-        The data are symmetrical about 90$^{\circ}$, as expected for a planet with a uniform surface.
-        The plot indicates that there are optimal obliquities at $\delta \approx 20^{\circ}$ and $\approx 50^{\circ}$ for a minimum and maximum temperature respectively.
-    }
-    \label{fig:temperature_obliquity}
-\end{figure}
-
-% \begin{figure}
-%     
-%     \includegraphics[width=0.495\linewidth]{images/obliquity_areaavghabitability_square.png}
-%     \caption{
-%         Left: Time-averaged habitability for each latitude band in the final year of simulation.
-%         Higher obliquities allow for more energy input into the poles
-%         Right: Area-averaged habitability for the final 10 years of simulation.
-%         The cyclical temperature fluctuations due to obliquity of the orbit are evident.
-%         It is worth noting that though there are habitability fluctuations in time, they vary by only ~20\% from maximum habitability.
-%     }
-%     \label{fig:timeareahab_obliquity}
-% \end{figure}
-
-
-\section{1D Energy Balance Depth Model} \label{sec:ebdmodel}
-
-So far the tidal heating has been found by balancing convection with tidal heat input, then allowing this tidal heat to flow through the surface of the planet.
-Now the tidal heat is allowed to flow through the bottom layer of a depth model.
-This investigates whether a planet with a cold frozen surface could harbour habitable temperatures below it's surface.
-
-The depth model can be found by first considering the standard heat equation
-
-\begin{equation}
-    \frac{\partial T}{\partial t} = \alpha \nabla^2 T,
-\end{equation}
-
-and substituting the spherical form for the lapacian,
-
-\begin{equation}
-    \frac{\partial T}{\partial t}  = \alpha \left[\frac{1}{r} \frac{\partial^2 }{\partial r^2} (r T)
-        + \frac{1}{r^2 \sin\theta} \frac{\partial}{\partial \theta}\left(\sin\theta \frac{\partial T}{\partial\theta}\right)
-        + \frac{1}{r^2 \sin\theta} \frac{\partial^2 T}{\partial \phi^2} \right]
-\end{equation}
-where $r$ is the distance to the center of the planet, $\theta = \pi - \lambda$ is the co-latitude $\theta$ related to the latitude $\lambda$, and $\phi$ is longitude.
-In the latitude-band surface case $T(r, \theta, \phi) = T(\theta)$ and the equation is transformed into $\lambda$, whereas in the depth case $T(r, \theta, \phi) = T(r)$.
-
-Thus the depth model is given by
-
-\begin{equation}
-    \frac{\partial T}{\partial t} = \alpha \left[\frac{\partial^2 T}{\partial r^2} + \frac{2}{r}\frac{\partial T}{\partial r}\right]
-\end{equation}
-
-...
-
-\section{Conclusions} \label{sec:conclusion}
-
-Donec finibus, tellus sit amet luctus sodales, lectus ante accumsan ligula, at condimentum lorem justo a sapien. Phasellus vel tortor vitae metus lacinia efficitur ac vel ex. Aenean eget congue leo. Aliquam cursus mauris sit amet arcu dignissim, vel condimentum nisi sodales.
-
-% \begin{acknowledgments}
-%     (OPTIONAL) The author would like to thank...
-% \end{acknowledgments}
-
-\begin{thebibliography}{}
-    % \bibitem{ref01} A.~N.~Other, Title of the book, edition, publishers, place of publication (year of publication), p.~123.  % example book reference 
-    % \bibitem{ref02} A.~N.~Other, Title of the article, journal title, volume, 123--456 (year of publication).   % example journal reference
-    \bibitem{Dressing10} Courtney D. Dressing et al, HABITABLE CLIMATES: THE INFLUENCE OF ECCENTRICITY, ApJ, 721, 1295--1307, 2010
-    \bibitem{HabKepler62f} Aomawa L. Shields et al, The Effect of Orbital Configuration on the Possible Climates and Habitability of Kepler-62f, Astrobiology, 16, 443-464, 2016
-    \bibitem{Roe06} Gerard Roe, In defence of Milankovitch, Geophysical Research Letters, 33, L24703, 2006
-    \bibitem{SMS08} David S. Spiegel et al, Habitable Climates, ApJ, 681, 1609--1623, 2008
-    \bibitem{SMS09} David S. Spiegel et al, Habitable Climates: the influence of Obliquity, ApJ 691, 596--, 2009
-    \bibitem{WK97} Williams and Kasting, Habitable Planets with High Obliquities, Icarus, 129, 254-267, 1997
-    \bibitem{NC79} North and Coakley, Differences between Seasonal and Mean Annual Energy Balance Model Calculations of Climate and Climate Sensitivity, J. Atmos. Sci., 36, 1189--1204, 1979
-    \bibitem{Mendez2017} Abel Méndez and Edgard G. Rivera-Valentín, The Equilibrium Temperature of Planets in Elliptical Orbits, ApJL, 837, 2017
-    % \bibitem{ExoEu} Exoplanet data from http://exoplanet.eu
-    \bibitem{NumericalModelling} Viggo H. Hansteen, Numerical Modelling in a nutshell, University of Oslo, Institute of Theoretical Astrophysics, AST5110 Lecture materials 2011, accessed 6/11/2023: https://www.uio.no/studier/emner/matnat/astro/AST5110/h11/undervisningsmateriale/numerics\_intro.pdf
-    \bibitem{NASAGlobTemp} https://earthobservatory.nasa.gov/world-of-change/global-temperatures, paragraph 3, accessed 08/12/2023
-    \bibitem{SAB22} Sulaiman, Achilleos, Bertucci et al, Enceladus and Titan: emerging worlds of the Solar System, Exp Astron 54, 849--876, 2022
-    \bibitem{RN21} Marc Rovira-Navarro et al, Tidally Heated Exomoons around Gas Giants, Planet. Sci. J., 2 119, 2021
-    \bibitem{Segatz1988} Segatz et al, Tidal dissipation, surface heat flow, and figure of viscoelastic models of Io, ICARUS 75, 187--206, 1988
-    \bibitem{YP1981} Charles F. Yoder, Stanton J. Peale, The tides of Io, Icarus, 47 1, 1--35, 1981
-    \bibitem{DHT2015} Vera Dobos, René Heller, Edwin L. Turner, The effect of multiple heat sources on exomoon habitable zones, A\&A 601 A91, 2017
-    \bibitem{LJW2018} L. Li, X. Jiang, R.A. West et al, Less absorbed solar energy and more internal heat for Jupiter. Nat Commun 9, 3709, 2018
-    \bibitem{Henning2009} Wade G. Henning et al, TIDALLY HEATED TERRESTRIAL EXOPLANETS: VISCOELASTIC RESPONSE MODELS, ApJ 707 1000, 2009
-\end{thebibliography}
-
-\clearpage
-
-\appendix
 
 \section{Numerical Stability Calculations} \label{app:numstabworkings}
 
