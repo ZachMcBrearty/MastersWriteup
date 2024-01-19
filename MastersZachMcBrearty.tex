@@ -543,28 +543,8 @@ Donec finibus, tellus sit amet luctus sodales, lectus ante accumsan ligula, at c
 % \end{acknowledgments}
 
 %%% TODO: figureout bibtex %%%
-\begin{thebibliography}{MastersZachMcBrearty.bib}
-    % \bibitem{ref01} A.~N.~Other, Title of the book, edition, publishers, place of publication (year of publication), p.~123.  % example book reference 
-    % \bibitem{ref02} A.~N.~Other, Title of the article, journal title, volume, 123--456 (year of publication).   % example journal reference
-    \bibitem{Dressing10} Courtney D. Dressing et al, HABITABLE CLIMATES: THE INFLUENCE OF ECCENTRICITY, ApJ, 721, 1295--1307, 2010
-    \bibitem{HabKepler62f} Aomawa L. Shields et al, The Effect of Orbital Configuration on the Possible Climates and Habitability of Kepler-62f, Astrobiology, 16, 443-464, 2016
-    \bibitem{Roe06} Gerard Roe, In defence of Milankovitch, Geophysical Research Letters, 33, L24703, 2006
-    \bibitem{SMS08} David S. Spiegel et al, Habitable Climates, ApJ, 681, 1609--1623, 2008
-    \bibitem{SMS09} David S. Spiegel et al, Habitable Climates: the influence of Obliquity, ApJ 691, 596--, 2009
-    \bibitem{WK97} Williams and Kasting, Habitable Planets with High Obliquities, Icarus, 129, 254-267, 1997
-    \bibitem{NC79} North and Coakley, Differences between Seasonal and Mean Annual Energy Balance Model Calculations of Climate and Climate Sensitivity, J. Atmos. Sci., 36, 1189--1204, 1979
-    \bibitem{Mendez2017} Abel Méndez and Edgard G. Rivera-Valentín, The Equilibrium Temperature of Planets in Elliptical Orbits, ApJL, 837, 2017
-    % \bibitem{ExoEu} Exoplanet data from http://exoplanet.eu
-    \bibitem{NumericalModelling} Viggo H. Hansteen, Numerical Modelling in a nutshell, University of Oslo, Institute of Theoretical Astrophysics, AST5110 Lecture materials 2011, accessed 6/11/2023: https://www.uio.no/studier/emner/matnat/astro/AST5110/h11/undervisningsmateriale/numerics\_intro.pdf
-    \bibitem{NASAGlobTemp} https://earthobservatory.nasa.gov/world-of-change/global-temperatures, paragraph 3, accessed 08/12/2023
-    \bibitem{SAB22} Sulaiman, Achilleos, Bertucci et al, Enceladus and Titan: emerging worlds of the Solar System, Exp Astron 54, 849--876, 2022
-    \bibitem{RN21} Marc Rovira-Navarro et al, Tidally Heated Exomoons around Gas Giants, Planet. Sci. J., 2 119, 2021
-    \bibitem{Segatz1988} Segatz et al, Tidal dissipation, surface heat flow, and figure of viscoelastic models of Io, ICARUS 75, 187--206, 1988
-    \bibitem{YP1981} Charles F. Yoder, Stanton J. Peale, The tides of Io, Icarus, 47 1, 1--35, 1981
-    \bibitem{DHT2015} Vera Dobos, René Heller, Edwin L. Turner, The effect of multiple heat sources on exomoon habitable zones, A\&A 601 A91, 2017
-    \bibitem{LJW2018} L. Li, X. Jiang, R.A. West et al, Less absorbed solar energy and more internal heat for Jupiter. Nat Commun 9, 3709, 2018
-    \bibitem{Henning2009} Wade G. Henning et al, TIDALLY HEATED TERRESTRIAL EXOPLANETS: VISCOELASTIC RESPONSE MODELS, ApJ 707 1000, 2009
-\end{thebibliography}
+\bibliographystyle{ieeetr}
+\bibliography{references}
 
 \clearpage
 
@@ -572,7 +552,7 @@ Donec finibus, tellus sit amet luctus sodales, lectus ante accumsan ligula, at c
 
 %%% TODO: merge the two following sections into one %%%
 
-\subsection{Numerical stability of time forward-difference} \label{sec:numerical_stability}
+\section{Numerical stability of time forward-difference} \label{sec:numerical_stability}
 
 \begin{figure}[ht]
     \includegraphics[width=\linewidth]{images/convergence_varying_spacedim_140to149.png}
