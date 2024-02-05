@@ -56,11 +56,11 @@
 
 \begin{abstract}
 
-    A 1-D energy balance climate model is developed in order to investigate how changing certain orbital parameters can result in changes to a planet's habitability.
-    Theoretical relationships between temperature, semimajoraxis, and eccentricity are derived from a simple 0-D energy balance model and are tested against the 1-D model and are found to be correct.
-    A qualitative analysis of obliquity shows that there are optimal obliquities to minimise and maximise global temperature.
-    The climates of exomoons orbiting gas giants are also investigated, including reflected light from the gas giant, eclipsing, and tidal heating.
-    It is expected that these additional sources of heat move the habitable zones for the planet outwards.
+  A 1-D energy balance climate model is developed in order to investigate how changing certain orbital parameters can result in changes to a planet's habitability.
+  Theoretical relationships between temperature, semimajoraxis, and eccentricity are derived from a simple 0-D energy balance model and are tested against the 1-D model and are found to be correct.
+  A qualitative analysis of obliquity shows that there are optimal obliquities to minimise and maximise global temperature.
+  The climates of exomoons orbiting gas giants are also investigated, including reflected light from the gas giant, eclipsing, and tidal heating.
+  It is expected that these additional sources of heat move the habitable zones for the planet outwards.
 
 \end{abstract}
 
@@ -79,21 +79,27 @@
 % > Search for extraterrestrial life
 % > Settling other worlds
 % > Current missions to find exoplanets and exomoons
-
-
+\cite{RN21}
+\cite{SAB22}
+\cite{LA2010}
+\cite{Fogg92}
 % Climate model
 % > 0D-Equation and where it comes from
 \begin{equation}
-    \pi r^2 S(1-A) = 4 \pi r^2 \sigma T^4, \label{eq:0DEBCM}
+  \pi r^2 S(1-A) = 4 \pi r^2 \sigma T^4, \label{eq:0DEBCM}
 \end{equation}
 % > 1D-Equation + what the parameters are 
 \begin{equation}
-    C \partialderiv{T(t, x)}{t} - D \partialderiv{}{x} \left((1-x^2)\partialderiv{T(x, t)}{x}\right) + I - S(1-A) = 0
-    \label{eq:PDE_in_x}
+  C \partialderiv{T(t, x)}{t} - D \partialderiv{}{x} \left((1-x^2)\partialderiv{T(x, t)}{x}\right) + I - S(1-A) = 0
+  \label{eq:PDE_in_x}
 \end{equation}
+\cite{WK97}
+\cite{SMS08}
 % > Ignoring longitude dimension (How/Why)
-% Earth as a baseline
+% Earth as a baseline and Milankovitch cycles
 % > using Earth to constrain certain parameters of the model to be realistic
+% > varying parameters and seeing where the Earth moves in that space gives insight to the history and evolution of the Earth
+\cite{Roe06}
 % Exoplanets (i.e. moving Earth around)
 % > Describe how varying parameters can lead to habitability parameter space
 % > Suggest by generating parameter spaces that new discoveries can be quickly checked  
@@ -106,35 +112,73 @@
 % Rederive 1DEBCM from standard heat eqn
 The EBCM can be derived from the standard heat equation given by
 \begin{equation}
-    \partialderiv{T}{t} = \alpha \nabla^2 T,
+  \partialderiv{T}{t} = \alpha \nabla^2 T,
 \end{equation}
 where $T(t, r, \theta, \phi)$ is the temperature at time $t$, radius $r$, co-latitude $\theta$, and longitude $\phi$.
 The constant $\alpha$ is related to the heat capacity and diffusion rate of the system.
 Expanding the laplacian in spherical coordinates the equation becomes
 \begin{equation}
-    \partialderiv{T}{t} = \alpha \left[\frac{1}{r} \partialderivsecnd{}{r} (r T)
-        + \frac{1}{r^2 \sin\theta} \partialderiv{}{\theta}\left(\sin\theta \partialderiv{T}{\theta}\right)
-        + \frac{1}{r^2 \sin^2\theta} \partialderivsecnd{T}{\theta} \right]. \label{eq:FullyExpandedHeatEqn}
+  \partialderiv{T}{t} = \alpha \left[\frac{1}{r} \partialderivsecnd{}{r} (r T)
+    + \frac{1}{r^2 \sin\theta} \partialderiv{}{\theta}\left(\sin\theta \partialderiv{T}{\theta}\right)
+    + \frac{1}{r^2 \sin^2\theta} \partialderivsecnd{T}{\theta} \right]. \label{eq:FullyExpandedHeatEqn}
 \end{equation}
 The EBCM is arrived at by first letting $T(r, \theta, \phi) = T(\lambda)$, with $\lambda = \pi - \theta$. Thus the equation simplifies to
 \begin{align}
-    \partialderiv{T}{t} & = \frac{\alpha}{r^2 \sin\theta} \partialderiv{}{\theta}\left(\sin\theta \partialderiv{T}{\theta}\right)   \\
-                        & = \frac{\alpha}{r^2} \left(\tan\lambda \partialderiv{T}{\lambda} + \partialderivsecnd{T}{\lambda}\right).
+  \partialderiv{T}{t} & = \frac{\alpha}{r^2 \sin\theta} \partialderiv{}{\theta}\left(\sin\theta \partialderiv{T}{\theta}\right)   \\
+                      & = \frac{\alpha}{r^2} \left(\tan\lambda \partialderiv{T}{\lambda} + \partialderivsecnd{T}{\lambda}\right).
 \end{align}
 The original equation can be recovered by defining $\alpha / r^2 \equiv D / C$ for diffusion constant $D$ and heat capacity $C$.
 Then adding incoming solar radiation $S$ (insolation), which is reduced by planetary albedo $A$, and outgoing IR-emission $I$ to the PDE.
 Thus the form of the EBCM in terms of latitude (instead of $x = \sin\lambda$) is given by
 \begin{equation}
-    C\partialderiv{T}{t} = D \left(\tan\lambda \partialderiv{T}{\lambda} + \partialderivsecnd{T}{\lambda}\right) + S(1-A) - I.
+  C\partialderiv{T}{t} = D \left(\tan\lambda \partialderiv{T}{\lambda} + \partialderivsecnd{T}{\lambda}\right) + S(1-A) - I.
 \end{equation}
 % Expand derivatives and introduce latitude as the standard parameter
+
+\subsection{Discretisation of the climate model} \label{ssec:DiscretisationPDE}
+% choice of discretisation
+Numerically integrating the EBCM requires the derivatives to be discretised.
+Spatially the planet can be split into $S$ nodes, separated by
+\begin{equation}
+  \Delta\lambda = \frac{\pi\radians}{S-1} = \frac{180\degrees}{S-1},
+\end{equation}
+with spatial indexing of each zone from $m=0, 1, \dots, S-1$.
+Similarly, a temporal indexing of $n=0, 1, \dots$ is used to discretise time in steps of $\Delta t$.
+
+% choice of partial derivatives
+The spatial derivatives can then be approximated by the central difference and second order central difference:
+\begin{align}
+  \partialderiv{T^m_n}{\lambda}      & = \frac{T^{m+1}_n - T^{m-1}_n}{2 \Delta\lambda},     \label{eq:space_1}        \\
+  \partialderivsecnd{T^m_n}{\lambda} & = \frac{T^{m+2}_n -2T^m_n + T^{m-2}_n}{(2 \Delta\lambda)^2},\label{eq:space_2}
+\end{align}
+and the temporal derivative can be approximated as a forward difference,
+\begin{equation} \label{eq:time_1}
+  \partialderiv{T^m_n}{t} = \frac{T^m_{n+1} - T^m_n}{\Delta t},
+\end{equation}
+with numerical stability analysed in appendix \ref{appx:NumStability}.
+Evolving the EBCM is performed by solving eqn. \eqref{eq:time_1} for $T^m_{n+1}$ in terms of the parameter and temperature values at time $n$.
+
+% choice of edge case partial derivatives
+However, a problem arises at the edges of the model as $m=-2, -1, S, S+1$ are not defined.
+To fix this the derivatives at $m=0$ ($m=S-1$) are discretised as forward then backward (backward then forward) derivatives.
+By imposing that ${\partial T^{m=0, S-1}_n}/{\partial \lambda} = 0$, these second order derivatives reduce to
+\begin{alignat}{2}
+  \partialderivsecnd{T^{m=0}_n}{\lambda}   & = \left(\partialderiv{T^{m=1}_n}{\lambda} - \partialderiv{T^{m=0}_n}{\lambda}\right) / \Delta\lambda     &  & = \frac{T^{m=1}_n - T^{m=0}_n}{(\Delta\lambda)^2}
+  \label{eq:forward_backward}                                                                                                                                                                                     \\
+  \partialderivsecnd{T^{m=S-1}_n}{\lambda} & = \left(\partialderiv{T^{m=S-1}_n}{\lambda} - \partialderiv{T^{m=S-2}_n}{\lambda}\right) / \Delta\lambda &  & = \frac{T^{m=S-2}_n - T^{m=S-1}_n}{(\Delta\lambda)^2}.
+  \label{eq:backward_forward}
+\end{alignat}
+Furthermore, the treatment imposed for the $m=1$ and $m=S-2$ second order derivatives is much the same, using central-backward and central-forward derivatives respectively.
+
+
+\section{Earth-like model} \label{sec:EarthLikeModel}
 \subsection{Characterising Model Parameters} \label{ssec:CharacterisingModelParameters} %%% -> could appendix if not enough space %%%
 In this analysis the forms of the model parameters are taken from Williams and Kastings (WK97) \cite{WK97}.
 
 % Diffusion
 The diffusion varies with orbital and atmospheric parameters as,
 \begin{equation}
-    \frac{D}{D_0} = \frac{p}{p_0} \frac{c_p}{c_{p,0}} \left(\frac{m}{28}\right)^{-2} \left(\frac{\Omega}{1 \text{day}^{-1}}\right)^{-2}
+  \frac{D}{D_0} = \frac{p}{p_0} \frac{c_p}{c_{p,0}} \left(\frac{m}{28}\right)^{-2} \left(\frac{\Omega}{1 \text{day}^{-1}}\right)^{-2}
 \end{equation}
 where $D_0 = 0.56 \diffusion$ is from fitting to the time averaged Earth model from North and Coakley 1979 \cite{NC79}.
 $p$ is the atmospheric pressure relative to $p_0 = 101 \ \text{kPa}$.
@@ -147,25 +191,25 @@ However this paper only considers varying the rotation rate of the planet.
 % Heat capacity
 Heat capacity, $C(\lambda, t)$, varies with latitude through the ocean-land fraction, $f_o(\lambda)$, and with temperature through the ice-ocean fraction, $f_i(T)$, as
 \begin{equation}
-    C(\lambda, T) = (1 - f_o(\lambda)) C_{land} + f_o(\lambda) ((1-f_i(T)) C_{ocean} + f_i(T) C_{ice}(T)),
+  C(\lambda, T) = (1 - f_o(\lambda)) C_{land} + f_o(\lambda) ((1-f_i(T)) C_{ocean} + f_i(T) C_{ice}(T)),
 \end{equation}
 Where $C_{\text{land}} = 5.25\times10^6 \heatcap$ and $C_{\text{ocean}} = 40 \times C_{\text{land}}$ are constant, and
 \begin{equation}
-    C_{\text{ice}}(T) =
-    \begin{cases}
-        9.2 C_\text{land} & T \ge 263\text{K} \\
-        2.0 C_\text{land} & T < 263\text{K},
-    \end{cases}
+  C_{\text{ice}}(T) =
+  \begin{cases}
+    9.2 C_\text{land} & T \ge 263\text{K} \\
+    2.0 C_\text{land} & T < 263\text{K},
+  \end{cases}
 \end{equation}
 
 % IR-emission
 % Albedo -> snow / water reflectance
 WK97 provides three sets of IR-emission and Albedo functions. Following the example of SMS08 and Dressing et al 2010 (here on Dressing10) \cite{Dressing10} the second set of IR and Albedo functions which are given by
 \begin{equation}
-    I(T) = I_2(T) = \frac{\sigma T^4}{1 + 0.5925 (T / 273 \text{K}) ^ 3}
+  I(T) = I_2(T) = \frac{\sigma T^4}{1 + 0.5925 (T / 273 \text{K}) ^ 3}
 \end{equation}
 \begin{equation}
-    A(T) = A_2(T) = 0.525 - 0.245 \tanh\left(\frac{T - 268 \text{K}}{5}\right),
+  A(T) = A_2(T) = 0.525 - 0.245 \tanh\left(\frac{T - 268 \text{K}}{5}\right),
 \end{equation}
 are used in all models.
 This IR-emission is a blackbody radiation term (numerator) damped by the optical thickness of the atmosphere (denominator) which is roughly equivalent to a greenhouse gas effect.
@@ -174,54 +218,17 @@ The albedo function is a smooth scaling from low to high reflectivity due to sno
 % Insolation -> why diurnally averaged (No longitude)
 The insolation function, $S$, is defined in WK97 as the day averaged incident (based on latitude) radiation from the sun,
 $$
-    S(\lambda, t) = \frac{q_0}{\pi} \left(\frac{1 \ \text{au}}{a}\right)^2 (H(t) \sin{\lambda} \sin{\delta(t)} + \cos{\lambda} \cos{\delta(t)} \sin{H(t)})
+  S(\lambda, t) = \frac{q_0}{\pi} \left(\frac{1 \ \text{au}}{a}\right)^2 (H(t) \sin{\lambda} \sin{\delta(t)} + \cos{\lambda} \cos{\delta(t)} \sin{H(t)})
 $$
 where $q_0=1360 \ \text{Wm}^{-2}$ is the insolation from the Sun,
 $a$ is the distance from the Sun,
 $\cos H(t) = -\tan \lambda \tan \delta(t)$ is the radian half-day length with $0 < H < \pi$,
 and $\delta(t)$ is the solar declination defined by
 $$
-    \sin \delta(t) = -\sin \delta_0 \cos(L_s(t) + \pi/2)
+  \sin \delta(t) = -\sin \delta_0 \cos(L_s(t) + \pi/2)
 $$
 where $\delta_0$ is the obliquity of the planet and $L_s(t) = \omega t$ is orbital longitude from an orbital angular velocity found by Kepler's laws.
 
-\subsection{Discretisation of the climate model} \label{ssec:DiscretisationPDE}
-% choice of discretisation
-Numerically integrating the EBCM requires the derivatives to be discretised.
-Spatially the planet can be split into $S$ nodes, separated by
-\begin{equation}
-    \Delta\lambda = \frac{\pi\radians}{S-1} = \frac{180\degrees}{S-1},
-\end{equation}
-with spatial indexing of each zone from $m=0, 1, \dots, S-1$.
-Similarly, a temporal indexing of $n=0, 1, \dots$ is used to discretise time in steps of $\Delta t$.
-
-% choice of partial derivatives
-The spatial derivatives can then be approximated by the central difference and second order central difference:
-\begin{align}
-    \partialderiv{T^m_n}{\lambda}      & = \frac{T^{m+1}_n - T^{m-1}_n}{2 \Delta\lambda},     \label{eq:space_1}        \\
-    \partialderivsecnd{T^m_n}{\lambda} & = \frac{T^{m+2}_n -2T^m_n + T^{m-2}_n}{(2 \Delta\lambda)^2},\label{eq:space_2}
-\end{align}
-and the temporal derivative can be approximated as a forward difference,
-\begin{equation} \label{eq:time_1}
-    \partialderiv{T^m_n}{t} = \frac{T^m_{n+1} - T^m_n}{\Delta t},
-\end{equation}
-with numerical stability analysed in appendix \ref{appx:NumStability}.
-Evolving the EBCM is performed by solving eqn. \ref{eq:time_1} for $T^m_{n+1}$ in terms of the parameter and temperature values at time $n$.
-
-% choice of edge case partial derivatives
-However, a problem arises at the edges of the model as $m=-2, -1, S, S+1$ are not defined.
-To fix this the derivatives at $m=0$ ($m=S-1$) are discretised as forward then backward (backward then forward) derivatives.
-By imposing that ${\partial T^{m=0, S-1}_n}/{\partial \lambda} = 0$, these second order derivatives reduce to
-\begin{alignat}{2}
-    \partialderivsecnd{T^{m=0}_n}{\lambda}   & = \left(\partialderiv{T^{m=1}_n}{\lambda} - \partialderiv{T^{m=0}_n}{\lambda}\right) / \Delta\lambda     &  & = \frac{T^{m=1}_n - T^{m=0}_n}{(\Delta\lambda)^2}
-    \label{eq:forward_backward}                                                                                                                                                                                     \\
-    \partialderivsecnd{T^{m=S-1}_n}{\lambda} & = \left(\partialderiv{T^{m=S-1}_n}{\lambda} - \partialderiv{T^{m=S-2}_n}{\lambda}\right) / \Delta\lambda &  & = \frac{T^{m=S-2}_n - T^{m=S-1}_n}{(\Delta\lambda)^2}.
-    \label{eq:backward_forward}
-\end{alignat}
-Furthermore, the treatment imposed for the $m=1$ and $m=S-2$ second order derivatives is much the same, using central-backward and central-forward derivatives respectively.
-
-
-\section{Earth-like model} \label{sec:EarthLikeModel}
 % choice of 0.7-uniform
 % choice of D_0 by fitting to NC97
 % choice of spatial separation and time step sizes
@@ -231,45 +238,78 @@ Furthermore, the treatment imposed for the $m=1$ and $m=S-2$ second order deriva
 % > habitability (human, bio) distribution
 % > Climate cycles (eccentricity, obliquity)
 \begin{table*}
-    \begin{tabular}{|c|c|c|c|c|c|}
-        \hline
-        Semimajoraxis        & Eccentricity     & Obliquity     & No. spatial nodes & Timestep         & \multirow{2}{*}{Land fraction type} \\
-        $a_{\text{gas}}$, au & $e_{\text{gas}}$ & $\delta$, deg & $S$               & $\Delta t$, days &                                     \\
-        \hline
-        1                    & 0.0167           & 23.5          & 61                & 1                & Uniform 70\% Ocean                  \\
-        \hline
-    \end{tabular}
-    \caption{A summary of the default parameters for the Earth-like model.
-        A `Uniform' land fraction indicates that the model has the same ratio of land to ocean across the entire planet.
-        The odd number of spatial nodes means there is a true equator with $\lambda = 0$ as well as poles with $\lambda = \pm 90\degrees$}
-    \label{tab:default_params}
+  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    Semimajoraxis        & Eccentricity     & Obliquity     & No. spatial nodes & Timestep         & \multirow{2}{*}{Land fraction type} \\
+    $a_{\text{gas}}$, au & $e_{\text{gas}}$ & $\delta$, deg & $S$               & $\Delta t$, days &                                     \\
+    \hline
+    1                    & 0.0167           & 23.5          & 61                & 1                & Uniform 70\% Ocean                  \\
+    \hline
+  \end{tabular}
+  \caption{A summary of the default parameters for the Earth-like model.
+    A `Uniform' land fraction indicates that the model has the same ratio of land to ocean across the entire planet.
+    The odd number of spatial nodes means there is a true equator with $\lambda = 0$ as well as poles with $\lambda = \pm 90\degrees$}
+  \label{tab:default_params}
 \end{table*}
 
 \section{Exoplanets} \label{sec:Exoplanets}
 \subsection{Investigating time-averaged solar flux} \label{ssec:InvTimeAveragedSolarFlux}
 % use 0D model and Mendez to find parameter relations
+General temperature relations for a planet can be found from the 0D EBCM.
+Time averaged insolation of an planet in an elliptical orbit is given by
 \begin{equation}
-    \langle S \rangle = \frac{L}{a^2 \sqrt{1-e^2}} \label{eq:avgInsolation}
+  \langle F \rangle = \frac{q_0}{a^2 \sqrt{1-e^2}} \label{eq:avgInsolation},
 \end{equation}
+where $q_0 = L_{\text{Sun}}/4\pi a_{\text{Earth}}^2 \approx 1360 \ \text{Wm}^{-2}$ is the solar flux for Earth, $a$ and $e$ are the semimajor axis and eccentricity respectively \cite{Mendez2017}.
+
+Subsituting this relation into equation \eqref{eq:0DEBCM}, a temperature relation of
 \begin{equation}
-    \frac{L (1-A)}{a^2 \sqrt{1-e^2}} = \sigma T^4
+  T \propto a^{-1/2} (1-e^2)^{-1/8}, \label{eq:T_propto_a_e}
 \end{equation}
-\begin{equation}
-    T \propto a^{-1/2}
-\end{equation}
-\begin{equation}
-    T \propto (1-e^2)^{-1/8}
-\end{equation}
-\begin{equation}
-    a \propto (1-e^2)^{-1/4}
-\end{equation}
+with proportionality constant $(q_0 (1-A) / 4\sigma)^{1/4}$ is found.
+
+\begin{figure}
+  \includegraphics[width=\linewidth]{images/convergence_varying_a_0.5to1.5.png}
+  \caption{
+    $\langle T \rangle = p_i a^{q_i}$
+    Temperate zone: $a < 1$ au
+    $p_1 = 293.5 \pm 0.4, q_1 = 0.505 \pm 0.004$
+    Snowball zone: $a > 1$ au
+    $p_2 = 210.2 \pm 0.2, q_2 = 0.378 \pm 0.003$
+    Also shown are Venus and Mars to highlight the range of values considered.
+  }
+  \label{fig:planet_semimajoraxis}
+\end{figure}
 % > T prop a^-1/2
 % > > talk about powerlaw being obeyed well until snowball
+\begin{equation}
+  T \propto a^{-1/2} \label{eq:T_propto_a}
+\end{equation}
+
 % > T prop (1-e^2)^-1/8
 % > > good relationship until very high eccentricity
-% > a prop (1-e^2)^-1/4
-% > > finding inner and outer habitable zone (Human, Bio)
+\begin{equation}
+  T \propto (1-e^2)^{-1/8} \label{eq:T_propto_e}
+\end{equation}
+\begin{figure}
+  \includegraphics[width=\linewidth]{images/convergence_varying_e_0to0.9.png}
+  \caption{
+    $\langle T \rangle = p(1-e^2)^{-1/8}$
+    $p = 292.6 \pm 0.2$
+    Also shown are the current and maximum theoretical value of Earth's eccentricity.
+    The minimum value is $0$.
+  }
+  \label{fig:planet_eccentricity}
+\end{figure}
+
+% % > a prop (1-e^2)^-1/4
+% % > > finding inner and outer habitable zone (Human, Bio)
+% \begin{equation}
+%   a \propto (1-e^2)^{-1/4}
+% \end{equation}
+
 % % Describe in caption, analysis in main body of text 
+
 \subsection{Investigating obliquity and rotation rate}\label{ssec:InvObliquityRotationRate}
 % Qualitative look at how obliquity influences habitability
 % > global temperature-obliquity
