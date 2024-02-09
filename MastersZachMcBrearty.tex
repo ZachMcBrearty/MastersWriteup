@@ -36,6 +36,8 @@
 
 \def\bibsection{\section*{References}}        % Position reference section correctly
 
+\newcommand{\flux}{\ensuremath{\ \text{Wm}^{-2}}}
+
 \newcommand{\heatcap}{\ensuremath{\ \text{Jm}^{-2} \text{K}^{-1}}}
 \newcommand{\diffusion}{\ensuremath{\ \text{Wm}^{-2} \text{K}^{-1}}}
 
@@ -75,34 +77,34 @@
 \newpage
 
 \section{Introduction} \label{sec:Introduction}
-% Exoplanet/Exomoon habitability motivation 
+
+%Exoplanet/Exomoon habitability motivation
 % > Search for extraterrestrial life
 % > Settling other worlds
 % > Current missions to find exoplanets and exomoons
-\cite{RN21}
-\cite{SAB22}
-\cite{LA2010}
-\cite{Fogg92}
+
 % Climate model
 % > 0D-Equation and where it comes from
 \begin{equation}
-  \pi r^2 S(1-A) = 4 \pi r^2 \sigma T^4, \label{eq:0DEBCM}
+  \pi r^2 S(1-A) = 4 \pi r^2 \sigma T^4,
+  \label{eq:0DEBCM}
 \end{equation}
+
 % > 1D-Equation + what the parameters are 
 \begin{equation}
-  C \partialderiv{T(t, x)}{t} - D \partialderiv{}{x} \left((1-x^2)\partialderiv{T(x, t)}{x}\right) + I - S(1-A) = 0
-  \label{eq:PDE_in_x}
+  C(\lambda, T) \partialderiv{T(t, \lambda)}{t} = D\left[\partialderivsecnd{T(t, \lambda)}{\lambda} - \tan\lambda\partialderiv{T(t, \lambda)}{\lambda}\right] + S(\lambda, t)(1-A(T)) - I(T),
+  \label{eq:1DEBCM}
 \end{equation}
-\cite{WK97}
-\cite{SMS08}
 % > Ignoring longitude dimension (How/Why)
+
 % Earth as a baseline and Milankovitch cycles
 % > using Earth to constrain certain parameters of the model to be realistic
 % > varying parameters and seeing where the Earth moves in that space gives insight to the history and evolution of the Earth
-\cite{Roe06}
+
 % Exoplanets (i.e. moving Earth around)
 % > Describe how varying parameters can lead to habitability parameter space
 % > Suggest by generating parameter spaces that new discoveries can be quickly checked  
+
 % Exomoons
 % > How they differ from exoplanets
 % > TH, Eclipsing, Reflectance
@@ -122,28 +124,25 @@ Expanding the laplacian in spherical coordinates the equation becomes
     + \frac{1}{r^2 \sin\theta} \partialderiv{}{\theta}\left(\sin\theta \partialderiv{T}{\theta}\right)
     + \frac{1}{r^2 \sin^2\theta} \partialderivsecnd{T}{\theta} \right]. \label{eq:FullyExpandedHeatEqn}
 \end{equation}
-The EBCM is arrived at by first letting $T(r, \theta, \phi) = T(\lambda)$, with $\lambda = \pi - \theta$. Thus the equation simplifies to
+The EBCM is arrived at by first letting $T(t, r, \theta, \phi) = T(t, \lambda)$, with latitude $\lambda = \pi - \theta$. Thus the equation simplifies to
 \begin{align}
   \partialderiv{T}{t} & = \frac{\alpha}{r^2 \sin\theta} \partialderiv{}{\theta}\left(\sin\theta \partialderiv{T}{\theta}\right)   \\
-                      & = \frac{\alpha}{r^2} \left(\tan\lambda \partialderiv{T}{\lambda} + \partialderivsecnd{T}{\lambda}\right).
+                      & = \frac{\alpha}{r^2} \left(\partialderivsecnd{T}{\lambda} - \tan\lambda \partialderiv{T}{\lambda}\right).
 \end{align}
 The original equation can be recovered by defining $\alpha / r^2 \equiv D / C$ for diffusion constant $D$ and heat capacity $C$.
 Then adding incoming solar radiation $S$ (insolation), which is reduced by planetary albedo $A$, and outgoing IR-emission $I$ to the PDE.
-Thus the form of the EBCM in terms of latitude (instead of $x = \sin\lambda$) is given by
-\begin{equation}
-  C\partialderiv{T}{t} = D \left(\tan\lambda \partialderiv{T}{\lambda} + \partialderivsecnd{T}{\lambda}\right) + S(1-A) - I.
-\end{equation}
-% Expand derivatives and introduce latitude as the standard parameter
+Thus the original form of the 1D EBCM in eqn. \eqref{eq:1DEBCM} is recovered.
 
 \subsection{Discretisation of the climate model} \label{ssec:DiscretisationPDE}
 % choice of discretisation
 Numerically integrating the EBCM requires the derivatives to be discretised.
-Spatially the planet can be split into $S$ nodes, separated by
+Spatially the planet can be split into $S$ latitude bands, separated by
 \begin{equation}
   \Delta\lambda = \frac{\pi\radians}{S-1} = \frac{180\degrees}{S-1},
 \end{equation}
-with spatial indexing of each zone from $m=0, 1, \dots, S-1$.
+with spatial indexing of each band from $m=0, 1, \dots, S-1$.
 Similarly, a temporal indexing of $n=0, 1, \dots$ is used to discretise time in steps of $\Delta t$.
+Thus $T^m_n$ is the temperature at the m\textsuperscript{th} timestep for the n\textsuperscript{th} latitude band.
 
 % choice of partial derivatives
 The spatial derivatives can then be approximated by the central difference and second order central difference:
@@ -152,11 +151,11 @@ The spatial derivatives can then be approximated by the central difference and s
   \partialderivsecnd{T^m_n}{\lambda} & = \frac{T^{m+2}_n -2T^m_n + T^{m-2}_n}{(2 \Delta\lambda)^2},\label{eq:space_2}
 \end{align}
 and the temporal derivative can be approximated as a forward difference,
-\begin{equation} \label{eq:time_1}
-  \partialderiv{T^m_n}{t} = \frac{T^m_{n+1} - T^m_n}{\Delta t},
+\begin{equation}
+  \partialderiv{T^m_n}{t} = \frac{T^m_{n+1} - T^m_n}{\Delta t},\label{eq:time_1}
 \end{equation}
 with numerical stability analysed in appendix \ref{appx:NumStability}.
-Evolving the EBCM is performed by solving eqn. \eqref{eq:time_1} for $T^m_{n+1}$ in terms of the parameter and temperature values at time $n$.
+Evolving the EBCM is performed by solving eqn. \eqref{eq:time_1} for $T^m_{n+1}$ in terms of the parameter and temperature values at timestep $n$.
 
 % choice of edge case partial derivatives
 However, a problem arises at the edges of the model as $m=-2, -1, S, S+1$ are not defined.
@@ -252,8 +251,9 @@ where $\delta_0$ is the obliquity of the planet and $L_s(t) = \omega t$ is orbit
   \label{tab:default_params}
 \end{table*}
 
-\section{Exoplanets} \label{sec:Exoplanets}
+\section{Earth-like exoplanets} \label{sec:Exoplanets}
 \subsection{Investigating time-averaged solar flux} \label{ssec:InvTimeAveragedSolarFlux}
+%%% Quantitatively investigate semimajor axis and eccentricity wrt temperature %%%
 % use 0D model and Mendez to find parameter relations
 General temperature relations for a planet can be found from the 0D EBCM.
 Time averaged insolation of an planet in an elliptical orbit is given by
@@ -262,29 +262,45 @@ Time averaged insolation of an planet in an elliptical orbit is given by
 \end{equation}
 where $q_0 = L_{\text{Sun}}/4\pi a_{\text{Earth}}^2 \approx 1360 \ \text{Wm}^{-2}$ is the solar flux for Earth, $a$ and $e$ are the semimajor axis and eccentricity respectively \cite{Mendez2017}.
 
-Subsituting this relation into equation \eqref{eq:0DEBCM}, a temperature relation of
+By subsituting this relation into equation \eqref{eq:0DEBCM}, the temperature of a planet can be related to semimajor axis and eccentricity through
 \begin{equation}
   T \propto a^{-1/2} (1-e^2)^{-1/8}, \label{eq:T_propto_a_e}
 \end{equation}
-with proportionality constant $(q_0 (1-A) / 4\sigma)^{1/4}$ is found.
+with proportionality constant $(q_0 (1-A) / 4\sigma)^{1/4} = 255$ K for an Earth-like albedo of 0.3.
 
 \begin{figure}
   \includegraphics[width=\linewidth]{images/convergence_varying_a_0.5to1.5.png}
   \caption{
-    $\langle T \rangle = p_i a^{q_i}$
-    Temperate zone: $a < 1$ au
-    $p_1 = 293.5 \pm 0.4, q_1 = 0.505 \pm 0.004$
-    Snowball zone: $a > 1$ au
-    $p_2 = 210.2 \pm 0.2, q_2 = 0.378 \pm 0.003$
+    A plot of the global temperature of the planet when varying its semimajor axis.
+    Overlaid on the plot are two curves which are fitted to the data by a least squares regression.
+    The form of the curve is $\langle T \rangle = p_i a^{q_i}$.
+    It is expected from a 0D EBCM (see eq. \eqref{eq:T_propto_a_e}) that $q_i = -0.5$.
+    The first zone obeys the expected powerlaw nicely, with $q_1 = -0.505 \pm 0.004$.
+    The other free parameter for the first zone is $p_1 = 293.5 \pm 0.4$.
+    The "snowball" zone after 1 au represents a sudden drop in temperature due to ice-albedo feedback, and follows a very different powerlaw to the first zone.
+    Free parameters for this zone are $p_2 = 210.2 \pm 0.2$ and $q_2 = -0.378 \pm 0.003$
     Also shown are Venus and Mars to highlight the range of values considered.
   }
   \label{fig:planet_semimajoraxis}
 \end{figure}
 % > T prop a^-1/2
 % > > talk about powerlaw being obeyed well until snowball
-\begin{equation}
-  T \propto a^{-1/2} \label{eq:T_propto_a}
-\end{equation}
+By keeping $e = 0.0167$ constant and varying $a$ from $0.5$ au to $1.5$ au the validity of this proportionality can be investigated.
+As seen in Figure \ref{fig:planet_semimajoraxis} there are three main zones to consider.
+The first zone with $a < 0.65$ au has temperatures too high to sustain life due to being too close to the Sun.
+The second zone with $0.65 < a < 1$ au is much more temperate, and is able to sustain liquid water on the planet's surface.
+There is a small dip at $1$ au where the planet is marginally colder than expected where the ice albedo feedback is starting to become stronger.
+Both the first and second zones are described by $\langle T \rangle = p_1 a^{q_1} = 293 a^{-0.505}$ which is very close to the expected $a^{-0.5}$ powerlaw seen in eq. \eqref{eq:T_propto_a_e}.
+The value of $p_1$ is $~38$ K higher than the proportionality constant above, most likely due to the additional greenhouse effect present in the 1D model.
+
+The third zone with $a > 1$ au is a sudden departure from this expected powerlaw to $\langle T \rangle = p_2 a^{q_2} = 210.2 a^{-0.378}$ due to ice-albedo feedback.
+As the planet cools, more ice forms with a higher albedo.
+This higher albedo means more light is reflected, thus the planet absorbs less heat, so cools more.
+At $1$ au the planet is on a tipping point in terms of this feedback loop.
+This, along with the following analysis of eccentricity and obliquity, help show why the Earth has had many ice ages in the past \cite{Emiliani78}.
+
+Alternatively, $a$ can be fixed at $1$ au and the eccentricity can be varied from a perfect circle, $e = 0$, to a very eccentric ellipse, $e = 0.9$.
+
 
 % > T prop (1-e^2)^-1/8
 % > > good relationship until very high eccentricity
@@ -302,15 +318,36 @@ with proportionality constant $(q_0 (1-A) / 4\sigma)^{1/4}$ is found.
   \label{fig:planet_eccentricity}
 \end{figure}
 
-% % > a prop (1-e^2)^-1/4
-% % > > finding inner and outer habitable zone (Human, Bio)
-% \begin{equation}
-%   a \propto (1-e^2)^{-1/4}
-% \end{equation}
+\subsection{Semimajor axis} \label{ssec:qualitative_semimajoraxis}
+\begin{figure}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_humancomp_time.png}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_humancomp_area.png}
+  \caption{
+    Qualitative look at time and area habitability for variable semimajor axis
+  }
+  \label{fig:qualitative_semimajoraxis}
+\end{figure}
 
-% % Describe in caption, analysis in main body of text 
 
-\subsection{Investigating obliquity and rotation rate}\label{ssec:InvObliquityRotationRate}
+\subsection{Eccentricity} \label{ssec:qualitative_eccentricity}
+\begin{figure}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/eccentricity_humancomp_time.png}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/eccentricity_humancomp_area.png}
+  \caption{
+    Qualitative look at time and area habitability for variable eccentricity
+  }
+  \label{fig:qualitative_eccentricity}
+\end{figure}
+
+\subsection{Obliquity} \label{ssec:qualitative_obliquity}
+\begin{figure}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/obliquity_humancomp_time.png}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/obliquity_humancomp_area.png}
+  \caption{
+    Qualitative look at time and area habitability for variable eccentricity
+  }
+  \label{fig:qualitative_obliquity}
+\end{figure}
 % Qualitative look at how obliquity influences habitability
 % > global temperature-obliquity
 % > latitude-obliquity
@@ -318,15 +355,59 @@ with proportionality constant $(q_0 (1-A) / 4\sigma)^{1/4}$ is found.
 % Qualitative look at how rotation-rate influences habitability
 % > "island of stability" at higher rotation rates
 % > Three plot of obliquity showing the "island" growing / stabilising
-\subsection{Investigating of ocean fraction} \label{ssec:InvOceanFraction}% -> lower priority
+\subsection{Ocean fraction} \label{ssec:qualitative_oceanfraction}
+\begin{figure}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/obliquity_humancomp_time.png}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/obliquity_humancomp_area.png}
+  \caption{
+    Qualitative look at time and area habitability for variable eccentricity
+  }
+  \label{fig:qualitative_oceanfraction}
+\end{figure}
 % Stability of the snowballing w.r.t. ocean fraction
 % > a-f_ocean plot showing snowball transition changing?
 
 \section{Exomoons} \label{sec:Exomoons}
-\subsection{Investigating eclipsing} \label{ssec:InvEclipsing}
-% Eclipsing amount vs a_gas, e_gas, a_moon, e_moon
-% show that eclipsing is minor / could be approximated by powerlaws?
-\subsection{Investigating tidal heating} \label{ssec:InvTidalHeating}
+\subsection{Eclipsing} \label{ssec:InvEclipsing}
+\begin{figure}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/eclipsedlight_gassemimajoraxis_with_fit.png}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/eclipsedlight_moonsemimajoraxis_with_fit.png}
+  \caption{
+    Quantitative look at eclipsing fraction wrt semimajor axis of moon and gas giant
+  }
+  \label{fig:quantitative_eclipsing}
+\end{figure}
+% Eclipsing amount vs a_gas, a_moon ^^^
+% mention that varying eccentricity made the eclipsing fraction more variable / random without making the fraction larger
+% show combining powerlaw for eclipsing as a function of a_gas and a_moon
+\subsection{Tidal heating} \label{ssec:InvTidalHeating}
+\begin{figure}
+  \includegraphics[width=\linewidth]{images_rewrite/varying_agas_0.5to1.5_three_together.png}
+  \caption{
+    Qualitative look at how tidal heating effects semimajoraxis temperature curve
+  }
+  \label{fig:qualitative_tidalheating_semimajoraxis}
+\end{figure}
+
+\begin{figure}
+  \includegraphics[width=\linewidth]{images_rewrite/varying_egas_0to0.9_three_together.png}
+  \caption{
+    Qualitative look at how tidal heating effects semimajoraxis temperature curve
+  }
+  \label{fig:qualitative_tidalheating_eccentrcity}
+\end{figure}
+
+\begin{figure}
+  \includegraphics[width=\linewidth]{images_rewrite/varying_obliquity_0to90_three_together.png}
+  \caption{
+    Qualitative look at how tidal heating effects semimajoraxis temperature curve
+  }
+  \label{fig:qualitative_tidalheating_obliquity}
+\end{figure}
+
+
+
+
 % with constant TH -> vary a_gas-e_gas to see how habitability moves
 % const a_gas/e_gas -> vary a_moon-e_moon to see habitability relations
 % vary planet size/radius/mass? 
@@ -384,7 +465,7 @@ Simulations and models such as those in this paper are used to determine if a pl
 A habitable zone can be made by varying the parameters of the model to see where the model is habitable, partially habitable, or uninhabitable.
 
 The main model in this paper takes a planet and divides it into a number of latitude bands which can have energy flow between them.
-Certain parameters, such as how the planet orbits around it's star and the angle the planet is tilted at, are varied to build this habitable zone.
+Certain parameters, such as how the planet orbits around its star and the angle the planet is tilted at, are varied to build this habitable zone.
 A result of this paper is if the Earth orbited slightly further away from the Sun then it is likely that it would fall into an ice age similar to what the Earth has experienced in the past.
 Another result found is that the tilt of the planet can affect how hot or cold it is, and indicates that the current tilt of the Earth gives a cold planet.
 
