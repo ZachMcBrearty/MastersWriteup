@@ -6,23 +6,21 @@
 \contentsline {section}{\numberline {1}Introduction}{3}{}
 \contentsline {section}{\numberline {2}1-D Energy Balance Climate Model}{3}{}
 \contentsline {subsection}{\numberline {A}Discretisation of the climate model}{3}{}
-\contentsline {section}{\numberline {3}Earth-like model}{4}{}
-\contentsline {subsection}{\numberline {A}Characterising Model Parameters}{4}{}
-\contentsline {section}{\numberline {4}Earth-like exoplanets}{5}{}
-\contentsline {subsection}{\numberline {A}Investigating time-averaged solar flux}{5}{}
-\contentsline {subsection}{\numberline {B}Semimajor axis}{13}{}
-\contentsline {subsection}{\numberline {C}Eccentricity}{13}{}
-\contentsline {subsection}{\numberline {D}Obliquity}{13}{}
-\contentsline {subsection}{\numberline {E}Ocean fraction}{13}{}
-\contentsline {section}{\numberline {5}Exomoons}{13}{}
-\contentsline {subsection}{\numberline {A}Eclipsing}{13}{}
-\contentsline {subsection}{\numberline {B}Tidal heating}{13}{}
-\contentsline {subsection}{\numberline {C}Developing and investigating a depth model}{13}{}
-\contentsline {section}{\numberline {6}Discussion}{13}{}
-\contentsline {section}{\numberline {7}Conclusion}{13}{}
-\contentsline {section}{\numberline {}References}{13}{}
+\contentsline {section}{\numberline {3}Method}{4}{}
+\contentsline {section}{\numberline {4}Earth-like model}{5}{}
+\contentsline {section}{\numberline {5}Earth-like exoplanets}{9}{}
+\contentsline {subsection}{\numberline {A}Investigating time-averaged solar flux}{9}{}
+\contentsline {subsection}{\numberline {B}Semimajor axis and eccentricity}{11}{}
+\contentsline {subsection}{\numberline {C}Obliquity}{11}{}
+\contentsline {subsection}{\numberline {D}Ocean fraction}{11}{}
+\contentsline {section}{\numberline {6}Exomoons}{11}{}
+\contentsline {subsection}{\numberline {A}Eclipsing}{11}{}
+\contentsline {subsection}{\numberline {B}Tidal heating}{16}{}
+\contentsline {subsection}{\numberline {C}Developing and investigating a depth model}{16}{}
+\contentsline {section}{\numberline {7}Discussion}{16}{}
+\contentsline {section}{\numberline {8}Conclusion}{16}{}
+\contentsline {section}{\numberline {}References}{16}{}
 \appendix 
-\contentsline {section}{\numberline {A}Defining Equilibrium Temperature and Averages used}{14}{}
-\contentsline {section}{\numberline {B}Numerical stability of the 1D EBCM}{14}{}
-\contentsline {section}{\numberline {C}Tidal heating equations and method}{14}{}
-\contentsline {section}{\numberline {}Scientific Summary for a General Audience}{15}{}
+\contentsline {section}{\numberline {A}Numerical stability of the 1D EBCM}{19}{}
+\contentsline {section}{\numberline {B}Tidal heating equations and method}{19}{}
+\contentsline {section}{\numberline {}Scientific Summary for a General Audience}{20}{}

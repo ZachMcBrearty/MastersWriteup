@@ -43,6 +43,7 @@
 
 \newcommand{\radians}{\ensuremath{^{\text{rad}}}}
 \newcommand{\degrees}{\ensuremath{^{\circ}}}
+\newcommand{\degreesC}{\ensuremath{^{\circ}\text{C}}}
 
 \newcommand{\partialderiv}[2]{\frac{\partial {#1}}{\partial {#2}}}
 \newcommand{\partialderivsecnd}[2]{\frac{\partial^2 {#1}}{\partial {#2}^2}}
@@ -125,10 +126,12 @@ Expanding the laplacian in spherical coordinates the equation becomes
     + \frac{1}{r^2 \sin^2\theta} \partialderivsecnd{T}{\theta} \right]. \label{eq:FullyExpandedHeatEqn}
 \end{equation}
 The EBCM is arrived at by first letting $T(t, r, \theta, \phi) = T(t, \lambda)$, with latitude $\lambda = \pi - \theta$. Thus the equation simplifies to
-\begin{align}
-  \partialderiv{T}{t} & = \frac{\alpha}{r^2 \sin\theta} \partialderiv{}{\theta}\left(\sin\theta \partialderiv{T}{\theta}\right)   \\
-                      & = \frac{\alpha}{r^2} \left(\partialderivsecnd{T}{\lambda} - \tan\lambda \partialderiv{T}{\lambda}\right).
-\end{align}
+\begin{equation}
+  \begin{split}
+    \partialderiv{T}{t} & = \frac{\alpha}{r^2 \sin\theta} \partialderiv{}{\theta}\left(\sin\theta \partialderiv{T}{\theta}\right)   \\
+                        & = \frac{\alpha}{r^2} \left(\partialderivsecnd{T}{\lambda} - \tan\lambda \partialderiv{T}{\lambda}\right).
+  \end{split}
+\end{equation}
 The original equation can be recovered by defining $\alpha / r^2 \equiv D / C$ for diffusion constant $D$ and heat capacity $C$.
 Then adding incoming solar radiation $S$ (insolation), which is reduced by planetary albedo $A$, and outgoing IR-emission $I$ to the PDE.
 Thus the original form of the 1D EBCM in eqn. \eqref{eq:1DEBCM} is recovered.
@@ -142,7 +145,7 @@ Spatially the planet can be split into $S$ latitude bands, separated by
 \end{equation}
 with spatial indexing of each band from $m=0, 1, \dots, S-1$.
 Similarly, a temporal indexing of $n=0, 1, \dots$ is used to discretise time in steps of $\Delta t$.
-Thus $T^m_n$ is the temperature at the m\textsuperscript{th} timestep for the n\textsuperscript{th} latitude band.
+Thus $T^m_n$ is the temperature at the $m$\textsuperscript{th} timestep for the $n$\textsuperscript{th} latitude band.
 
 % choice of partial derivatives
 The spatial derivatives can then be approximated by the central difference and second order central difference:
@@ -169,17 +172,136 @@ By imposing that ${\partial T^{m=0, S-1}_n}/{\partial \lambda} = 0$, these secon
 \end{alignat}
 Furthermore, the treatment imposed for the $m=1$ and $m=S-2$ second order derivatives is much the same, using central-backward and central-forward derivatives respectively.
 
+\section{Method} \label{sec:Method}
+% averaging
+Area averaging
+\begin{equation}
+  \bar{Q}_n = \frac{\sum_{m = 0}^{S-1} Q^m_n \cos(\lambda_m) \Delta\lambda}{\sum_{m = 0}^{S-1} \cos(\lambda_m) \Delta\lambda},
+  \label{eq:Q_areaaveraged}
+\end{equation}
+where $\lambda_m = m \Delta\lambda - \pi / 2$ denominator evaluates to 2
+
+Time averaging
+\begin{equation}
+  \begin{split}
+    Q^m_{p \to q} & = \frac{\sum_{n=p}^{q} Q^m_n \Delta t} {\sum_{n=p}^{q} \Delta t} \\
+                  & = \frac{\sum_{n=p}^{q} Q^m_n}{q-p}
+  \end{split}
+  \label{eq:Q_timeaverage}
+\end{equation}
+where, since $\Delta t$ is constant, the averaging over time becomes an average of a number of points.
+
+total average
+\begin{equation}
+  \bar{Q}_{p \to q} = \frac{\sum_{n=p}^{q} \sum_{m = 0}^{S-1} Q^m_n \cos(\lambda_m) \Delta\lambda}{2(q-p)},
+  \label{eq:Q_totalaverage}
+\end{equation}
+which is simply the time and area averages of the temperature data
+
+% Equilibrium Temperature
+The system is said to reach an equilbrium temperature when the average temperature between 2 averaging periods divided by the average temperature over both periods is less than some tolerance $\epsilon$:
+\begin{equation}
+  \frac{\bar{T}_{p \to q} - \bar{T}_{q \to r}}{\bar{T}_{p \to r}} < \epsilon,
+  \label{eq:T_equilb}
+\end{equation}
+typically the averaging occurs over an orbital period (i.e. local year), so the equilbrium temperature is when there are no significant variations in temperature between two consecutive orbits.
+
+% Habitability
+The classical habitability function is the Liquid Water Requirement (LWR) given by
+\begin{equation}
+  H_\text{LWR}(T) =
+  \begin{cases}
+    1 : 0\degreesC \le T \le 100\degreesC \\
+    0 : \text{Otherwise}
+  \end{cases},
+  \label{eq:H_LWR}
+\end{equation}
+Thus a temperature is habitable if it is between the boiling and melting points of water.
+
+An alternative is motivated by the limits of human endurance.
+If a human's core temperature is raised above $35\degreesC$ then enzymes esssential for life denature and breakdown.
+This does not mean temperatures above this are lethal as humans can regulate temperature by sweating.
+The wet bulb temperature is defined by wrapping a thermometer bulb with a wet cloth.
+It is designed to take the humidity and ambient temperature into account, essentially mimicking the internal temperature of a human.
+Thus a wetbulb temperature of $35\degreesC$ is lethal if prolonged.
+
+This climate model does not calculate humidity,
+thus a conservative temperature at which habitability reduces is taken to be $30\degreesC$:
+\begin{equation}
+  H_\text{HC}(T) =
+  \begin{cases}
+    1 : 0\degreesC \le T \le 30\degreesC \\
+    0 : \text{Otherwise}
+  \end{cases},
+  \label{eq:H_HC}
+\end{equation}
+with the additional constraint that temperatures greater than $40\degreesC$ or less than $-10\degreesC$ in a latitude band sets the habitability of the band to 0 for all time.
 
 \section{Earth-like model} \label{sec:EarthLikeModel}
-\subsection{Characterising Model Parameters} \label{ssec:CharacterisingModelParameters} %%% -> could appendix if not enough space %%%
-In this analysis the forms of the model parameters are taken from Williams and Kastings (WK97) \cite{WK97}.
+\begin{table*}
+  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    Semimajoraxis & Eccentricity & Obliquity     & No. spatial nodes & Timestep         & \multirow{2}{*}{Land fraction type} \\
+    $a$, au       & $e$          & $\delta$, deg & $S$               & $\Delta t$, days &                                     \\
+    \hline
+    1             & 0.0167       & 23.5          & 61                & 1                & Uniform 70\% Ocean                  \\
+    \hline
+  \end{tabular}
+  \caption{A summary of the default parameters for the Earth-like model.
+    A `Uniform' land fraction indicates that the model has the same ratio of land to ocean across the entire planet.
+    The odd number of spatial nodes means there is a true equator with $\lambda = 0$ as well as poles with $\lambda = \pm 90\degrees$}
+  \label{tab:default_params}
+\end{table*}
+
+\begin{figure}
+  \includegraphics[width=0.8\linewidth]{images_rewrite/earth_150yr_fit_056.png}
+  \caption{
+    The 10-year-averaged temperature distribution of the Earth-like model given in \ref{tab:default_params}.
+    Overlaid on the fit is the time averaged Earth model from North and Coakley's 1979 paper \cite{NC79}.
+    The diffusion parameter $D_0$ in eqn. \eqref{eq:diffusion_eqn} was varied to give the best agreement between the two models.
+    The value found to work best is $D_0 = 0.56 \diffusion$.
+  }
+  \label{fig:NC_fit}
+\end{figure}
+
+\begin{figure}
+  \includegraphics[width=0.8\linewidth]{images_rewrite/Earth_latitude_time_190_192.png}
+  \includegraphics[width=0.8\linewidth]{images_rewrite/Earth_habitabilities_time_190_192.png}
+  \caption{
+    Top: The temperature distribution for the Earth model with parameters given in Table \ref{tab:default_params}.
+    The time range is for 2 years, showing the periodicity of the seasons in the model.
+    Bottom: The temperature distribution processed with the LWR habitability (eqn. \eqref{eq:H_LWR}) and then averaged over time (left) or area (right).
+  }
+  \label{fig:Earth_lat_time}
+\end{figure}
+
+In order to investigate the Earth and Earth-like planets, the parameters and functions which define the Earth must be established.
+In this analysis the forms of the model functions are taken from Williams and Kastings (WK97) \cite{WK97}, and the model is compared against the model from North and Coakley 1979 (NC79) \cite{NC79} which has been time-averaged as follows.
+
+% choice of D_0 by fitting to NC97
+%%% Move to introduction as a "comparison model"? %%%
+The first 3 terms of the NC79 model are given in their eqn. (4) as
+\begin{equation}
+  T(\lambda, t)[\degrees\text{C}] = 14.2 + 15.5 \cos(\omega t + \phi) P_1(\sin\lambda) - 30.2 P_2(\sin(\lambda)), \label{eq:NC_timedep}
+\end{equation}
+where $P_i$ is the $i^\text{th}$ Legendre polynomial.
+The time-averaged temperature is found when averaging eqn. \eqref{eq:NC_timedep} over a year period,
+\begin{equation}
+  \begin{split}
+    T(\lambda)[\text{K}] & = 14.2 + 273 - 30.2 (3 \sin^2(\lambda) - 1) / 2 \\
+                         & = 302.3 - 45.3\sin^2(\lambda),
+  \end{split}
+  \label{eq:NC_timeavg}
+\end{equation}
+where the temperature has been converted to Kelvin, and the second legrendre polynomial is expanded as $P_2(x) =(3x^2-1) / 2$.
+The average of $\cos(\omega t + \phi)$ over an period $T = 2\pi / \omega$ is $0$, so the first legendre polynomial is not needed.
 
 % Diffusion
 The diffusion varies with orbital and atmospheric parameters as,
 \begin{equation}
-  \frac{D}{D_0} = \frac{p}{p_0} \frac{c_p}{c_{p,0}} \left(\frac{m}{28}\right)^{-2} \left(\frac{\Omega}{1 \text{day}^{-1}}\right)^{-2}
+  \frac{D}{D_0} = \frac{p}{p_0} \frac{c_p}{c_{p,0}} \left(\frac{m}{28}\right)^{-2} \left(\frac{\Omega}{1\ \text{day}^{-1}}\right)^{-2} \label{eq:diffusion_eqn}
 \end{equation}
-where $D_0 = 0.56 \diffusion$ is from fitting to the time averaged Earth model from North and Coakley 1979 \cite{NC79}.
+where $D_0 = 0.56 \diffusion$ is from fitting to eqn. \ref{eq:NC_timeavg} as shown in Fig. \ref{fig:NC_fit}.
 $p$ is the atmospheric pressure relative to $p_0 = 101 \ \text{kPa}$.
 $c_p$ is the heat capacity of the atmosphere, relative to $c_{p,0} = 1\times10^3 \ \text{g}^{-1} \text{K}^{-1}$.
 $m$ is the (average) mass of the particles in the atmosphere, relative to the Nitrogen molecule.
@@ -188,9 +310,9 @@ This can be extended to be time variable, such as having CO$_2$ emissions increa
 However this paper only considers varying the rotation rate of the planet.
 
 % Heat capacity
-Heat capacity, $C(\lambda, t)$, varies with latitude through the ocean-land fraction, $f_o(\lambda)$, and with temperature through the ice-ocean fraction, $f_i(T)$, as
+Heat capacity, $C(\lambda, T)$, varies with latitude through the ocean-land fraction, $f_\text{o}(\lambda)$, and with temperature through the ice-ocean fraction, $f_\text{i}(T)$, as
 \begin{equation}
-  C(\lambda, T) = (1 - f_o(\lambda)) C_{land} + f_o(\lambda) ((1-f_i(T)) C_{ocean} + f_i(T) C_{ice}(T)),
+  C(\lambda, T) = (1 - f_\text{o}(\lambda)) C_\text{land} + f_\text{o}(\lambda) ((1-f_\text{i}(T)) C_\text{ocean} + f_\text{i}(T) C_\text{ice}(T)),
 \end{equation}
 Where $C_{\text{land}} = 5.25\times10^6 \heatcap$ and $C_{\text{ocean}} = 40 \times C_{\text{land}}$ are constant, and
 \begin{equation}
@@ -200,6 +322,18 @@ Where $C_{\text{land}} = 5.25\times10^6 \heatcap$ and $C_{\text{ocean}} = 40 \ti
     2.0 C_\text{land} & T < 263\text{K},
   \end{cases}
 \end{equation}
+which encapsulates the additional energy requirements of the heat of fusion, and expects that the water would be entirely frozen below $-10\degrees$C.
+% choice of 0.7-uniform
+The ratio of ocean to land for the Earth is 70\% ocean to 30\% land.
+This model assumes this ratio is uniform and constant across the entire planet, thus $f_\text{o} = 0.7$.
+This is a simplification as the Earth has an uneven distribution of land and ocean, with most of the land in the northern hemisphere.
+
+With definitions of diffusion and heat capacity, the timestep and latitude step which are numerically stable can be calculated.
+To do this the EBCM is investigated with a plane wave solution and boundaries on the timestep and latitude step are found.
+The explicit calculation of this is shown in appx. \ref{appx:NumStability}, with the result that, for constant diffusion and timestep, a lower heat capacity requires a larger latitude step.
+The default values for the model are then taken as a timestep of $\Delta t = 1$ day and $S = 61$ latitude nodes ($\Delta \lambda = 3\degrees$ separation)/
+These parameters give good resolution while being completely numerically stable.
+For planets with $f_\text{o} = 0$ a lower value of $S=31$ is chosen as it is stable for the land-only heat capacity value.
 
 % IR-emission
 % Albedo -> snow / water reflectance
@@ -211,8 +345,8 @@ WK97 provides three sets of IR-emission and Albedo functions. Following the exam
   A(T) = A_2(T) = 0.525 - 0.245 \tanh\left(\frac{T - 268 \text{K}}{5}\right),
 \end{equation}
 are used in all models.
-This IR-emission is a blackbody radiation term (numerator) damped by the optical thickness of the atmosphere (denominator) which is roughly equivalent to a greenhouse gas effect.
-The albedo function is a smooth scaling from low to high reflectivity due to snow and water-vapour reflectance.
+This IR-emission is a blackbody radiation term (numerator) damped by the optical thickness of the atmosphere (denominator) which is roughly equivalent to the greenhouse gas effect due to water vapour content in the air.
+The albedo function is a smooth scaling from low reflectivity of land and forest to high reflectivity due to ice and snow.
 
 % Insolation -> why diurnally averaged (No longitude)
 The insolation function, $S$, is defined in WK97 as the day averaged incident (based on latitude) radiation from the sun,
@@ -227,29 +361,22 @@ $$
   \sin \delta(t) = -\sin \delta_0 \cos(L_s(t) + \pi/2)
 $$
 where $\delta_0$ is the obliquity of the planet and $L_s(t) = \omega t$ is orbital longitude from an orbital angular velocity found by Kepler's laws.
+It is important to average over a day insolation as the model does not have a longitude dimension, so cannot account for uneven distribution of the insolation, for example in the case of a tidally locked planet.
 
-% choice of 0.7-uniform
-% choice of D_0 by fitting to NC97
-% choice of spatial separation and time step sizes
-% > relate to numerical stability appx 
-% Show Earth: 
-% > temperature distribution
-% > habitability (human, bio) distribution
-% > Climate cycles (eccentricity, obliquity)
-\begin{table*}
-  \begin{tabular}{|c|c|c|c|c|c|}
-    \hline
-    Semimajoraxis        & Eccentricity     & Obliquity     & No. spatial nodes & Timestep         & \multirow{2}{*}{Land fraction type} \\
-    $a_{\text{gas}}$, au & $e_{\text{gas}}$ & $\delta$, deg & $S$               & $\Delta t$, days &                                     \\
-    \hline
-    1                    & 0.0167           & 23.5          & 61                & 1                & Uniform 70\% Ocean                  \\
-    \hline
-  \end{tabular}
-  \caption{A summary of the default parameters for the Earth-like model.
-    A `Uniform' land fraction indicates that the model has the same ratio of land to ocean across the entire planet.
-    The odd number of spatial nodes means there is a true equator with $\lambda = 0$ as well as poles with $\lambda = \pm 90\degrees$}
-  \label{tab:default_params}
-\end{table*}
+% Show Earth-like model
+The temperature distribution for the Earth model is shown in Fig. \ref{fig:Earth_lat_time} for 2 years after 190 years of evolution.
+There is clear periodicity in the model corresponding clearly with the seasonal variations experienced by the Earth.
+
+Also shown is the LWR habitability of this temperature data which has been time averaged with eqn. \eqref{eq:Q_timeaverage} and area averaged with eqn. \eqref{eq:Q_areaaveraged}.
+The total habitability given by eqn. \eqref{eq:Q_totalaverage} is $H_\text{Earth} = 0.84$, meaning that the Earth is, when using LWR, 84\% habitable.
+When using HC habitability this value is slightly reduced but the same to two significant figures.
+
+The time averaged habitability shows how the the equator is habitable all year around.
+The poles are uninhabitable year round.
+Between $65\degrees$ to $45\degrees$ the habitability decreases linearly, representative of the variablity of the frost line.
+
+The area averaged habitability changes in steps as each discrete latitude band becomes habitable or uninhabitable.
+It is periodic but difficult to predict within each year.
 
 \section{Earth-like exoplanets} \label{sec:Exoplanets}
 \subsection{Investigating time-averaged solar flux} \label{ssec:InvTimeAveragedSolarFlux}
@@ -260,18 +387,18 @@ Time averaged insolation of an planet in an elliptical orbit is given by
 \begin{equation}
   \langle F \rangle = \frac{q_0}{a^2 \sqrt{1-e^2}} \label{eq:avgInsolation},
 \end{equation}
-where $q_0 = L_{\text{Sun}}/4\pi a_{\text{Earth}}^2 \approx 1360 \ \text{Wm}^{-2}$ is the solar flux for Earth, $a$ and $e$ are the semimajor axis and eccentricity respectively \cite{Mendez2017}.
+where $q_0 = L_{\text{Sun}}/4\pi a_{\text{Earth}}^2 \approx 1360 \ \text{Wm}^{-2}$ is the bolometric solar flux for Earth, $a$ and $e$ are the semimajor axis and eccentricity respectively of the planet \cite{Mendez2017}.
 
 By subsituting this relation into equation \eqref{eq:0DEBCM}, the temperature of a planet can be related to semimajor axis and eccentricity through
 \begin{equation}
-  T \propto a^{-1/2} (1-e^2)^{-1/8}, \label{eq:T_propto_a_e}
+  T \propto a^{-\frac{1}{2}} (1-e^2)^{-\frac{1}{8}}, \label{eq:T_propto_a_e}
 \end{equation}
 with proportionality constant $(q_0 (1-A) / 4\sigma)^{1/4} = 255$ K for an Earth-like albedo of 0.3.
 
 \begin{figure}
-  \includegraphics[width=\linewidth]{images/convergence_varying_a_0.5to1.5.png}
+  \includegraphics[width=0.8\linewidth]{images/convergence_varying_a_0.5to1.5.png}
   \caption{
-    A plot of the global temperature of the planet when varying its semimajor axis.
+    A plot of the globally averaged temperature of the planet when varying its semimajor axis at constant eccentricity of $e=0.0167$.
     Overlaid on the plot are two curves which are fitted to the data by a least squares regression.
     The form of the curve is $\langle T \rangle = p_i a^{q_i}$.
     It is expected from a 0D EBCM (see eq. \eqref{eq:T_propto_a_e}) that $q_i = -0.5$.
@@ -285,69 +412,121 @@ with proportionality constant $(q_0 (1-A) / 4\sigma)^{1/4} = 255$ K for an Earth
 \end{figure}
 % > T prop a^-1/2
 % > > talk about powerlaw being obeyed well until snowball
-By keeping $e = 0.0167$ constant and varying $a$ from $0.5$ au to $1.5$ au the validity of this proportionality can be investigated.
-As seen in Figure \ref{fig:planet_semimajoraxis} there are three main zones to consider.
-The first zone with $a < 0.65$ au has temperatures too high to sustain life due to being too close to the Sun.
+The validity of this proportionality can be investigated in terms of the semimajor axis by keeping $e = 0.0167$ constant and varying $a$ from just outside Mercury's orbit at $0.5$ au to Mars' orbit at $1.5$ au.
+As seen in Figure \ref{fig:planet_semimajoraxis} there are three main zones of interest to consider.
+
+The first zone with $a < 0.65$ au has temperatures too high to sustain liquid water due to being too close to the Sun.
 The second zone with $0.65 < a < 1$ au is much more temperate, and is able to sustain liquid water on the planet's surface.
-There is a small dip at $1$ au where the planet is marginally colder than expected where the ice albedo feedback is starting to become stronger.
+% There is a small dip at $1$ au where the planet is marginally colder than expected.
+% This is due to the ice albedo feedback which is very temperature dependent.
 Both the first and second zones are described by $\langle T \rangle = p_1 a^{q_1} = 293 a^{-0.505}$ which is very close to the expected $a^{-0.5}$ powerlaw seen in eq. \eqref{eq:T_propto_a_e}.
 The value of $p_1$ is $~38$ K higher than the proportionality constant above, most likely due to the additional greenhouse effect present in the 1D model.
 
-The third zone with $a > 1$ au is a sudden departure from this expected powerlaw to $\langle T \rangle = p_2 a^{q_2} = 210.2 a^{-0.378}$ due to ice-albedo feedback.
-As the planet cools, more ice forms with a higher albedo.
+The third zone with $a > 1$ au is a sudden departure from this expected powerlaw to $\langle T \rangle = p_2 a^{q_2} = 210.2 a^{-0.378}$.
+This is due to the ice albedo feedback which works as follows.
+As the planet cools, ice forms with a higher albedo than the land or ocean.
 This higher albedo means more light is reflected, thus the planet absorbs less heat, so cools more.
-At $1$ au the planet is on a tipping point in terms of this feedback loop.
+This cycle continues until the planet reaches a much colder equilibrium than is expected by a fixed albedo method.
+At $1$ au the planet is on a tipping point in terms of this feedback loop, as seen by the temperature being slightly lower than expected by eqn. \eqref{eq:T_propto_a_e}.
 This, along with the following analysis of eccentricity and obliquity, help show why the Earth has had many ice ages in the past \cite{Emiliani78}.
 
-Alternatively, $a$ can be fixed at $1$ au and the eccentricity can be varied from a perfect circle, $e = 0$, to a very eccentric ellipse, $e = 0.9$.
-
-
-% > T prop (1-e^2)^-1/8
-% > > good relationship until very high eccentricity
-\begin{equation}
-  T \propto (1-e^2)^{-1/8} \label{eq:T_propto_e}
-\end{equation}
 \begin{figure}
-  \includegraphics[width=\linewidth]{images/convergence_varying_e_0to0.9.png}
+  \includegraphics[width=0.8\linewidth]{images/convergence_varying_e_0to0.9.png}
   \caption{
-    $\langle T \rangle = p(1-e^2)^{-1/8}$
-    $p = 292.6 \pm 0.2$
-    Also shown are the current and maximum theoretical value of Earth's eccentricity.
+    A plot of the globally averaged temperature of the planet when varying its eccentricity at constant semimajor axis of $a = 1$ au.
+    Overlaid on the plot is a curve which is fitted to the data by a least squares regression.
+    The form of the curve is $\langle T \rangle = p(1-e^2)^{-1/8}$.
+    The proportionality constant $p = 292.6 \pm 0.2$ K, which is higher than expected due to greenhouse effects.
+    Also shown are the current and maximum theoretical value of Earth's eccentricity \cite{LA2010}.
     The minimum value is $0$.
+    There is a large dip at lower eccentricities due to ice albedo feedback forming polar icecaps.
   }
   \label{fig:planet_eccentricity}
 \end{figure}
+Alternatively, $a$ can be fixed at $1$ au and the eccentricity can be varied from a perfect circle, $e = 0$, to a very eccentric ellipse, $e = 0.9$.
+Beyond $e > 0.9$ the iteration to find orbital distance converges much less quickly so becomes intractible.
+Additionally planets in extreme orbits with $e > 0.9$ would be extremely unstable and most likely would not be able to retain an atmosphere due to extreme temperatures.
 
-\subsection{Semimajor axis} \label{ssec:qualitative_semimajoraxis}
+Similar to varying the semimajor axis, there are two main zones of interest in Figure \ref{fig:planet_eccentricity} where the eccentricity of the planet is varied.
+
+The zone with $e > 0.2$ follows the relationship well, and the globally averaged temperature doesn't exceed the boiling point of water.
+On the other hand, the zone with $e < 0.2$ is up to $5$ K lower than the relationship.
+This dip is again due to ice albedo feedback.
+High eccentricities mean the planet gathers and stores enough thermal energy when close to the Sun to prevent polar ice caps from forming even when further away from the Sun.
+Lower eccentricities allow for polar ice caps to form which then significantly lower the global temperature.
+
+As seen from the vertical lines in Fig. \ref{fig:planet_eccentricity}, the Earth has moved in this lower eccentricity region for its entire history, suggesting that the presence of the polar caps has been reasonably constant for the recent past.
+
+% > T prop (1-e^2)^-1/8
+% > > good relationship until very high eccentricity
+% \begin{equation}
+%   T \propto (1-e^2)^{-1/8} \label{eq:T_propto_e}
+% \end{equation}
+
+
+\subsection{Semimajor axis and eccentricity} \label{ssec:qualitative_semimajoraxis_eccentricity}
 \begin{figure}
   \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_humancomp_time.png}
   \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_humancomp_area.png}
   \caption{
-    Qualitative look at time and area habitability for variable semimajor axis
+    Left: The area-averaged human habitability for a 2 year period after 180 years of simulation.
+    The planet is never 100\% habitable, reaching a maximum of 85\% when at the Earth-like $1$ au.
+    Cyclical variations in habitability can be seen for $a < 1$ au.
+    This indicates seasonal variation where the planet becomes too cold or, more likely, too hot for the human compatible habitability considered.
+    Right: The 10 year time-averaged human habitability for each latitude band.
+    In this case some latitude bands do reach 100\% habitability.
+    Decreasing $a$ from $1$ au causes the equator to become too hot for habitability, and melts the ice caps which are then habitable.
+    Increasing $a$ from $1$ au causes ice caps to grow and the planet to fall into a snowball state which is too cold for habitability.
   }
   \label{fig:qualitative_semimajoraxis}
 \end{figure}
 
-
-\subsection{Eccentricity} \label{ssec:qualitative_eccentricity}
 \begin{figure}
   \includegraphics[width=0.495\linewidth]{images_rewrite/eccentricity_humancomp_time.png}
   \includegraphics[width=0.495\linewidth]{images_rewrite/eccentricity_humancomp_area.png}
   \caption{
-    Qualitative look at time and area habitability for variable eccentricity
+    Left: The area-averaged human habitability for a 2 year period after 180 years of simulation.
+    The planet is never 100\% habitable, reaching a maximum of ~85\%.
+    There is a sharp cut off between $t=180.5$ and $t=181$ years where the equator has cooled as the planet is further from the Sun, but is still considered uninhabitable due to exceeding the maximum allowed temperature (40\degrees C).
+    At $t=180$ years the planet is at perihelion, and is at aphelion at $t=180.5$ years.
+    Right: The 10 year time-averaged human habitability for each latitude band.
+    As eccentricity increases the habitable zones of the planet move outwards towards the poles which are less directly insolated.
+    Higher eccentricities both melt the poles and cause the equatorial regions to be too hot.
   }
   \label{fig:qualitative_eccentricity}
 \end{figure}
+
+\begin{figure}
+  \includegraphics[width=\linewidth]{images_rewrite/dual_gassemajoraxis_0.5_2_gaseccentricity_0_0.9.png}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/LWR_gassemimajoraxis_gaseccentricity.png}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/humancomp_gassemimajoraxis_gaseccentricity.png}
+  \caption{
+    Top: Varying the semimajoraxis and eccentricity of the gas giant to produce a heat map for the equilibrium temperature of the planet.
+    Left: Processing of the temperature data with eqn. \eqref{eq:H_LWR} and eqn. \eqref{eq:f_tot}.
+    Right: Processing of the temperature data with eqn. \eqref{eq:H_HC} and eqn. \eqref{eq:f_tot}.
+  }
+  \label{fig:qualitative_semimajoraxis_eccentricity}
+\end{figure}
+
+
 
 \subsection{Obliquity} \label{ssec:qualitative_obliquity}
 \begin{figure}
   \includegraphics[width=0.495\linewidth]{images_rewrite/obliquity_humancomp_time.png}
   \includegraphics[width=0.495\linewidth]{images_rewrite/obliquity_humancomp_area.png}
   \caption{
-    Qualitative look at time and area habitability for variable eccentricity
+    Left: The area-averaged human habitability for a 2 year period after 150 years of simulation.
+    The habitability varies between 70\% and 100\%, with the highest habitabilities being between 20\degrees and 50\degrees
+    At lower obliquities polar ice caps form reducing the area habitability.
+    There is a small seasonal variation in the habitability due to these polar ice caps growing and shrinking as they are more or less directly insolated.
+    At high obliquities the variation is more extreme, where the pole being directly insolated melts and then reaches temperatures which are too hot, then the other half of the time are more temperate so can sustain life better.
+    Right: The 10 year time-averaged human habitability for each latitude band.
+    Habitability at the equator of this planet is usually totally habitable all year around.
+    The poles vary from totally uninhabitable from cold, habitable, to partially uninhabitable due to cyclical heating then freezing.
   }
   \label{fig:qualitative_obliquity}
 \end{figure}
+
 % Qualitative look at how obliquity influences habitability
 % > global temperature-obliquity
 % > latitude-obliquity
@@ -355,12 +534,19 @@ Alternatively, $a$ can be fixed at $1$ au and the eccentricity can be varied fro
 % Qualitative look at how rotation-rate influences habitability
 % > "island of stability" at higher rotation rates
 % > Three plot of obliquity showing the "island" growing / stabilising
+
 \subsection{Ocean fraction} \label{ssec:qualitative_oceanfraction}
 \begin{figure}
-  \includegraphics[width=0.495\linewidth]{images_rewrite/obliquity_humancomp_time.png}
-  \includegraphics[width=0.495\linewidth]{images_rewrite/obliquity_humancomp_area.png}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/dual_eccentricity_0_0.5_uniform_ocean_fraction_0_1.png}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/dual_obliquity_0_90_uniform_ocean_fraction_0_1.png}
   \caption{
-    Qualitative look at time and area habitability for variable eccentricity
+    Graphs show the minimum ocean fraction required to keep the planet thermally stable (i.e. not fall into a snowball state) for different eccentricities (Left) and obliquities (Right) at constant semimajor axis of $1$ au.
+    While both temperature scales start at $200$ K, the eccentricity graph reaches $360$ K whereas the obliquity graph reaches $295$ K.
+    Both variables cause the planet to be susceptible to ice-albedo feedback, and both cause full or partial recovery from snowball at extreme values.
+    For eccentricity the minimum ocean fraction varies approximately quadratically with eccentricity until $e = 0.4$ where the eccentricity is high enough to melt the induced snowball meaning the time averaged temperature increases.
+    The minimum ocean fraction in the obliquity case varies with an `S' shape and levels out after $\delta = 40\degrees$ to a minimum ocean fraction of $f_\text{ocean, min} = 0.36$.
+    Similar to the eccentricity case, high obliquities can partially recover from the snowball. In this case it is due to the pole facing the Sun melting for half a year due to constant insolation before refreezing when facing away from the Sun.
+    There are nearly no variations due to changing ocean fraction above $f_\text{ocean} = 0.2$ in the eccentricity case, and few variations above $f_\text{ocean} = 0.4$ for the obliquity case.
   }
   \label{fig:qualitative_oceanfraction}
 \end{figure}
@@ -369,20 +555,71 @@ Alternatively, $a$ can be fixed at $1$ au and the eccentricity can be varied fro
 
 \section{Exomoons} \label{sec:Exomoons}
 \subsection{Eclipsing} \label{ssec:InvEclipsing}
+
 \begin{figure}
-  \includegraphics[width=0.495\linewidth]{images_rewrite/eclipsedlight_gassemimajoraxis_with_fit.png}
-  \includegraphics[width=0.495\linewidth]{images_rewrite/eclipsedlight_moonsemimajoraxis_with_fit.png}
+  \includegraphics[width=0.5\linewidth]{images_rewrite/eclipsing diagram.png}
   \caption{
-    Quantitative look at eclipsing fraction wrt semimajor axis of moon and gas giant
+    A diagram of a planet in orbit around a star at a distance $a_{\text{gas}}$, and a moon in orbit of the planet at a distance $a_{\text{moon}}$.
+    The planet has radius $R_\text{gas}$.
+    The angle $2\theta$ corresponds to the angular size of the planet from the star.
+    Inside the angle $2\alpha$ the moon is eclisped by the planet.
   }
   \label{fig:quantitative_eclipsing}
+\end{figure}
+
+Eclipsing of the moon by the gas giant was initially investigated with two independent 2-body solutions for gravitational attraction which showed that varying the eccentricity of the moon or planet resulted in no change to time-averaged eclipsing fraction.
+Thus, the main influences of eclipsing are gas giant semimajor axis and moon semimajor axis, with moon semimajor axis being the most important factor.
+
+In order to add eclipsing to the EBCM without running the 2-body solution in parallel, the eclipsing fraction must be quantified.
+To do this the star is assumed to be a point source, and both planets are assumed to be in circular orbits which are coplanar.
+Figure \ref{fig:quantitative_eclipsing} shows the configuration of the system, including the angle $2\alpha$ which is the fraction of the moon's orbit which is spent being eclipsed.
+
+$\alpha$ can be related to the length $x$ by
+\begin{equation}
+  \sin \alpha = \frac{x}{a_\text{moon}}, \label{eq:alpha_x_amoon}
+\end{equation}
+$\theta$ can be related to the length $x$ by
+\begin{equation}
+  \sin \theta = \frac{x}{a_\text{gas} + a_\text{moon} \cos\alpha} = \frac{r_\text{gas}}{a_\text{gas}} , \label{eq:theta_x_agas}
+\end{equation}
+combining eqns. \eqref{eq:alpha_x_amoon} and \eqref{eq:theta_x_agas} leads to
+\begin{equation}
+  (a_\text{gas} + a_\text{moon}\cos\alpha) \frac{r_\text{gas}}{a_\text{gas}} = a_\text{moon} \sin\alpha,
+\end{equation}
+thus
+\begin{equation}
+  \frac{r_\text{gas}}{a_\text{moon}} = \sin\alpha - \frac{r_\text{gas}}{a_\text{gas}}\cos\alpha,
+\end{equation}
+By approximating $r_\text{gas} \gg a_\text{gas}$, $\alpha$ can be solved for.
+Dividing $2\alpha$ by the full $2\pi$ angle the moon rotates through, the eclipsing fraction can be found as
+\begin{equation}
+  \epsilon = \frac{2\alpha}{2\pi} = \frac{\arcsin(R_\text{gas} / a_\text{moon})}{\pi},
+  \label{eq:eclipsing_fraction}
+\end{equation}
+for a planet of radius $R_\text{gas}$ and moon semimajor axis $a_\text{moon}$.
+
+This relation is investigated in Fig. \ref{fig:quantitative_eclipsing_moon_semimajor_axis} where the fit uses that $\arcsin(x) = x$ for small $x$.
+The value of $b = (1.69 \pm 0.02) \times 10^{-4}$ is very close to the theory value of
+\begin{equation}
+  \frac{R_\text{gas}}{\pi \ 1.5\times10^{11} \text{m au}^{-1}} = 1.48 \times 10^{-4} \text{au},
+\end{equation}
+for a planet with $R_\text{gas} = 7\times10^7 m$ with $a_\text{moon}$ in au.
+
+\begin{figure}
+  \includegraphics[width=0.8\linewidth]{images_rewrite/eclipsedlight_moonsemimajoraxis_with_fit.png}
+  \caption{
+    Fraction of light eclipsed by a Jupiter sized gas giant when varying a moon's semimajor axis.
+    Shown is the Roche limit for Jupiter, as well as the orbital distances of Jupiter's three innermost moons.
+    Overlaid on the data is a fit of $\epsilon = a + b / x$ with parameters $a = (-3.3 \pm 0.8) \times 10^{-3}$ and $b = (1.69 +/- 0.02) \times 10^{-4}$.
+  }
+  \label{fig:quantitative_eclipsing_moon_semimajor_axis}
 \end{figure}
 % Eclipsing amount vs a_gas, a_moon ^^^
 % mention that varying eccentricity made the eclipsing fraction more variable / random without making the fraction larger
 % show combining powerlaw for eclipsing as a function of a_gas and a_moon
 \subsection{Tidal heating} \label{ssec:InvTidalHeating}
 \begin{figure}
-  \includegraphics[width=\linewidth]{images_rewrite/varying_agas_0.5to1.5_three_together.png}
+  \includegraphics[width=0.8\linewidth]{images_rewrite/varying_agas_0.5to1.5_three_together.png}
   \caption{
     Qualitative look at how tidal heating effects semimajoraxis temperature curve
   }
@@ -390,17 +627,17 @@ Alternatively, $a$ can be fixed at $1$ au and the eccentricity can be varied fro
 \end{figure}
 
 \begin{figure}
-  \includegraphics[width=\linewidth]{images_rewrite/varying_egas_0to0.9_three_together.png}
+  \includegraphics[width=0.8\linewidth]{images_rewrite/varying_egas_0to0.9_three_together.png}
   \caption{
-    Qualitative look at how tidal heating effects semimajoraxis temperature curve
+    Qualitative look at how tidal heating effects eccentricity temperature curve
   }
   \label{fig:qualitative_tidalheating_eccentrcity}
 \end{figure}
 
 \begin{figure}
-  \includegraphics[width=\linewidth]{images_rewrite/varying_obliquity_0to90_three_together.png}
+  \includegraphics[width=0.8\linewidth]{images_rewrite/varying_obliquity_0to90_three_together.png}
   \caption{
-    Qualitative look at how tidal heating effects semimajoraxis temperature curve
+    Qualitative look at how tidal heating effects obliquity temperature curve
   }
   \label{fig:qualitative_tidalheating_obliquity}
 \end{figure}
@@ -440,12 +677,6 @@ Alternatively, $a$ can be fixed at $1$ au and the eccentricity can be varied fro
 \clearpage
 
 \appendix
-
-\section{Defining Equilibrium Temperature and Averages used} \label{appx:EquilTempAverages}
-% Time-averaged temperature -> T(lat)
-% Latitude-averaged temperature -> T(t)
-% Time-and-latitude-averaged temperature -> <T>
-% Equilibrium temperature as when <T_i+1> - <T_i> / <T_i> < epsilon
 
 \section{Numerical stability of the 1D EBCM} \label{appx:NumStability}
 % Maths analysis
