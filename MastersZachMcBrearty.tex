@@ -590,7 +590,7 @@ thus
 \begin{equation}
   \frac{r_\text{gas}}{a_\text{moon}} = \sin\alpha - \frac{r_\text{gas}}{a_\text{gas}}\cos\alpha,
 \end{equation}
-By approximating $r_\text{gas} \gg a_\text{gas}$, $\alpha$ can be solved for.
+$\alpha$ can be solved for by approximating $r_\text{gas} \gg a_\text{gas}$.
 Dividing $2\alpha$ by the full $2\pi$ angle the moon rotates through, the eclipsing fraction can be found as
 \begin{equation}
   \epsilon = \frac{2\alpha}{2\pi} = \frac{\arcsin(R_\text{gas} / a_\text{moon})}{\pi},
@@ -598,25 +598,19 @@ Dividing $2\alpha$ by the full $2\pi$ angle the moon rotates through, the eclips
 \end{equation}
 for a planet of radius $R_\text{gas}$ and moon semimajor axis $a_\text{moon}$.
 
-This relation is investigated in Fig. \ref{fig:quantitative_eclipsing_moon_semimajor_axis} where the fit uses that $\arcsin(x) = x$ for small $x$.
-The value of $b = (1.69 \pm 0.02) \times 10^{-4}$ is very close to the theory value of
-\begin{equation}
-  \frac{R_\text{gas}}{\pi \ 1.5\times10^{11} \text{m au}^{-1}} = 1.48 \times 10^{-4} \text{au},
-\end{equation}
-for a planet with $R_\text{gas} = 7\times10^7 m$ with $a_\text{moon}$ in au.
+This relation is investigated in Fig. \ref{fig:quantitative_eclipsing_moon_semimajor_axis} with a free parameter in place of $R_\text{gas}$.
+The value of the free parameter is $(7.0125\pm 0.0075) \times 10^7 \text{m}$ which is extremely close to the radius of Jupiter, as to be expected.
 
 \begin{figure}
   \includegraphics[width=0.8\linewidth]{images_rewrite/eclipsedlight_moonsemimajoraxis_with_fit.png}
   \caption{
     Fraction of light eclipsed by a Jupiter sized gas giant when varying a moon's semimajor axis.
     Shown is the Roche limit for Jupiter, as well as the orbital distances of Jupiter's three innermost moons.
-    Overlaid on the data is a fit of $\epsilon = a + b / x$ with parameters $a = (-3.3 \pm 0.8) \times 10^{-3}$ and $b = (1.69 +/- 0.02) \times 10^{-4}$.
+    Overlaid on the data is a fit of $\epsilon = \arcsin(p/x)/\pi$ with parameter $p = (4.675\pm0.005)\times 10^{-4}\ \text{au}$.
   }
   \label{fig:quantitative_eclipsing_moon_semimajor_axis}
 \end{figure}
-% Eclipsing amount vs a_gas, a_moon ^^^
-% mention that varying eccentricity made the eclipsing fraction more variable / random without making the fraction larger
-% show combining powerlaw for eclipsing as a function of a_gas and a_moon
+
 \subsection{Tidal heating} \label{ssec:InvTidalHeating}
 \begin{figure}
   \includegraphics[width=0.8\linewidth]{images_rewrite/varying_agas_0.5to1.5_three_together.png}
