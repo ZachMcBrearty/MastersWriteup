@@ -15,12 +15,11 @@
 \contentsline {subsection}{\numberline {D}Ocean fraction}{14}{}
 \contentsline {section}{\numberline {6}Exomoons}{15}{}
 \contentsline {subsection}{\numberline {A}Eclipsing}{15}{}
-\contentsline {subsection}{\numberline {B}Tidal heating}{17}{}
-\contentsline {subsection}{\numberline {C}Developing and investigating a depth model}{17}{}
+\contentsline {subsection}{\numberline {B}Tidal heating}{16}{}
 \contentsline {section}{\numberline {7}Discussion}{17}{}
 \contentsline {section}{\numberline {8}Conclusion}{17}{}
 \contentsline {section}{\numberline {}References}{17}{}
 \appendix 
-\contentsline {section}{\numberline {A}Numerical stability of the 1D EBCM}{19}{}
-\contentsline {section}{\numberline {B}Tidal heating equations and method}{19}{}
-\contentsline {section}{\numberline {}Scientific Summary for a General Audience}{20}{}
+\contentsline {section}{\numberline {A}Numerical stability of the 1D EBCM}{20}{}
+\contentsline {section}{\numberline {B}Tidal heating equations and method}{20}{}
+\contentsline {section}{\numberline {}Scientific Summary for a General Audience}{21}{}
