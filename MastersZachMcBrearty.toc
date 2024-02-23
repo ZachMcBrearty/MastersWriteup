@@ -11,15 +11,15 @@
 \contentsline {section}{\numberline {5}Earth-like exoplanets}{9}{}
 \contentsline {subsection}{\numberline {A}Investigating time-averaged solar flux}{9}{}
 \contentsline {subsection}{\numberline {B}Semimajor axis and eccentricity}{12}{}
-\contentsline {subsection}{\numberline {C}Obliquity}{13}{}
-\contentsline {subsection}{\numberline {D}Ocean fraction}{14}{}
-\contentsline {section}{\numberline {6}Exomoons}{15}{}
-\contentsline {subsection}{\numberline {A}Eclipsing}{15}{}
-\contentsline {subsection}{\numberline {B}Tidal heating}{16}{}
-\contentsline {section}{\numberline {7}Discussion}{17}{}
-\contentsline {section}{\numberline {8}Conclusion}{17}{}
-\contentsline {section}{\numberline {}References}{17}{}
+\contentsline {subsection}{\numberline {C}Obliquity}{14}{}
+\contentsline {subsection}{\numberline {D}Ocean fraction}{15}{}
+\contentsline {section}{\numberline {6}Exomoons}{16}{}
+\contentsline {subsection}{\numberline {A}Eclipsing}{16}{}
+\contentsline {subsection}{\numberline {B}Tidal heating}{17}{}
+\contentsline {section}{\numberline {7}Discussion}{18}{}
+\contentsline {section}{\numberline {8}Conclusion}{18}{}
+\contentsline {section}{\numberline {}References}{18}{}
 \appendix 
-\contentsline {section}{\numberline {A}Numerical stability of the 1D EBCM}{20}{}
-\contentsline {section}{\numberline {B}Tidal heating equations and method}{20}{}
-\contentsline {section}{\numberline {}Scientific Summary for a General Audience}{21}{}
+\contentsline {section}{\numberline {A}Numerical stability of the 1D EBCM}{21}{}
+\contentsline {section}{\numberline {B}Tidal heating equations and method}{21}{}
+\contentsline {section}{\numberline {}Scientific Summary for a General Audience}{22}{}

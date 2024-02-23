@@ -309,11 +309,11 @@ The diffusion varies with orbital and atmospheric parameters as,
   \frac{D}{D_0} = \frac{p}{p_0} \frac{c_p}{c_{p,0}} \left(\frac{m}{28}\right)^{-2} \left(\frac{\Omega}{1\ \text{day}^{-1}}\right)^{-2} \label{eq:diffusion_eqn}
 \end{equation}
 where $D_0 = 0.56 \diffusion$ is from fitting to eqn. \ref{eq:NC_timeavg} as shown in Fig. \ref{fig:NC_fit}.
-$p$ is the atmospheric pressure relative to $p_0 = 101 \ \text{kPa}$.
-$c_p$ is the heat capacity of the atmosphere, relative to $c_{p,0} = 1\times10^3 \ \text{g}^{-1} \text{K}^{-1}$.
-$m$ is the (average) mass of the particles in the atmosphere, relative to the Nitrogen molecule.
-$\Omega$ is the rotation rate of the planet, relative to Earth's $1$ rotation per day.
-This can be extended to be time variable, such as having CO$_2$ emissions increase pressure, change heat capacity, and increase mass of particles.
+The atmospheric pressure $p$ is relative to $p_0 = 101 \ \text{kPa}$.
+The heat capacity $c_p$ of the atmosphere is relative to $c_{p,0} = 1\times10^3 \ \text{g}^{-1} \text{K}^{-1}$.
+Average mass of particles in the atmosphere is given by $m$ and is relative to the Nitrogen molecule.
+Rotation rate of the planet $\Omega$ is relative to Earth's $1$ rotation per day.
+These parameters can be extended to be time variable, such as having CO$_2$ emissions increase pressure, change heat capacity, and change mass of particles.
 However this paper only considers varying the rotation rate of the planet.
 
 % Heat capacity
@@ -378,8 +378,8 @@ For a 2-body system this distance can be calculated through an iterative method 
 where $a$ and $e$ are semimajor axis and eccentricity respectively, and the eccentricity anomaly $E$ is given by iteration
 \begin{equation}
   \begin{split}
-    E_0 = M
-    E_{i+1} = E_i + \frac{M + e \sin E_i - E_i}{1-e \cos E_i}
+    E_0 &= M \\
+    E_{i+1} &= E_i + \frac{M + e \sin E_i - E_i}{1-e \cos E_i}
   \end{split},
   \label{eq:two_body_angle}
 \end{equation}
@@ -406,7 +406,7 @@ It is periodic but difficult to predict within each year.
 \subsection{Investigating time-averaged solar flux} \label{ssec:InvTimeAveragedSolarFlux}
 
 \begin{figure}
-  \includegraphics[width=0.8\linewidth]{images/convergence_varying_a_0.5to1.5.png}
+  \includegraphics[width=0.8\linewidth]{images_rewrite/convergence_varying_a_0.5to1.5.png}
   \caption{
     A plot of the equilibrium temperature of the planet when varying its semimajor axis at constant eccentricity of $e=0.0167$.
     Overlaid on the plot are two curves which are fitted to the data by a least squares regression.
@@ -422,7 +422,7 @@ It is periodic but difficult to predict within each year.
 \end{figure}
 
 \begin{figure}
-  \includegraphics[width=0.8\linewidth]{images/convergence_varying_e_0to0.9.png}
+  \includegraphics[width=0.8\linewidth]{images_rewrite/convergence_varying_e_0to0.9.png}
   \caption{
     A plot of the equilibrium temperature of the planet when varying its eccentricity at constant semimajor axis of $a = 1$ au.
     Overlaid on the plot is a curve which is fitted to the data by a least squares regression.
@@ -430,7 +430,7 @@ It is periodic but difficult to predict within each year.
     % The proportionality constant $p = 292.6 \pm 0.2$ K.
     Also shown are the current and maximum theoretical value of Earth's eccentricity \cite{LA2010}.
     The minimum value is $0$.
-    There is a dip from the model at lower eccentricities due to ice albedo feedback forming polar icecaps.
+    There is a dip from the model at lower eccentricities due to ice-albedo feedback forming polar icecaps.
   }
   \label{fig:planet_eccentricity}
 \end{figure}
@@ -440,7 +440,7 @@ It is periodic but difficult to predict within each year.
 General temperature relations for a planet can be found from the 0D EBCM.
 Time averaged insolation of an planet in an elliptical orbit is given by
 \begin{equation}
-  \langle F \rangle = \frac{q_0}{a^2 \sqrt{1-e^2}} \label{eq:avgInsolation},
+  S = \langle F \rangle = \frac{q_0}{a^2 \sqrt{1-e^2}} \label{eq:avgInsolation},
 \end{equation}
 where $q_0 = L_{\text{Sun}}/4\pi a_{\text{Earth}}^2 \approx 1360 \ \text{Wm}^{-2}$ is the bolometric solar flux for Earth, $a$ and $e$ are the semimajor axis and eccentricity respectively of the planet \cite{Mendez2017}.
 
@@ -480,7 +480,7 @@ There are two main zones of interest in Figure \ref{fig:planet_eccentricity} whe
 
 The zone with $e > 0.2$ follows the relationship well, and the globally averaged temperature doesn't exceed the boiling point of water.
 On the other hand, the zone with $e < 0.2$ is up to $5$ K lower than the relationship.
-This dip is again due to ice albedo feedback.
+This dip is again due to ice-albedo feedback.
 High eccentricities mean the planet gathers and stores enough thermal energy when close to the Sun to prevent polar ice caps from forming even when further away from the Sun.
 Lower eccentricities allow for polar ice caps to form which then significantly lower the global temperature.
 
@@ -488,12 +488,16 @@ As seen from the vertical lines in Fig. \ref{fig:planet_eccentricity}, the Earth
 
 \subsection{Semimajor axis and eccentricity} \label{ssec:qualitative_semimajoraxis_eccentricity}
 \begin{figure}
-  \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_humancomp_time.png}
-  \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_humancomp_area.png}
+  % \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_humancomp_time.png}
+  % \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_humancomp_area.png}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_humancomp_time_zoom.png}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_humancomp_area_zoom.png}
   \caption{
-    Left: The area-averaged human habitability for a 2 year period after 180 years of simulation.
-    The planet is never 100\% habitable, reaching a maximum of 85\% when at the Earth-like $1$ au.
-    Right: The 10 year time-averaged human habitability for each latitude band.
+    Left: A heatmap for area-averaged HC habitability for a 2 years on the y-axis and planet semimajor axis between $0.75$ and $1.05$ au on the x-axis.
+    % The area-averaged HC habitability for a 2 year period after 180 years of simulation.
+    The planet is never 100\% habitable, reaching a maximum of ~85\% when at the Earth-like $1$ au.
+    Right: A heatmap for the 10-year time-averaged HC habitability for each latitude band on the y axis and the same planet semimajor axis values on the x-axis.
+    % The 10 year time-averaged HC habitability for each latitude band.
     In this case some latitude bands do reach 100\% habitability.
   }
   \label{fig:qualitative_semimajoraxis}
@@ -503,11 +507,12 @@ As seen from the vertical lines in Fig. \ref{fig:planet_eccentricity}, the Earth
   \includegraphics[width=0.495\linewidth]{images_rewrite/eccentricity_humancomp_time.png}
   \includegraphics[width=0.495\linewidth]{images_rewrite/eccentricity_humancomp_area.png}
   \caption{
-    Left: The area-averaged human habitability for a 2 year period after 180 years of simulation.
+    Left: A heatmap for area-averaged HC habitability for a 2 years on the y-axis and planet eccentricity between $0$ and $0.9$ on the x-axis.
+    % The area-averaged human habitability for a 2 year period after 180 years of simulation.
     The planet is never 100\% habitable, reaching a maximum of ~85\%.
-    There is a sharp cut off between $t=180.5$ and $t=181$ years where the equator has cooled as the planet is further from the Sun, but is still considered uninhabitable due to exceeding the maximum allowed temperature (40\degrees C).
     % At $t=180$ years the planet is at perihelion, and is at aphelion at $t=180.5$ years.
-    Right: The 10 year time-averaged human habitability for each latitude band.
+    Right: A heatmap for the 10-year time-averaged HC habitability for each latitude band on the y axis and the same planet eccentricity values on the x-axis.
+    % The 10 year time-averaged human habitability for each latitude band.
     As eccentricity increases the habitable zones of the planet move outwards towards the poles because they are less directly insolated.
     % Higher eccentricities both melt the poles and cause the equatorial regions to be too hot.
   }
@@ -526,10 +531,49 @@ As seen from the vertical lines in Fig. \ref{fig:planet_eccentricity}, the Earth
   \label{fig:qualitative_semimajoraxis_eccentricity}
 \end{figure}
 
-Cyclical variations in habitability can be seen for $a < 1$ au.
-This indicates seasonal variation where the planet becomes too cold or, more likely, too hot for the human compatible habitability considered.
-Decreasing $a$ from $1$ au causes the equator to become too hot for habitability, and melts the ice caps which are then habitable.
-Increasing $a$ from $1$ au causes ice caps to grow and the planet to fall into a snowball state which is too cold for habitability.
+In Fig. \ref{fig:qualitative_semimajoraxis} the semimajor axis of the planet is varied between just outside Mercury's orbit and Mars' orbit at constant eccentricity in order to investigate how HC habitability changes.
+The area-averaged habitability shows slight variations in habitability over time.
+This variation occurs for two main reasons: the growth and recession of the polar icecaps and equatorial desert.
+This growth and recession is shown in the time-averaged habitability where polar and equatorial regions have habitabilities between 0 and 1, indicating they are partially habitable over time.
+
+As $a$ decreases from $1$ au, the planet experiences higher insolation.
+This higher insolation gives rise to higher temperatures across the planet.
+This melts the poles which are otherwise frozen, and causes the already hot equator to become too hot to sustain life.
+
+Slighty increasing $a$ from $1$ au, the planet experiences a sharp drop in temperature.
+This is due to ice-albedo feedback where a small temperature decrease allows the icecaps to grow, and further decrease insolation until the entire planet is covered in ice.
+
+In this case the HC habitability means that an Earth-like planet would not be habitable at the orbits of our closest neighbours, Venus and Mars.
+
+
+Similarly, Fig. \ref{fig:qualitative_eccentricity} shows the effects on habitability when the eccentricity of the planet is varied from $0$ to $0.9$.
+At low eccentricities, such as those the Earth has experienced in it's history, there is little variation both in area- and time-averaged habitabilites.
+
+Increasing eccentricity results in more seasonality.
+For example for $e=0.2$ the planet has an area averaged habitability which starts at 0.5, increases to 0.85, then decreases again at the turn of the year.
+This is because the planet's temperature is too hot in the first half of the year near the Sun, and is temperate all over the planet for the other half of the year as the planet is allowed to cool away from the Sun.
+However for eccentricities $e>0.3$ the hot spike as the planet is close to the Sun exceeds the maximum limit and latitude bands at the equator are considered fully uninhabitable.
+This results in a sizeable decrease in habitability for the other half of the year where the planet is cooling.
+
+At extreme values of eccentricity, only the poles stay cool enough year round to harbour life.
+However, this represents a small fraction of the surface area of the planet.
+At eccentricites above $e > 0.8$ the poles become too hot for life at certain parts of the year, and eventually are totally uninhabitable.
+
+
+So far the semimajor axis and eccentricity have been varied independently to investigate effects on the time and area habitabilites.
+Varying both together can illuminate the habitability parameter space for orbits in exoplanet systems.
+This is shown in Fig.\ref{fig:qualitative_semimajoraxis_eccentricity} where the semimajor axis and eccentricity of a planet are varied together.
+The top graph is a heatmap for the equilibrium temperature of the planet, and the bottom graphs are the processing of the temperature data using the LWR habitability and HC habitability which are then time and area averaged.
+
+The temperature heatmap highlights the drop off in temperature when ice-albedo feedback starts and the planet falls into a snowball.
+There exist some above freezing temperatures for high eccentricity and high semimajor axis, likely due to the planets unfreezing when close the Sun, and refreezing when further away.
+
+Both habitabilites show similar shapes with different widths which is reflective of HC being more restrictive in temperature range than LWR.
+The differnce in the habitabilites is shown at high eccentricity.
+The LWR habitability suggests that there is a wide range of semimajor axis values where liquid water exists on the surface of the planet year-round at high eccentricities.
+Alternatively, the HC habitability indicates that high eccentricities have extremes of temperature which are not compatible with life, thus the actual habitability is lower.
+
+
 
 \subsection{Obliquity} \label{ssec:qualitative_obliquity}
 \begin{figure}
