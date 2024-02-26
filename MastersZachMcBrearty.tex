@@ -589,9 +589,62 @@ Alternatively, the HC habitability indicates that high eccentricities have extre
   \label{fig:qualitative_obliquity}
 \end{figure}
 
-There is a small seasonal variation in the habitability due to these polar ice caps growing and shrinking as they are more or less directly insolated.
-At high obliquities the variation is more extreme, where the pole being directly insolated melts and then reaches temperatures which are too hot, then the other half of the time are more temperate so can sustain life better.
-The poles vary from totally uninhabitable from cold, habitable, to partially uninhabitable due to cyclical heating then freezing.
+The obliquity of the planet's spin can be varied to see how the habitability profile changes.
+Due to the uniform nature of the planet there is a symmetry about $\delta = 90\degrees$.
+Because of this symmetry only values between $0\degrees$ and $90\degrees$ need to be considered.
+
+Varying obliquity is shown in Fig. \ref{fig:qualitative_obliquity}.
+There are three main areas to consider:
+\begin{itemize}
+  \item Low obliquity ($0\degrees - 20\degrees$) where the planet directly presents its equator to the Sun for the majority of it's orbit.
+  \item Medium obliquity ($20\degrees - 50\degrees$) where the planet presents both the equator and poles to the Sun in roughly equal amounts.
+  \item High obliquity ($50\degrees - 90\degrees$) where the planet cycles between presenting a pole to the Sun and presenting the equator (sideways) to the Sun.
+\end{itemize}
+
+
+% Low obliquity:
+% fewer temperature variations, thus habitability is quite constant
+% poles of the planet are covered in permanent icecaps
+For low obliquities there are small habitability variations.
+These variations are due to the permanent icecaps growing and shrinking.
+As the cap grows more latitude bands are below freezing so area-averaged habitability decreases.
+As the cap shrinks the opposite occurs, and area-averaged habitability increases.
+At especially low obliquities the shrinking and growing is smaller than the width of a latitude band so the habitability is constant.
+
+
+% Medium obliquity:
+% poles melt and stay melted for high enough obliquity
+% heat is distributed very equally across the planet
+% entire planet is temperate, so is habitable year-round
+At medium obliquities the icecaps are insolated directly enough to be melted.
+At the lower end of this range the icecaps can reform for the portion of the year that they are facing away from the Sun, and then melt in the portion of the year when facing toward the Sun.
+This results in some seasonal habitability.
+In the middle of this range the poles are melted for the entire year.
+This suggests an optimal range for obliquity where the insolation is spread out evenly across the planet, allowing for the entire surface to be temperate (and thus habitable) for all time.
+
+
+% High obliquity:
+%%% might need rewrite %%%
+At very high obliquities each pole is either directly insolated or in shadow for long periods of time, so experience extreme temperatures.
+The pole which is being directly insolated becomes very hot and can exceed the maximum temperature which sets the habitability of the latitude band to 0 for all time.
+Conversely, the pole which is in constant shadow quickly cools and freezes over. This exceeds the minimum temperature for habitability.
+Between the poles is a steep temperature gradient from hot to cold pole.
+This gives rise to the 80\% habitability regions between dark spots where the habitability is at its highest for large obliquity.
+
+As the planet moves in the orbit the equator is directly insolated and both poles are only partially insolated.
+The equator has a much larger area so can distribute this extra heat better so exceeds the habitable limit but not the maximum temperature.
+The poles at this time are able to melt or cool as appropriate.
+While the temperatures they reach at this time may be suitable for life, they exceeded the maximum limit so are still considered uninhabitable.
+The overall effect are seen in the darker 70\% habitable regions where the poles and equator both have reduced habitability.
+
+
+% Earth obliquities:
+% between low and Medium
+% no large variations in habitability.
+Most planets have obliquities which can vary through this entire range of values.
+The Earth is an exception to this. 
+The Moon stabilises the Earth's obliquity to vary between $22\degrees$ and $25\degrees$ with a current value of $23.5\degrees$ (decreasing).
+In this range the habitability is fairly constant.
 
 % Qualitative look at how obliquity influences habitability
 % > global temperature-obliquity
@@ -719,6 +772,18 @@ The value of the free parameter is $(7.0125\pm 0.0075) \times 10^7 \text{m}$ whi
 % % setup system for ocean planet habitability under an ice layer with tidal heating
 
 \section{Discussion} \label{sec:Discussion}
+Research motivated by climate change suggests that ice melting can release CO$_2$ which is not accounted for in this model.
+This would introduce a ice-temperature feedback where melting ice releases CO$_2$, increasing greenhouse gas effects and feeding back until the temperature is very high.
+This would reduce the habitability at higher temperatures particularly where the icecaps melt due to a higher CO$_2$ fraction in the atmosphere, thus larger greenhouse effect.
+However this effect is very particular for the Earth due to it's CO$_2$ rich past.
+It would not be correct to assume that all exoplanets have a CO$_2$ rich past but could be considered in further research.
+
+Ice melting and rising temperatures would also cause the oceans to expand, thus changing the mixing depth (thus heat capacity) of the oceans.
+
+The approximation of a uniform planet could also be probed further.
+Exoplanets may have land-ocean distributions similar to Earth where the northern hemisphere has more land than the southern hemisphere.
+The planet could be probed with different fractions of land and ocean.
+For example: an ocean centered on one of the poles of the planet and increasing in size from a desert world with small a polar ocean to ocean world with a small polar continent.
 % Problems arising during analysis / method
 % Sources of uncertainty in the method
 % Approximations made and their validity

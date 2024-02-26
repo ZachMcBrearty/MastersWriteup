@@ -12,13 +12,13 @@
 \contentsline {subsection}{\numberline {A}Investigating time-averaged solar flux}{9}{}
 \contentsline {subsection}{\numberline {B}Semimajor axis and eccentricity}{12}{}
 \contentsline {subsection}{\numberline {C}Obliquity}{14}{}
-\contentsline {subsection}{\numberline {D}Ocean fraction}{15}{}
+\contentsline {subsection}{\numberline {D}Ocean fraction}{16}{}
 \contentsline {section}{\numberline {6}Exomoons}{16}{}
 \contentsline {subsection}{\numberline {A}Eclipsing}{16}{}
-\contentsline {subsection}{\numberline {B}Tidal heating}{17}{}
+\contentsline {subsection}{\numberline {B}Tidal heating}{18}{}
 \contentsline {section}{\numberline {7}Discussion}{18}{}
-\contentsline {section}{\numberline {8}Conclusion}{18}{}
-\contentsline {section}{\numberline {}References}{18}{}
+\contentsline {section}{\numberline {8}Conclusion}{19}{}
+\contentsline {section}{\numberline {}References}{19}{}
 \appendix 
 \contentsline {section}{\numberline {A}Numerical stability of the 1D EBCM}{21}{}
 \contentsline {section}{\numberline {B}Tidal heating equations and method}{21}{}
