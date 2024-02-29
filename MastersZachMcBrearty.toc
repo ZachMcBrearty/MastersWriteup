@@ -16,7 +16,7 @@
 \contentsline {section}{\numberline {6}Exomoons}{18}{}
 \contentsline {subsection}{\numberline {A}Eclipsing}{18}{}
 \contentsline {subsection}{\numberline {B}Tidal heating}{19}{}
-\contentsline {section}{\numberline {7}Discussion}{19}{}
+\contentsline {section}{\numberline {7}Discussion}{20}{}
 \contentsline {section}{\numberline {8}Conclusion}{20}{}
 \contentsline {section}{\numberline {}References}{20}{}
 \appendix 

@@ -58,7 +58,7 @@
 \affiliation{\normalfont Level 4 Project, MPhys Physics with Astronomy\\ Supervisor: Dr Richard Wilman \\ Second Supervisor: Dr Craig Testrow \\ Department of Physics, Durham University}
 
 \begin{abstract}
-
+  %%% ABSTRACT %%%
   A 1-D energy balance climate model is developed in order to investigate how changing certain orbital parameters can result in changes to a planet's habitability.
   Theoretical relationships between temperature, semimajoraxis, and eccentricity are derived from a simple 0-D energy balance model and are tested against the 1-D model and are found to be correct.
   A qualitative analysis of obliquity shows that there are optimal obliquities to minimise and maximise global temperature.
@@ -562,7 +562,7 @@ At eccentricites above $e > 0.8$ the poles become too hot for life at certain pa
 
 So far the semimajor axis and eccentricity have been varied independently to investigate effects on the time and area habitabilites.
 Varying both together can illuminate the habitability parameter space for orbits in exoplanet systems.
-This is shown in Fig.\ref{fig:qualitative_semimajoraxis_eccentricity} where the semimajor axis and eccentricity of a planet are varied together.
+This is shown in Fig. \ref{fig:qualitative_semimajoraxis_eccentricity} where the semimajor axis and eccentricity of a planet are varied together.
 The top graph is a heatmap for the equilibrium temperature of the planet, and the bottom graphs are the processing of the temperature data using the LWR habitability and HC habitability which are then time and area averaged.
 
 The temperature heatmap highlights the drop off in temperature when ice-albedo feedback starts and the planet falls into a snowball.
@@ -737,7 +737,7 @@ There are nearly no variations due to changing ocean fraction above $f_\text{oce
     A diagram of a planet in orbit around a star at a distance $a_{\text{gas}}$, and a moon in orbit of the planet at a distance $a_{\text{moon}}$.
     The planet has radius $R_\text{gas}$.
     The angle $2\theta$ corresponds to the angular size of the planet from the star.
-    Inside the angle $2\alpha$ the moon is eclisped by the planet.
+    Inside the angle $2\alpha$ the moon is eclipsed by the planet.
   }
   \label{fig:quantitative_eclipsing}
 \end{figure}
@@ -751,6 +751,13 @@ There are nearly no variations due to changing ocean fraction above $f_\text{oce
   }
   \label{fig:quantitative_eclipsing_moon_semimajor_axis}
 \end{figure}
+
+In co-planar orbits the moon can be eclisped by the planet with respect to the Sun.
+The amount of light being eclipsed has been quantified with a variety of methods, including an n=3 body simulation, two independent 2-body solutions run in parallel, and an analytical solution with a number of assumptions.
+The n-body simulation and 2-body solutions indicated that the main contributor to the eclipsing fraction is from the moon semimajor axis, with other orbital parameters having small or negilible effects (see appx. \ref{appx:eclipsing_sizes} for more information).
+
+The n-body simulation or 2-body solutions require much smaller timesteps (~1 hour) compared to the timestep of the EBCM (1 day).
+This means that if these were run in parallel with the main EBCM that most of the computational time would be spent 
 
 Eclipsing of the moon by the gas giant was initially investigated by finding the orbital distance and angle  for gravitational attraction which showed that varying the eccentricity of the moon or planet resulted in no change to time-averaged eclipsing fraction.
 Thus, the main influences of eclipsing are gas giant semimajor axis and moon semimajor axis, with moon semimajor axis being the most important factor.
@@ -784,7 +791,7 @@ Dividing $2\alpha$ by the full $2\pi$ angle the moon rotates through, the eclips
 for a planet of radius $R_\text{gas}$ and moon semimajor axis $a_\text{moon}$.
 
 This relation is investigated in Fig. \ref{fig:quantitative_eclipsing_moon_semimajor_axis} with a free parameter in place of $R_\text{gas}$.
-The value of the free parameter is $(7.0125\pm 0.0075) \times 10^7 \text{m}$ which is extremely close to the radius of Jupiter, as to be expected.
+The value of the free parameter is $(7.013\pm 0.008) \times 10^7 \text{m}$ which is extremely close to the radius of Jupiter, as to be expected.
 
 \subsection{Tidal heating} \label{ssec:InvTidalHeating}
 \begin{figure}
