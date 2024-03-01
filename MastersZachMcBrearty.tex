@@ -752,12 +752,19 @@ There are nearly no variations due to changing ocean fraction above $f_\text{oce
   \label{fig:quantitative_eclipsing_moon_semimajor_axis}
 \end{figure}
 
-In co-planar orbits the moon can be eclisped by the planet with respect to the Sun.
-The amount of light being eclipsed has been quantified with a variety of methods, including an n=3 body simulation, two independent 2-body solutions run in parallel, and an analytical solution with a number of assumptions.
-The n-body simulation and 2-body solutions indicated that the main contributor to the eclipsing fraction is from the moon semimajor axis, with other orbital parameters having small or negilible effects (see appx. \ref{appx:eclipsing_sizes} for more information).
+planet and moon orbits are (close to) co-planar.
+this means eclipsing
+quantify eclipsing using 2 independent 2-body solutions (distance \eqref{eq:two_body_distance}, angle \eqref{eq:two_body_angle})
+ - requires timesteps of ~1 hour as eclipses are very short
+this establishes that eccentricity of the planet orbit has negligible effect.
+eccentricity of the moon as small effect (~1\%)
+semimajor axis of the planet also small
+Largest contributor is moon semimajor axis
 
-The n-body simulation or 2-body solutions require much smaller timesteps (~1 hour) compared to the timestep of the EBCM (1 day).
-This means that if these were run in parallel with the main EBCM that most of the computational time would be spent 
+evolving the 2 independent solutions in parallel with the EBCM is impractical
+knowing that both eccentricities have very small effects leads to the setup for an analytical solution for circular orbits.
+\ref{fig:quantitative_eclipsing}
+where the sun has been assumed to be a point source (i.e. if $a_\text{gas} \gg 10*a_\text{moon}$)
 
 Eclipsing of the moon by the gas giant was initially investigated by finding the orbital distance and angle  for gravitational attraction which showed that varying the eccentricity of the moon or planet resulted in no change to time-averaged eclipsing fraction.
 Thus, the main influences of eclipsing are gas giant semimajor axis and moon semimajor axis, with moon semimajor axis being the most important factor.
@@ -772,17 +779,17 @@ $\alpha$ can be related to the length $x$ by
 \end{equation}
 $\theta$ can be related to the length $x$ by
 \begin{equation}
-  \sin \theta = \frac{x}{a_\text{gas} + a_\text{moon} \cos\alpha} = \frac{r_\text{gas}}{a_\text{gas}} , \label{eq:theta_x_agas}
+  \sin \theta = \frac{x}{a_\text{gas} + a_\text{moon} \cos\alpha} = \frac{R_\text{gas}}{a_\text{gas}} , \label{eq:theta_x_agas}
 \end{equation}
 combining eqns. \eqref{eq:alpha_x_amoon} and \eqref{eq:theta_x_agas} leads to
 \begin{equation}
-  (a_\text{gas} + a_\text{moon}\cos\alpha) \frac{r_\text{gas}}{a_\text{gas}} = a_\text{moon} \sin\alpha,
+  (a_\text{gas} + a_\text{moon}\cos\alpha) \frac{R_\text{gas}}{a_\text{gas}} = a_\text{moon} \sin\alpha,
 \end{equation}
 thus
 \begin{equation}
-  \frac{r_\text{gas}}{a_\text{moon}} = \sin\alpha - \frac{r_\text{gas}}{a_\text{gas}}\cos\alpha,
+  \frac{R_\text{gas}}{a_\text{moon}} = \sin\alpha - \frac{R_\text{gas}}{a_\text{gas}}\cos\alpha,
 \end{equation}
-$\alpha$ can be solved for by approximating $r_\text{gas} \gg a_\text{gas}$.
+$\alpha$ can be solved for by approximating $R_\text{gas} \ll a_\text{gas}$.
 Dividing $2\alpha$ by the full $2\pi$ angle the moon rotates through, the eclipsing fraction can be found as
 \begin{equation}
   \epsilon = \frac{2\alpha}{2\pi} = \frac{\arcsin(R_\text{gas} / a_\text{moon})}{\pi},
@@ -794,35 +801,113 @@ This relation is investigated in Fig. \ref{fig:quantitative_eclipsing_moon_semim
 The value of the free parameter is $(7.013\pm 0.008) \times 10^7 \text{m}$ which is extremely close to the radius of Jupiter, as to be expected.
 
 \subsection{Tidal heating} \label{ssec:InvTidalHeating}
-\begin{figure}
-  \includegraphics[width=0.8\linewidth]{images_rewrite/varying_agas_0.5to1.5_three_together.png}
+\begin{table*}
+  \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{4}{|c|}{Moon} && \multicolumn{3}{c|}{Gas Giant} \\
+    \hline
+    Semimajor axis & Eccentricity & Radius & Density && Mass & Radius & Albedo \\
+    \hline
+    $0.03$ au & $0.006$ & $6.4\times 10^6$ m & $5500$ kg m$^{-3}$ && $1.9\times10^{27}$ kg & $7.0 \times 10^7$ m & 0.3 \\
+    \hline
+  \end{tabular}
   \caption{
-    Qualitative look at how tidal heating effects semimajoraxis temperature curve
+    A summary of the default parameters for the Earth-like exomoon model.
+    The moon orbital parameters are ones which generate a good level of tidal heating,
+    and the radius and density are similar to the radius and density of the Earth.
+    The gas giant parameters are the same as Jupiter's \cite{NASA_jupiter}, where the volumetric mean radius, and bond albedo have been used.
+    Other model parameters are the same as the planetary model (Tab. \ref{tab:default_params}).
   }
-  \label{fig:qualitative_tidalheating_semimajoraxis}
+  \label{tab:default_params_moon}
+\end{table*}
+
+Tidal heating occurs when the core of the moon is compressed and relaxed by unequal gravitational forces as the moon moves through an elliptical orbit. 
+Segatz et al 1988 \cite{Segatz1988} provide models for the tidal heating in terms of both a `fixed-Q' model providing a constant tidal heating, and a suite of `viscoelastic' models which account for conditions of the material within the moon.
+
+The `fixed-Q' model is given by
+\begin{equation}
+  F_\text{f-Q} = \frac{21}{2} \frac{k_2}{Q} \frac{G^{3/2} M_\text{gas}^{5/2} R_\text{moon}^5 e_\text{moon}^2} {a_\text{moon}^{15/2}}
+\end{equation}
+where $k_2$ is the second love number for the moon and $Q$ is the total dissipation factor due to friction.
+%%% iffy %%%
+this assumes only viscous heating (segatz about io, probably relevant)
+
+The $k_2 / Q$ term is a collection of various viscosity and shear modulus terms which are assumed to be constant.
+The model can be made more dynamic by replacing these constant terms with the imaginary part of the second-order Love number, $-\text{Im}(k_2)$:
+\begin{equation}
+  F_\text{VE} = -\frac{21}{2} \text{Im}(k_2) \frac{G^{3/2} M_\text{gas}^{5/2} R_\text{moon}^5 e_\text{moon}^2} {a_\text{moon}^{15/2}}
+\end{equation}
+where an anelastic Maxwell model is used to give the imaginary part of the second-order Love number as
+\begin{equation}
+  -\text{Im}(k_2) = \frac{57 \eta \omega} {4 \beta \left[ 1 
+  + \left(1 + \frac{19 \mu}{2 \beta}\right)^2 
+  \left(\frac{\eta \omega}{\mu}\right)^2 
+  \right]}
+\end{equation}
+where $\beta = \rho g R_\text{moon}$ which has been described as gravitational stiffness term \cite{Henning2009}.
+The temperature dependent forms of the viscosity, $\eta$, and shear modulus, $\mu$, are given in Henning et al \cite{Henning2009} and in appx. \ref{appx:TidalHeatingEquationsMethod}. 
+The orbital frequency, density, and radius of the moon are $\omega$, $\rho$, and $R_\text{moon}$ respectively, with default values in table \ref{tab:default_params_moon}.
+
+
+\cite{DHT2015}
+\cite{RN21}
+
+\subsection{Results}
+\begin{figure}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_humancomp_area_combined.png}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/varying_agas_0.5to1.5_three_together.png}
+  \caption{
+    Left: Comparison of the time-averaged (HC) habitability for variable semimajor axis for the planetary model (top) and moon model (bottom). 
+    The moon model has the default parameters in Tab. \ref{tab:default_params_moon}.
+    Right: Comparison of the equilibrium temperatures when varying gas giant semimajor axis for the planetary model (blue), and two moon models with different eccentricity (orange and green).
+    Also shown are horizontal lines for the freezing and melting points of water.
+  }
+  \label{fig:semimajoraxiscomparision}
 \end{figure}
 
+With the model appropriately updated, temperature profiles and habitabilities seen previously can be investigated for this moon model.
+Shown in Fig. \ref{fig:semimajoraxiscomparision} are how the time-averaged (HC) habitability for variable semimajor axis changes between the planetary model and moon model. 
+The plot on the left shows how the latitude habitable zone changes between a planetary model and a moon model with the default parameters in Tab. \ref{tab:default_params_moon}.
+And the plot on the right shows how the equilibrium temperature of the planet between the planetary model and two moon models, one with default parameters and one with higher eccentricity.
+
+The habitable zone becomes wider at all latitudes and moves outwards towards Mars' orbit.
+The reason for both these effects is the additional energy flux from tidal heating.
+The habitable zone becomes wider as the moon is less reliant on a specific distance from the Sun to generate a habitable temperature.
+The habitable zone moves further out as the additional energy flux generally raises the temperature of the planet, meaning it is too hot for life at the previous distances.
+
+
+% \begin{figure}
+%   % \includegraphics[width=0.8\linewidth]{images_rewrite/varying_agas_0.5to1.5_three_together.png}
+%   \includegraphics[width=0.8\linewidth]{images_rewrite/gassemimajoraxis_mooneccentricity.png}
+%   \caption{
+%     Varying the moon's eccentricity and the gas giant's semim
+%   }
+%   \label{fig:qualitative_tidalheating_semimajoraxis}
+% \end{figure}
+
 \begin{figure}
-  \includegraphics[width=0.8\linewidth]{images_rewrite/varying_egas_0to0.9_three_together.png}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/varying_egas_0to0.9_three_together.png}
+  % \includegraphics[width=0.495\linewidth]{images_rewrite/gaseccentricity_mooneccentricity.png}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/varying_obliquity_0to90_three_together.png}
   \caption{
-    Qualitative look at how tidal heating effects eccentricity temperature curve
+    Left: Comparison of the equilibrium temperatures when varying gas giant eccentricity for the planetary model (blue), and two moon models with different eccentricity (orange and green).
+    Right: Comparison of the equilibrium temperatures when varying obliquity for the planetary model (blue), and two moon models with different eccentricity (orange and green).
   }
   \label{fig:qualitative_tidalheating_eccentrcity}
 \end{figure}
 
-\begin{figure}
-  \includegraphics[width=0.8\linewidth]{images_rewrite/varying_obliquity_0to90_three_together.png}
-  \caption{
-    Qualitative look at how tidal heating effects obliquity temperature curve
-  }
-  \label{fig:qualitative_tidalheating_obliquity}
-\end{figure}
+obliquity:
+The variations due to obliquity become smaller as any insolation variation across the planet are dampened by the uniform tidal heating.
 
-\cite{Segatz1988}
-\cite{DHT2015}
-\cite{RN21}
+% \begin{figure}
+%   \includegraphics[width=0.8\linewidth]{images_rewrite/varying_obliquity_0to90_three_together.png}
+%   \caption{
+%     Qualitative look at how tidal heating effects obliquity temperature curve
+%   }
+%   \label{fig:qualitative_tidalheating_obliquity}
+% \end{figure}
 
-
+In Fig. \ref{fig:semimajoraxiscomparision} the differences in varying semimajoraxis are investigated.
 
 % with constant TH -> vary a_gas-e_gas to see how habitability moves
 % const a_gas/e_gas -> vary a_moon-e_moon to see habitability relations
