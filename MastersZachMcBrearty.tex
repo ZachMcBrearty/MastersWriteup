@@ -1,5 +1,8 @@
 \documentclass[12pt, onecolumn]{revtex4-2}    % Font size (12pt) and column number (one or two).
 
+\setlength{\headheight}{15pt}
+\addtolength{\topmargin}{-3pt}
+
 \usepackage{times}                          % Times New Roman font type
 
 \usepackage[a4paper, left=2.5cm, right=2.5cm,
@@ -855,7 +858,8 @@ The orbital frequency, density, and radius of the moon are $\omega$, $\rho$, and
 \subsection{Results}
 \begin{figure}[t]
   \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_humancomp_area_combined.png}
-  \includegraphics[width=0.495\linewidth]{images_rewrite/varying_agas_0.5to1.5_three_together.png}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_planetary_2_moon.png}
+  % \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_planetary_2_moon_smaller.png}
   \caption{
     Left: Comparison of the time-averaged (HC) habitability for variable semimajor axis for the planetary model (top) and moon model (bottom). 
     The moon model has the default parameters in Tab. \ref{tab:default_params_moon}.
@@ -866,48 +870,42 @@ The orbital frequency, density, and radius of the moon are $\omega$, $\rho$, and
 \end{figure}
 
 With the model appropriately updated, temperature profiles and habitabilities seen previously can be investigated for this moon model.
-Shown in Fig. \ref{fig:semimajoraxiscomparision} are how the time-averaged (HC) habitability for variable semimajor axis changes between the planetary model and moon model. 
+Shown in Fig. \ref{fig:semimajoraxiscomparision} is how the time-averaged (HC) habitability for variable semimajor axis changes between the planetary model and moon model (left) and how the equilibrium temperature changes with semimajor axis (right). 
 The plot on the left shows how the latitude habitable zone changes between a planetary model and a moon model with the default parameters in Tab. \ref{tab:default_params_moon}.
 And the plot on the right shows how the equilibrium temperature of the planet between the planetary model and two moon models, one with default parameters and one with higher eccentricity.
 
 The habitable zone becomes wider at all latitudes and moves outwards towards Mars' orbit.
 The reason for both these effects is the additional energy flux from tidal heating.
-The habitable zone becomes wider as the moon is less reliant on a specific distance from the Sun to generate a habitable temperature.
-The habitable zone moves further out as the additional energy flux generally raises the temperature of the planet, meaning it is too hot for life at the previous distances.
+The habitable zone becomes wider as the moon is less reliant on a specific distance from the Sun to generate habitable temperatures.
+The habitable zone moves further out as the additional energy flux generally raises the temperature of the planet, meaning it is too hot for life at the closer distances.
 
-
-% \begin{figure}
-%   % \includegraphics[width=0.8\linewidth]{images_rewrite/varying_agas_0.5to1.5_three_together.png}
-%   \includegraphics[width=0.8\linewidth]{images_rewrite/gassemimajoraxis_mooneccentricity.png}
-%   \caption{
-%     Varying the moon's eccentricity and the gas giant's semim
-%   }
-%   \label{fig:qualitative_tidalheating_semimajoraxis}
-% \end{figure}
+This is also seen in the equilibrium temperatures, where a wider range of values are within the range for liquid water. 
+Seen in the orange set of data is a more exaggerated curve when falling to the snowball state than for the planetary model in blue.
+This is due to ice-albedo feedback playing less of a role in determining the climate of the planet as the tidal heating is independent of albedo.
+The tidal heating also helps to prevent the planet's temperature from decreasing to the point where ice-albedo feedback can dominate by providing a constant heat source when further from the star.
 
 \begin{figure}[t]
-  \includegraphics[width=0.495\linewidth]{images_rewrite/varying_egas_0to0.9_three_together.png}
-  % \includegraphics[width=0.495\linewidth]{images_rewrite/gaseccentricity_mooneccentricity.png}
-  \includegraphics[width=0.495\linewidth]{images_rewrite/varying_obliquity_0to90_three_together.png}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/eccentricity_planetary_2_moon.png}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/obliquity_planetary_2_moon.png}
+  % \includegraphics[width=0.495\linewidth]{images_rewrite/eccentricity_planetary_2_moon_small.png}
+  % \includegraphics[width=0.495\linewidth]{images_rewrite/obliquity_planetary_2_moon_small.png}
   \caption{
     Left: Comparison of the equilibrium temperatures when varying gas giant eccentricity for the planetary model (blue), and two moon models with different eccentricity (orange and green).
-    Right: Comparison of the equilibrium temperatures when varying obliquity for the planetary model (blue), and two moon models with different eccentricity (orange and green).
+    Right: Comparison of the equilibrium temperatures when varying obliquity for the planetary model (top), and two moon models with different eccentricity (middle and bottom).
+    The y-axes are very different, as each has progressively smaller range in values.
   }
-  \label{fig:qualitative_tidalheating_eccentrcity}
+  \label{fig:eccentricity_obliquity_comparisions}
 \end{figure}
 
+eccentricity:
+The temperature generally increases.
+The dip at low eccentricity due to ice-albedo feedback is missing from the moon models.
+This is due to the generally higher temperature 
+
 obliquity:
+Temperature increases.
+Temperature range decreases due to insolation playing smaller role (proportionally) in determining the planet climate.
 The variations due to obliquity become smaller as any insolation variation across the planet are dampened by the uniform tidal heating.
-
-% \begin{figure}
-%   \includegraphics[width=0.8\linewidth]{images_rewrite/varying_obliquity_0to90_three_together.png}
-%   \caption{
-%     Qualitative look at how tidal heating effects obliquity temperature curve
-%   }
-%   \label{fig:qualitative_tidalheating_obliquity}
-% \end{figure}
-
-In Fig. \ref{fig:semimajoraxiscomparision} the differences in varying semimajoraxis are investigated.
 
 % with constant TH -> vary a_gas-e_gas to see how habitability moves
 % const a_gas/e_gas -> vary a_moon-e_moon to see habitability relations
