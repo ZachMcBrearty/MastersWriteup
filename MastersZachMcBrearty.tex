@@ -63,7 +63,7 @@
 \begin{abstract}
   %%% ABSTRACT %%%
   A 1-D energy balance climate model is developed in order to investigate how changing certain orbital parameters can result in changes to a planet's habitability.
-  Theoretical relationships between temperature, semimajoraxis, and eccentricity are derived from a simple 0-D energy balance model and are tested against the 1-D model and are found to be correct.
+  Theoretical relationships between temperature, semimajoraxis, and eccentricity are derived from a 0-D energy balance model and are tested against the 1-D model and are found to be correct.
   A qualitative analysis of obliquity shows that there are optimal obliquities to minimise and maximise global temperature.
   The climates of exomoons orbiting gas giants are also investigated, including reflected light from the gas giant, eclipsing, and tidal heating.
   It is expected that these additional sources of heat move the habitable zones for the planet outwards.
@@ -87,18 +87,96 @@
 % > Settling other worlds
 % > Current missions to find exoplanets and exomoons
 
-% Climate model
-% > 0D-Equation and where it comes from
+When the first exoplanet was discovered is up for debate depending on classification \cite{ESA_2019}.
+To give a summary:
+The first evidence for an exoplanet came in 1988 but was attributed to stellar activity.
+This was followed up later in 2003 and found to be a exoplanet.
+This confirmation happened many years after 1992 when the first exoplanets were found orbiting a pulsar via the variations in pulsar timings due to those exoplanets.
+However the intensity of radiation from these pulsars make life on these exoplanets impossible.
+Then the first potentially habitable exoplants were found in 1995; potentially habitable because they orbit a Sun-like star.
+
+Exoplanets are now found in a variety of indirect and direct methods.
+Indirect methods include pulsar timing, radial velocity, astrometry, and gravitational lensing.
+Direct methods include transits and direct imaging via coronagraph.
+Direct and indirect methods have also been combined to find planets. 
+For example Kepler-88c was discovered indirectly due to variation in the transit of Kepler-88b.
+
+These methods can also be extended to find exomoons around exoplanets.
+The pulsar timing from an exoplanet has additional variations due to a exomoon \cite{Lewis2008} and it has been shown that nearby exomoons may be found using Kepler (or Kelper-class) photometry by analysing variations in transit timing signals \cite{KSG2009}.
+
+More recently, it has been shown that exomoons with strong tidal heating could be brighter brighter than the exoplanet they orbit, so are easier to detect than exoplanets in some cases \cite{LimTurn2013}.
+Further, the launch of the JWST has enabled the direct detection of earth-sized exomoons with economical use of observation time \cite{Limbach2021}.
+
+The culmination of all these methods is collated by the Encyclopaedia of Exoplanetary Systems \cite{ExoEu} who report a total of 5641 exoplanets confirmed but no exomoons.
+
+
+Reaching these exoplanets is a project for the far future, however current missions are building up to this auspicious goal.
+The one recent (and on going) mission is the Artemis Plan \cite{NASA_Artemis} which plans to build a Base Camp on the lunar surface and setup Gateway in lunar orbit.
+Additionally, the China National Space Administration also plan to return to the moon with the International Lunar Research Station \cite{CNSA_ILRS}.
+Both these projects will allow for human settlement away from the Earth, and are vital in progressing further out into our own solar system and beyond.
+
+
+Analysing the habitability of exoplanets can be difficult.
+The Trappist-1 system is an excellent example, where Earth-like planets were found within the habitable zone of their host star.
+However they are not habitable due to being tidally-locked to the star and extreme solar winds probably stripping them of any atmosphere long ago.
+In any case, the first step to finding if a planet is habitable is to first model them.
+
+One way to model the exoplanets is with an energy balance model, where incoming energy (usually from a star) is equated to outgoing energy (usually blackbody emission).
+If no time dependence is considered then the 0-D Energy Balance Model (0DEBM) is 
 \begin{equation}
   \pi r^2 S(1-A) = 4 \pi r^2 \sigma T^4,
   \label{eq:0DEBCM}
 \end{equation}
+where $r$ is the radius of the planet, $S$ is the incoming solar radiation (insolation) which is reduced by the albedo of the planet $A$.
+The blackbody term is given by the Stefan-Boltzmann constant $\sigma$ and the temperature of the planet $T$.
+This model does not resolve the planet's surface, and comes with a variety of assumptions such as energy being distributed equally over the entire planet's surface.
+This assumption implies that the planet is not tidally locked and has good diffusion mechanisms to spread out heat.
 
-% > 1D-Equation + what the parameters are 
+While this 0DEBM is powerful, there are limitations.
+The temperature produced is an average over time which means extreme temperatures are ignored.
+Different latitude bands experience different amounts of insolation depending on time and obliquity, thus the assumption of even energy distribution is not entirely valid.
+This is especially apparent on the Earth where the poles have much lower temperatures (i.e. freezing) than the equator.
+
+These problems can be addressed with a 1-D Energy Balance Climate Model (1DEBCM).
+The 1DEBCM is given in latitude, $\lambda$, coordinates as
 \begin{equation}
   C(\lambda, T) \partialderiv{T(t, \lambda)}{t} = D\left[\partialderivsecnd{T(t, \lambda)}{\lambda} - \tan\lambda\partialderiv{T(t, \lambda)}{\lambda}\right] + S(\lambda, t)(1-A(T)) - I(T),
   \label{eq:1DEBCM}
 \end{equation}
+Where $C$ is the heat capacity for a latitude band, $D$ is the diffusion constant regulating the horizontal transport of heat between latitude bands, $I$ is the generalised IR emission for a latitude band. The other terms are the same as the 0DEBM.
+Forms for these functions are given in Section \ref{sec:EarthLikeModel}.
+
+The 1DEBCM can be derived from the heat equation (see Section \ref{sec:1DEBCM}) and was originally developed by North and Coakley 1979 (NC79) \cite{NC79} to study the Earth.
+It was then further applied by Williams and Kasting 1997 (WK97) \cite{WK97} to study obliquity dependent habitability and then by Spiegel et al in 2008 (SMS08) \cite{SMS08} and 2009 \cite{SMS09} to study quantify habitability and then study obliquity dependent habitability.
+Spiegel's work was furthered by Dressing et al 2010 \cite{Dressing10} where eccentricity dependent habitability was investigated.
+
+SMS08 quantifies habitability in 3 main ways.
+The first is the time-averaged habitability, $f_\text{time}$, which is given in their eqn. (6) as
+\begin{equation}
+  f_\text{time}(q, \lambda) = \frac{1}{P} \int_{0}^{P} H(q, \lambda, t) dt,
+  \label{eqn:timeaverage}
+\end{equation}
+where $P$ is the length of the year for the model in question and $H(q, \lambda, t)$ is a habitability function; 1 if the temperature is habitable, 0 if not.
+The second is the area-weighted habitability, $f_\text{area}$, which is given in their eqn. (7) as
+\begin{equation}
+  f_\text{time}(q, t) = \frac{1}{2} \int_{-\pi/2}^{\pi/2} H(q, \lambda, t) \cos(\lambda)d\lambda,
+  \label{eqn:areaaverage}
+\end{equation}
+where the area weighting occurs as each latitude band has unequal area.
+Finally the combination of these two measures results in the total habitability, $f_\text{total}$, given in their eqn. (8) as
+\begin{equation}
+  f_\text{total}(q) = \frac{1}{2P} \int_{-\pi/2}^{\pi/2} \int_{0}^{P} H(q, \lambda, t) dt \cos(\lambda)d\lambda,
+  \label{eqn:totalaverage}
+\end{equation}
+where in all three cases the semimajor axis $a$ has been replaced by a generalised parameter (or set of parameters) $q$.
+This paper uses the discrete form of these equations in Section \ref{sec:Method} in order to both quantify when a model has reached an stable average (i.e. equilibrium) temperature and for quantifying the habitability of a model which varies in time and latitude.
+Also in given in Section \ref{sec:Method} are the two habitability functions used throughout this paper, as well as a.
+
+% Climate model
+% > 0D-Equation and where it comes from
+
+% > 1D-Equation + what the parameters are 
+
 % > Ignoring longitude dimension (How/Why)
 
 % Earth as a baseline and Milankovitch cycles
@@ -168,9 +246,9 @@ However, a problem arises at the edges of the model as $m=-2, -1, S, S+1$ are no
 To fix this the derivatives at $m=0$ ($m=S-1$) are discretised as forward then backward (backward then forward) derivatives.
 By imposing that ${\partial T^{m=0, S-1}_n}/{\partial \lambda} = 0$, the second order derivatives then reduce to
 \begin{alignat}{2}
-  \partialderivsecnd{T^{m=0}_n}{\lambda}   & = \left(\partialderiv{T^{m=1}_n}{\lambda} - \partialderiv{T^{m=0}_n}{\lambda}\right) / \Delta\lambda     &  & = \frac{T^{m=1}_n - T^{m=0}_n}{(\Delta\lambda)^2}
+  \partialderivsecnd{T^{m=0}_n}{\lambda}   & = \frac{1}{\Delta\lambda  }\left(\partialderiv{T^{m=1}_n}{\lambda} - \partialderiv{T^{m=0}_n}{\lambda}\right)    &  & = \frac{T^{m=1}_n - T^{m=0}_n}{(\Delta\lambda)^2}
   \label{eq:forward_backward}                                                                                                                                                                                     \\
-  \partialderivsecnd{T^{m=S-1}_n}{\lambda} & = \left(\partialderiv{T^{m=S-1}_n}{\lambda} - \partialderiv{T^{m=S-2}_n}{\lambda}\right) / \Delta\lambda &  & = \frac{T^{m=S-2}_n - T^{m=S-1}_n}{(\Delta\lambda)^2}.
+  \partialderivsecnd{T^{m=S-1}_n}{\lambda} & = \frac{1}{\Delta\lambda  }\left(\partialderiv{T^{m=S-1}_n}{\lambda} - \partialderiv{T^{m=S-2}_n}{\lambda}\right) &  & = \frac{T^{m=S-2}_n - T^{m=S-1}_n}{(\Delta\lambda)^2}.
   \label{eq:backward_forward}
 \end{alignat}
 Furthermore, the treatment imposed for the $m=1$ and $m=S-2$ second order derivatives is much the same, using central-backward and central-forward derivatives respectively.
@@ -388,7 +466,7 @@ where $a$ and $e$ are semimajor axis and eccentricity respectively, and the ecce
 \end{equation}
 where $M = 2\pi (t + t_0) / T$ for a temporal offset $t_0$ and period of the orbit $T$.
 The error in this function inceases with higher $e$ but reduces with additional iterations.
-Three iterations with an eccentricity of $0.9$ gives an error in $E$ of 5\%, which is a good compromise between computation time and accuracy, especially as $e=0.9$ is the upper bound for eccentricities considered.
+Three iterations with an eccentricity of $0.9$ gives an error in $E$ of 5\% (compared to 100 iterations), which is a good compromise between computation time and accuracy, especially as $e=0.9$ is the upper bound for eccentricities considered.
 
 % Show Earth-like model
 The temperature distribution for the Earth model is shown in Fig. \ref{fig:Earth_lat_time} for 2 years after 190 years of evolution.
@@ -847,7 +925,7 @@ where an anelastic Maxwell model is used to give the imaginary part of the secon
   \left(\frac{\eta \omega}{\mu}\right)^2 
   \right]}
 \end{equation}
-where $\beta = \rho g R_\text{moon}$ which has been described as gravitational stiffness term \cite{Henning2009}.
+where $\beta = \rho g R_\text{moon}$ has been described as gravitational stiffness term \cite{Henning2009}.
 The temperature dependent forms of the viscosity, $\eta$, and shear modulus, $\mu$, are given in Henning et al \cite{Henning2009} and in appx. \ref{appx:TidalHeatingEquationsMethod}. 
 The orbital frequency, density, and radius of the moon are $\omega$, $\rho$, and $R_\text{moon}$ respectively, with default values in table \ref{tab:default_params_moon}.
 
