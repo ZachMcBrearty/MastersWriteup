@@ -83,11 +83,11 @@
 
 \section{Introduction} \label{sec:Introduction} %% add subsections balance things out %%
 
+\subsection{Exoplanet and Exomoon detection}
 %Exoplanet/Exomoon habitability motivation
 % > Search for extraterrestrial life
 % > Settling other worlds
 % > Current missions to find exoplanets and exomoons
-\subsection{Exoplanet and Exomoon detection}
 When the first exoplanet was discovered is up for debate depending on classification \cite{ESA_2019}.
 To give a summary:
 The first evidence for an exoplanet came in 1988 but was attributed to stellar activity.
@@ -116,6 +116,12 @@ Additionally, the China National Space Administration also plan to return to the
 Both these projects will allow for human settlement away from the Earth, and are vital in progressing further out into our own solar system and beyond.
 
 \subsection{Energy balance models}
+% Climate model
+% > 0D-Equation and where it comes from
+
+% > 1D-Equation + what the parameters are 
+
+% > Ignoring longitude dimension (How/Why)
 
 Analysing the habitability of exoplanets can be difficult.
 The Trappist-1 system is an excellent example. In the system seven Earth-like planets were found within the habitable zone of their host star \cite{GTD2017}.
@@ -145,13 +151,28 @@ The 1DEBCM is given in latitude, $\lambda$, coordinates as
   \label{eq:1DEBCM}
 \end{equation}
 Where $C$ is the heat capacity for a latitude band, $D$ is the diffusion constant regulating the horizontal transport of heat between latitude bands, $I$ is the generalised IR emission for a latitude band. The other terms are the same as the 0DEBM.
-Forms for these functions are given in Section \ref{sec:EarthLikeModel}.
+Forms for these functions are given in Section \ref{ssec:EarthLikeModel}.
 
 The 1DEBCM can be derived from the heat equation (see Section \ref{sec:1DEBCM}) and was originally developed by North and Coakley 1979 (NC79) \cite{NC79} to study the Earth.
 It was then further applied by Williams and Kasting 1997 (WK97) \cite{WK97} to study obliquity dependent habitability and then by Spiegel et al in 2008 (SMS08) \cite{SMS08} and 2009 \cite{SMS09} to study quantify habitability and then study obliquity dependent habitability.
 Spiegel's work was furthered by Dressing et al 2010 \cite{Dressing10} where eccentricity dependent habitability was investigated.
 
+\subsection{Earth as a baseline}
+% Earth as a baseline and Milankovitch cycles
+% > using Earth to constrain certain parameters of the model to be realistic
+% > varying parameters and seeing where the Earth moves in that space gives insight to the history and evolution of the Earth
+
+First the parameters of the 1DEBCM must be validated against known data, in this the Earth ...
+
+% Exoplanets (i.e. moving Earth around)
+% > Describe how varying parameters can lead to habitability parameter space
+% > Suggest by generating parameter spaces that new discoveries can be quickly checked  
+
+The 1DEBCM can then be used to ...
+
 \subsection{Habitability}
+
+The temperature data in a parameter space must then be processed to find habitability...
 
 SMS08 quantifies habitability in 3 main ways.
 The first is the time-averaged habitability, $f_\text{time}$, which is given in their eqn. (6) as
@@ -172,32 +193,14 @@ Finally the combination of these two measures results in the total habitability,
   \label{eqn:totalaverage}
 \end{equation}
 where in all three cases the semimajor axis $a$ has been replaced by a generalised parameter (or set of parameters) $q$.
-This paper uses the discrete form of these equations in Section \ref{sec:Method} in order to both quantify when a model has reached an stable average (i.e. equilibrium) temperature and for quantifying the habitability of a model which varies in time and latitude.
-Also in given in Section \ref{sec:Method} are the two habitability functions used throughout this paper.
+This paper uses the discrete form of these equations in Section \ref{ssec:habiAver} in order to both quantify when a model has reached an stable average (i.e. equilibrium) temperature and for quantifying the habitability of a model which varies in time and latitude.
+Also in given in Section \ref{ssec:habiAver} are the two habitability functions used throughout this paper.
 
-The 1DEBCM can be used to ...
-
-exomoons 
-
-% Climate model
-% > 0D-Equation and where it comes from
-
-% > 1D-Equation + what the parameters are 
-
-% > Ignoring longitude dimension (How/Why)
-
-% Earth as a baseline and Milankovitch cycles
-% > using Earth to constrain certain parameters of the model to be realistic
-% > varying parameters and seeing where the Earth moves in that space gives insight to the history and evolution of the Earth
-
-% Exoplanets (i.e. moving Earth around)
-% > Describe how varying parameters can lead to habitability parameter space
-% > Suggest by generating parameter spaces that new discoveries can be quickly checked  
-
+\subsection{Exomoons}
 % Exomoons
 % > How they differ from exoplanets
 % > TH, Eclipsing, Reflectance
-% > Depth model -> suggestion of life without requirements of light under an ice shell
+In order to investigate exomoons the 1DEBCM must be modified...
 
 \section{1-D Energy Balance Climate Model}\label{sec:1DEBCM}
 % Rederive 1DEBCM from standard heat eqn
@@ -260,73 +263,7 @@ By imposing that ${\partial T^{m=0, S-1}_n}/{\partial \lambda} = 0$, the second 
 \end{alignat}
 Furthermore, the treatment imposed for the $m=1$ and $m=S-2$ second order derivatives is much the same, using central-backward and central-forward derivatives respectively.
 
-\section{Method} \label{sec:Method} %% move to sec 2, rename to habitability and averaging %%
-
-Analysing the data produced requires the use of area-weighted averaging and time averaging from SMS08.
-The original equations are given as continuous integrals, but are discretised in a similar way to the derivatives in \ref{ssec:DiscretisationPDE}.
-Thus the time averaging, area-weighted averaging, and total averaging are given by
-\begin{equation}
-  \begin{split}
-    Q^m_{p \to q} & = \frac{\sum_{n=p}^{q} Q^m_n \Delta t} {\sum_{n=p}^{q} \Delta t} \\
-                  & = \frac{\sum_{n=p}^{q} Q^m_n}{t_q-t_p}
-  \end{split},
-  \label{eq:Q_timeaverage}
-\end{equation}
-\begin{equation}
-  \bar{Q}_n = \sum_{m=0}^{S-1} Q^m_n F^m = \sum_{m = 0}^{S-1} \frac{1}{2}Q^m_n \cos(\lambda_m) \Delta\lambda,
-  \label{eq:Q_areaaveraged}
-\end{equation}
-\begin{equation}
-  \bar{Q}_{p \to q} = \frac{\sum_{n=p}^{q} \sum_{m = 0}^{S-1} Q^m_n \cos(\lambda_m) \Delta\lambda}{2(q-p)},
-  \label{eq:Q_totalaverage}
-\end{equation}
-respectively, with the time averaging happening between a time $t_p$ and $t_q$.
-These averages can now be used to evaluate if a model has reached an equilibrium temperature and what the average habitability of a planet is.
-
-% Equilibrium Temperature
-A model is said to reach an equilibrium temperature when the average temperature between 2 averaging periods divided by the average temperature over both periods is less than some tolerance $\epsilon$:
-\begin{equation}
-  \frac{\bar{T}_{p \to q} - \bar{T}_{q \to r}}{\bar{T}_{p \to r}} < \epsilon.
-  \label{eq:T_equilb}
-\end{equation}
-Typically the averaging occurs over an orbital period (i.e. local year), so the equilibrium temperature is when there are no significant variations in temperature between two consecutive orbits.
-The value of $\epsilon$ chosen directly influences how long the model must be run to reach an equilibrium.
-In most cases a value of $\epsilon = 10^{-3}$ is used and results in equilbrium times of between $20$ and $150$ years depending on model parameters.
-It is worth noting for some plots that a value of $\langle T \rangle = -1$ means the model did not reach an equilbrium temperature within the evolution time and value of $\epsilon$.
-This $\langle T \rangle = -1$
-
-% Habitability
-The classical habitability function is the Liquid Water Requirement (LWR) given by
-\begin{equation}
-  H_\text{LWR}(T) =
-  \begin{cases}
-    1 & 0\degreesC \le T \le 100\degreesC \\
-    0 & \text{Otherwise}
-  \end{cases},
-  \label{eq:H_LWR}
-\end{equation}
-Thus a temperature is habitable if it is between the boiling and melting points of water.
-
-An alternative is motivated by the limits of human endurance, thus is called Human Compatibility (HC).
-If a human's core temperature is raised above $35\degreesC$ then enzymes esssential for life denature and breakdown.
-This does not mean temperatures above this are lethal as humans can regulate temperature by sweating.
-The wet bulb temperature is defined by wrapping a thermometer bulb with a wet cloth.
-It is designed to take the humidity and ambient temperature into account, essentially mimicking the internal temperature of a human.
-Thus a wetbulb temperature of $35\degreesC$ is lethal if prolonged.
-
-This climate model does not calculate humidity,
-thus a conservative temperature at which habitability reduces is taken to be $30\degreesC$:
-\begin{equation}
-  H_\text{HC}(T) =
-  \begin{cases}
-    1 & 0\degreesC \le T \le 30\degreesC \\
-    0 & \text{Otherwise}
-  \end{cases},
-  \label{eq:H_HC}
-\end{equation}
-with the additional constraint that temperatures greater than $40\degreesC$ or less than $-10\degreesC$ in a latitude band sets the habitability of the band to 0 for all time.
-
-\section{Earth-like model} \label{sec:EarthLikeModel}
+\subsection{Earth-like model} \label{ssec:EarthLikeModel}
 \begin{table*}
   \begin{tabular}{|c|c|c|c|c|c|}
     \hline
@@ -365,16 +302,17 @@ with the additional constraint that temperatures greater than $40\degreesC$ or l
 \end{figure}
 
 In order to investigate the Earth and Earth-like planets, the parameters and functions which define the Earth must be established.
-In this analysis the forms of the model functions are taken from Williams and Kastings (WK97) \cite{WK97}, and the model is compared against the model from North and Coakley 1979 (NC79) \cite{NC79} which has been time-averaged as follows.
+In this analysis the forms of the Earth-like functions are taken from Williams and Kastings (WK97) \cite{WK97}, and the Earth-like model is compared against a model derived from North and Coakley 1979 (NC79) \cite{NC79}.
 
 % choice of D_0 by fitting to NC97
 %%% Move to introduction as a "comparison model"? %%%
-The first 3 terms of the NC79 model are given in their eqn. (4) as
+NC79 take data from various sources and develop a model using Legendre polynomials for latitude variation and sine and cosine functions for time variation.
+The first 3 terms of the global temperature model are given in eqn. (4) of NC79 as
 \begin{equation}
   T(\lambda, t)[\degrees\text{C}] = 14.2 + 15.5 \cos(\omega t + \phi) P_1(\sin\lambda) - 30.2 P_2(\sin(\lambda)), \label{eq:NC_timedep}
 \end{equation}
 where $P_i$ is the $i^\text{th}$ Legendre polynomial.
-The time-averaged temperature is found when averaging eqn. \eqref{eq:NC_timedep} over a year period,
+Taking the time-average of this function over a year period gives
 \begin{equation}
   \begin{split}
     T(\lambda)[\text{K}] & = 14.2 + 273 - 30.2 (3 \sin^2(\lambda) - 1) / 2 \\
@@ -384,19 +322,21 @@ The time-averaged temperature is found when averaging eqn. \eqref{eq:NC_timedep}
 \end{equation}
 where the temperature has been converted to Kelvin, and the second legrendre polynomial is expanded as $P_2(x) =(3x^2-1) / 2$.
 The average of $\cos(\omega t + \phi)$ over an period $T = 2\pi / \omega$ is $0$, so the first legendre polynomial is not needed.
+This gives a latitude dependent model for the Earth which the Earth-like model can be fitted to.
 
 % Diffusion
-The diffusion varies with orbital and atmospheric parameters as,
+The diffusion constant, $D$, varies with orbital and atmospheric parameters as
 \begin{equation}
-  \frac{D}{D_0} = \frac{p}{p_0} \frac{c_p}{c_{p,0}} \left(\frac{m}{28}\right)^{-2} \left(\frac{\Omega}{1\ \text{day}^{-1}}\right)^{-2} \label{eq:diffusion_eqn}
+  \frac{D}{D_0} = \frac{p}{p_0} \frac{c_p}{c_{p,0}} \left(\frac{m}{28}\right)^{-2} \left(\frac{\Omega}{1\ \text{day}^{-1}}\right)^{-2},
+  \label{eq:diffusion_eqn}
 \end{equation}
 where $D_0 = 0.56 \diffusion$ is from fitting to eqn. \ref{eq:NC_timeavg} as shown in Fig. \ref{fig:NC_fit}.
-The atmospheric pressure $p$ is relative to $p_0 = 101 \ \text{kPa}$.
-The heat capacity $c_p$ of the atmosphere is relative to $c_{p,0} = 1\times10^3 \ \text{g}^{-1} \text{K}^{-1}$.
-Average mass of particles in the atmosphere is given by $m$ and is relative to the Nitrogen molecule.
+The atmospheric pressure $p$ is relative to one atmosphere of pressure, $p_0 = 101 \ \text{kPa}$.
+The heat capacity $c_p$ of the atmosphere is relative to $c_{p,0} = 1\times10^3 \ \text{g}^{-1} \text{K}^{-1}$ which is the heat capacity of nitrogen gas.
+Average mass of particles in the atmosphere is given by $m$ and is relative to the nitrogen molecule.
 Rotation rate of the planet $\Omega$ is relative to Earth's $1$ rotation per day.
 These parameters can be extended to be time variable, such as having CO$_2$ emissions increase pressure, change heat capacity, and change mass of particles.
-However this paper only considers varying the rotation rate of the planet.
+However this paper only considers varying the rotation rate of the planet. %%% does it %%%
 
 % Heat capacity
 Heat capacity, $C(\lambda, T)$, varies with latitude through the ocean-land fraction, $f_\text{o}(\lambda)$, and with temperature through the ice-ocean fraction, $f_\text{i}(T)$, as
@@ -483,6 +423,72 @@ Between $65\degrees$ to $45\degrees$ the habitability decreases linearly, repres
 
 The area averaged habitability changes in steps as each discrete latitude band becomes habitable or uninhabitable.
 It is periodic but difficult to predict within each year.
+
+\subsection{Habitability and Averaging} \label{ssec:habiAver} %% move to sec 2, rename to habitability and averaging %%
+
+Analysing the data produced requires the use of area-weighted averaging and time averaging from SMS08.
+The original equations are given as continuous integrals, but are discretised in a similar way to the derivatives in \ref{ssec:DiscretisationPDE}.
+Thus the time averaging, area-weighted averaging, and total averaging are given by
+\begin{equation}
+  \begin{split}
+    Q^m_{p \to q} & = \frac{\sum_{n=p}^{q} Q^m_n \Delta t} {\sum_{n=p}^{q} \Delta t} \\
+                  & = \frac{\sum_{n=p}^{q} Q^m_n}{t_q-t_p}
+  \end{split},
+  \label{eq:Q_timeaverage}
+\end{equation}
+\begin{equation}
+  \bar{Q}_n = \sum_{m=0}^{S-1} Q^m_n F^m = \sum_{m = 0}^{S-1} \frac{1}{2}Q^m_n \cos(\lambda_m) \Delta\lambda,
+  \label{eq:Q_areaaveraged}
+\end{equation}
+\begin{equation}
+  \bar{Q}_{p \to q} = \frac{\sum_{n=p}^{q} \sum_{m = 0}^{S-1} Q^m_n \cos(\lambda_m) \Delta\lambda}{2(q-p)},
+  \label{eq:Q_totalaverage}
+\end{equation}
+respectively, with the time averaging happening between a time $t_p$ and $t_q$.
+These averages can now be used to evaluate if a model has reached an equilibrium temperature and what the average habitability of a planet is.
+
+% Equilibrium Temperature
+A model is said to reach an equilibrium temperature when the average temperature between 2 averaging periods divided by the average temperature over both periods is less than some tolerance $\epsilon$:
+\begin{equation}
+  \frac{\bar{T}_{p \to q} - \bar{T}_{q \to r}}{\bar{T}_{p \to r}} < \epsilon.
+  \label{eq:T_equilb}
+\end{equation}
+Typically the averaging occurs over an orbital period (i.e. local year), so the equilibrium temperature is when there are no significant variations in temperature between two consecutive orbits.
+The value of $\epsilon$ chosen directly influences how long the model must be run to reach an equilibrium.
+In most cases a value of $\epsilon = 10^{-3}$ is used and results in equilbrium times of between $20$ and $150$ years depending on model parameters.
+It is worth noting for some plots that a value of $\langle T \rangle = -1$ means the model did not reach an equilbrium temperature within the evolution time and value of $\epsilon$.
+This $\langle T \rangle = -1$
+
+% Habitability
+The classical habitability function is the Liquid Water Requirement (LWR) given by
+\begin{equation}
+  H_\text{LWR}(T) =
+  \begin{cases}
+    1 & 0\degreesC \le T \le 100\degreesC \\
+    0 & \text{Otherwise}
+  \end{cases},
+  \label{eq:H_LWR}
+\end{equation}
+Thus a temperature is habitable if it is between the boiling and melting points of water.
+
+An alternative is motivated by the limits of human endurance, thus is called Human Compatibility (HC).
+If a human's core temperature is raised above $35\degreesC$ then enzymes esssential for life denature and breakdown.
+This does not mean temperatures above this are lethal as humans can regulate temperature by sweating.
+The wet bulb temperature is defined by wrapping a thermometer bulb with a wet cloth.
+It is designed to take the humidity and ambient temperature into account, essentially mimicking the internal temperature of a human.
+Thus a wetbulb temperature of $35\degreesC$ is lethal if prolonged.
+
+This climate model does not calculate humidity,
+thus a conservative temperature at which habitability reduces is taken to be $30\degreesC$:
+\begin{equation}
+  H_\text{HC}(T) =
+  \begin{cases}
+    1 & 0\degreesC \le T \le 30\degreesC \\
+    0 & \text{Otherwise}
+  \end{cases},
+  \label{eq:H_HC}
+\end{equation}
+with the additional constraint that temperatures greater than $40\degreesC$ or less than $-10\degreesC$ in a latitude band sets the habitability of the band to 0 for all time.
 
 \section{Earth-like exoplanets} \label{sec:Exoplanets} %% move to sec 2 %%%
 \subsection{Investigating time-averaged solar flux} \label{ssec:InvTimeAveragedSolarFlux}
