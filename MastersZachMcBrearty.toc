@@ -4,17 +4,20 @@
 \contentsline {section}{\numberline {}Contents}{1}{}
 \tocdepth@restore 
 \contentsline {section}{\numberline {1}Introduction}{3}{}
+\contentsline {subsection}{\numberline {A}Exoplanet and Exomoon detection}{3}{}
+\contentsline {subsection}{\numberline {B}Energy balance models}{3}{}
+\contentsline {subsection}{\numberline {C}Habitability}{4}{}
 \contentsline {section}{\numberline {2}1-D Energy Balance Climate Model}{5}{}
 \contentsline {subsection}{\numberline {A}Discretisation of the climate model}{5}{}
 \contentsline {section}{\numberline {3}Method}{6}{}
 \contentsline {section}{\numberline {4}Earth-like model}{7}{}
 \contentsline {section}{\numberline {5}Earth-like exoplanets}{11}{}
 \contentsline {subsection}{\numberline {A}Investigating time-averaged solar flux}{11}{}
-\contentsline {subsection}{\numberline {B}Semimajor axis and eccentricity}{13}{}
+\contentsline {subsection}{\numberline {B}Semimajor axis and eccentricity}{14}{}
 \contentsline {subsection}{\numberline {C}Obliquity}{16}{}
-\contentsline {subsection}{\numberline {D}Ocean fraction}{17}{}
-\contentsline {section}{\numberline {6}Exomoons}{19}{}
-\contentsline {subsection}{\numberline {A}Eclipsing}{19}{}
+\contentsline {subsection}{\numberline {D}Ocean fraction}{18}{}
+\contentsline {section}{\numberline {6}Exomoons}{20}{}
+\contentsline {subsection}{\numberline {A}Eclipsing}{20}{}
 \contentsline {subsection}{\numberline {B}Tidal heating}{21}{}
 \contentsline {subsection}{\numberline {C}Results}{22}{}
 \contentsline {section}{\numberline {7}Discussion}{24}{}

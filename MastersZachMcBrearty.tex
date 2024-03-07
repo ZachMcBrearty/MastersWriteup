@@ -67,7 +67,6 @@
   A qualitative analysis of obliquity shows that there are optimal obliquities to minimise and maximise global temperature.
   The climates of exomoons orbiting gas giants are also investigated, including reflected light from the gas giant, eclipsing, and tidal heating.
   It is expected that these additional sources of heat move the habitable zones for the planet outwards.
-
 \end{abstract}
 
 
@@ -80,13 +79,15 @@
 
 \newpage
 
-\section{Introduction} \label{sec:Introduction}
+%% Generally better titles for sections and subsections %%
+
+\section{Introduction} \label{sec:Introduction} %% add subsections balance things out %%
 
 %Exoplanet/Exomoon habitability motivation
 % > Search for extraterrestrial life
 % > Settling other worlds
 % > Current missions to find exoplanets and exomoons
-
+\subsection{Exoplanet and Exomoon detection}
 When the first exoplanet was discovered is up for debate depending on classification \cite{ESA_2019}.
 To give a summary:
 The first evidence for an exoplanet came in 1988 but was attributed to stellar activity.
@@ -99,7 +100,7 @@ Exoplanets are now found in a variety of indirect and direct methods.
 Indirect methods include pulsar timing, radial velocity, astrometry, and gravitational lensing.
 Direct methods include transits and direct imaging via coronagraph.
 Direct and indirect methods have also been combined to find planets. 
-For example Kepler-88c was discovered indirectly due to variation in the transit of Kepler-88b.
+For example Kepler-88c was discovered indirectly due to variation in the transit of Kepler-88b \cite{Nesvorny2013}.
 
 These methods can also be extended to find exomoons around exoplanets.
 The pulsar timing from an exoplanet has additional variations due to a exomoon \cite{Lewis2008} and it has been shown that nearby exomoons may be found using Kepler (or Kelper-class) photometry by analysing variations in transit timing signals \cite{KSG2009}.
@@ -109,17 +110,17 @@ Further, the launch of the JWST has enabled the direct detection of earth-sized 
 
 The culmination of all these methods is collated by the Encyclopaedia of Exoplanetary Systems \cite{ExoEu} who report a total of 5641 exoplanets confirmed but no exomoons.
 
-
 Reaching these exoplanets is a project for the far future, however current missions are building up to this auspicious goal.
 The one recent (and on going) mission is the Artemis Plan \cite{NASA_Artemis} which plans to build a Base Camp on the lunar surface and setup Gateway in lunar orbit.
 Additionally, the China National Space Administration also plan to return to the moon with the International Lunar Research Station \cite{CNSA_ILRS}.
 Both these projects will allow for human settlement away from the Earth, and are vital in progressing further out into our own solar system and beyond.
 
+\subsection{Energy balance models}
 
 Analysing the habitability of exoplanets can be difficult.
-The Trappist-1 system is an excellent example, where Earth-like planets were found within the habitable zone of their host star.
-However they are not habitable due to being tidally-locked to the star and extreme solar winds probably stripping them of any atmosphere long ago.
-In any case, the first step to finding if a planet is habitable is to first model them.
+The Trappist-1 system is an excellent example. In the system seven Earth-like planets were found within the habitable zone of their host star \cite{GTD2017}.
+However they are not habitable due to a mixture of being tidally-locked to the star and experiencing extreme solar winds which have probably stripped them of any atmosphere long ago \cite{Cohen2024, VanLooveren2024}.
+This suggests that modelling of an exoplanet's habitability requires modelling of the dynamic atmosphere,
 
 One way to model the exoplanets is with an energy balance model, where incoming energy (usually from a star) is equated to outgoing energy (usually blackbody emission).
 If no time dependence is considered then the 0-D Energy Balance Model (0DEBM) is 
@@ -150,6 +151,8 @@ The 1DEBCM can be derived from the heat equation (see Section \ref{sec:1DEBCM}) 
 It was then further applied by Williams and Kasting 1997 (WK97) \cite{WK97} to study obliquity dependent habitability and then by Spiegel et al in 2008 (SMS08) \cite{SMS08} and 2009 \cite{SMS09} to study quantify habitability and then study obliquity dependent habitability.
 Spiegel's work was furthered by Dressing et al 2010 \cite{Dressing10} where eccentricity dependent habitability was investigated.
 
+\subsection{Habitability}
+
 SMS08 quantifies habitability in 3 main ways.
 The first is the time-averaged habitability, $f_\text{time}$, which is given in their eqn. (6) as
 \begin{equation}
@@ -159,7 +162,7 @@ The first is the time-averaged habitability, $f_\text{time}$, which is given in 
 where $P$ is the length of the year for the model in question and $H(q, \lambda, t)$ is a habitability function; 1 if the temperature is habitable, 0 if not.
 The second is the area-weighted habitability, $f_\text{area}$, which is given in their eqn. (7) as
 \begin{equation}
-  f_\text{time}(q, t) = \frac{1}{2} \int_{-\pi/2}^{\pi/2} H(q, \lambda, t) \cos(\lambda)d\lambda,
+  f_\text{area}(q, t) = \frac{1}{2} \int_{-\pi/2}^{\pi/2} H(q, \lambda, t) \cos(\lambda)d\lambda,
   \label{eqn:areaaverage}
 \end{equation}
 where the area weighting occurs as each latitude band has unequal area.
@@ -170,7 +173,11 @@ Finally the combination of these two measures results in the total habitability,
 \end{equation}
 where in all three cases the semimajor axis $a$ has been replaced by a generalised parameter (or set of parameters) $q$.
 This paper uses the discrete form of these equations in Section \ref{sec:Method} in order to both quantify when a model has reached an stable average (i.e. equilibrium) temperature and for quantifying the habitability of a model which varies in time and latitude.
-Also in given in Section \ref{sec:Method} are the two habitability functions used throughout this paper, as well as a.
+Also in given in Section \ref{sec:Method} are the two habitability functions used throughout this paper.
+
+The 1DEBCM can be used to ...
+
+exomoons 
 
 % Climate model
 % > 0D-Equation and where it comes from
@@ -253,46 +260,40 @@ By imposing that ${\partial T^{m=0, S-1}_n}/{\partial \lambda} = 0$, the second 
 \end{alignat}
 Furthermore, the treatment imposed for the $m=1$ and $m=S-2$ second order derivatives is much the same, using central-backward and central-forward derivatives respectively.
 
-\section{Method} \label{sec:Method}
+\section{Method} \label{sec:Method} %% move to sec 2, rename to habitability and averaging %%
 
-Analysing the data produced requires the use of area-weighted averaging and time averaging.
-
-Each latitude band has the same thickness $\Delta\lambda$ but have different fractions of the total area given by
+Analysing the data produced requires the use of area-weighted averaging and time averaging from SMS08.
+The original equations are given as continuous integrals, but are discretised in a similar way to the derivatives in \ref{ssec:DiscretisationPDE}.
+Thus the time averaging, area-weighted averaging, and total averaging are given by
 \begin{equation}
-  F^m = \frac{2\pi R^2 \cos\lambda^m \Delta\lambda}{4 \pi R^2} = \frac{\cos\lambda^m \Delta\lambda}{2},
+  \begin{split}
+    Q^m_{p \to q} & = \frac{\sum_{n=p}^{q} Q^m_n \Delta t} {\sum_{n=p}^{q} \Delta t} \\
+                  & = \frac{\sum_{n=p}^{q} Q^m_n}{t_q-t_p}
+  \end{split},
+  \label{eq:Q_timeaverage}
 \end{equation}
-thus the area averaging is given by
 \begin{equation}
   \bar{Q}_n = \sum_{m=0}^{S-1} Q^m_n F^m = \sum_{m = 0}^{S-1} \frac{1}{2}Q^m_n \cos(\lambda_m) \Delta\lambda,
   \label{eq:Q_areaaveraged}
 \end{equation}
-where $\lambda_m = m \Delta\lambda - \pi / 2$.
-This is used to...
-
-Time averaging
-\begin{equation}
-  \begin{split}
-    Q^m_{p \to q} & = \frac{\sum_{n=p}^{q} Q^m_n \Delta t} {\sum_{n=p}^{q} \Delta t} \\
-                  & = \frac{\sum_{n=p}^{q} Q^m_n}{q-p}
-  \end{split}
-  \label{eq:Q_timeaverage}
-\end{equation}
-where, since $\Delta t$ is constant, the averaging over time becomes an average of a number of points.
-
-total average
 \begin{equation}
   \bar{Q}_{p \to q} = \frac{\sum_{n=p}^{q} \sum_{m = 0}^{S-1} Q^m_n \cos(\lambda_m) \Delta\lambda}{2(q-p)},
   \label{eq:Q_totalaverage}
 \end{equation}
-which is simply the time and area averages of the temperature data
+respectively, with the time averaging happening between a time $t_p$ and $t_q$.
+These averages can now be used to evaluate if a model has reached an equilibrium temperature and what the average habitability of a planet is.
 
 % Equilibrium Temperature
-The system is said to reach an equilibrium temperature when the average temperature between 2 averaging periods divided by the average temperature over both periods is less than some tolerance $\epsilon$:
+A model is said to reach an equilibrium temperature when the average temperature between 2 averaging periods divided by the average temperature over both periods is less than some tolerance $\epsilon$:
 \begin{equation}
-  \frac{\bar{T}_{p \to q} - \bar{T}_{q \to r}}{\bar{T}_{p \to r}} < \epsilon,
+  \frac{\bar{T}_{p \to q} - \bar{T}_{q \to r}}{\bar{T}_{p \to r}} < \epsilon.
   \label{eq:T_equilb}
 \end{equation}
-typically the averaging occurs over an orbital period (i.e. local year), so the equilibrium temperature is when there are no significant variations in temperature between two consecutive orbits.
+Typically the averaging occurs over an orbital period (i.e. local year), so the equilibrium temperature is when there are no significant variations in temperature between two consecutive orbits.
+The value of $\epsilon$ chosen directly influences how long the model must be run to reach an equilibrium.
+In most cases a value of $\epsilon = 10^{-3}$ is used and results in equilbrium times of between $20$ and $150$ years depending on model parameters.
+It is worth noting for some plots that a value of $\langle T \rangle = -1$ means the model did not reach an equilbrium temperature within the evolution time and value of $\epsilon$.
+This $\langle T \rangle = -1$
 
 % Habitability
 The classical habitability function is the Liquid Water Requirement (LWR) given by
@@ -483,7 +484,7 @@ Between $65\degrees$ to $45\degrees$ the habitability decreases linearly, repres
 The area averaged habitability changes in steps as each discrete latitude band becomes habitable or uninhabitable.
 It is periodic but difficult to predict within each year.
 
-\section{Earth-like exoplanets} \label{sec:Exoplanets}
+\section{Earth-like exoplanets} \label{sec:Exoplanets} %% move to sec 2 %%%
 \subsection{Investigating time-averaged solar flux} \label{ssec:InvTimeAveragedSolarFlux}
 
 \begin{figure}[t]
