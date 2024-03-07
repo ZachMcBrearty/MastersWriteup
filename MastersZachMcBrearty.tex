@@ -51,6 +51,92 @@
 \newcommand{\partialderiv}[2]{\frac{\partial {#1}}{\partial {#2}}}
 \newcommand{\partialderivsecnd}[2]{\frac{\partial^2 {#1}}{\partial {#2}^2}}
 
+% Structure of the document % -> transcript of notes
+% Abstract;
+%
+% Introduction;
+%   A?: Exoplanets and Exomoons;
+%     History
+%     Methods of detection
+%     Current missions
+%     + [maybe] Artemis / ILRS -> first steps towards exoplanets
+%   B: Energy Balance Models;
+%     0DEBCM -> not dynamic, but still useful for establishing relationships between parameters e.g. Mendez
+%     1DEBCM -> dynamic, resolve latitude bands
+%     ~> both assume heat spread out evenly (0D -> over the entire planet, 1D -> within each latitude band)
+%     Thermal timescale definition τ = CT / I
+%     Ice-Albedo feedback due to dynamic model ~> relate to thermal timescale
+%     Using Earth as a baseline / validation ~> introduce NC79 equation
+%   C: Averaging and Habitability;
+%     LWR and HC habitability functions
+%     SMS08 averaging integrals ~> note that they are specifically for habitability, generalisations in Sec2C
+%   D: Modifications for Exomoons;
+%     Eclipsing;
+%       2 independent 2-body solutions
+%       Analytical approach
+%       ε, S(1-A) -> S(1-ε)(1-A)
+%     Reflectance and Emission from Gas giant;
+%       GG obeys 0DEBCM
+%       F_ref = SA_gas / a_moon^2 sqrt(1-e_moon^2)
+%       F_gas = σT_gas^4 / a_moon^2 sqrt(1-e_moon^2)
+%     Tidal heating;
+%        Main Equation F_th propto - 21/2 Im(k_2) G^3/2 ...
+%        fixed-Q model: -Im(k_2) = k_2 / Q
+%        viscoelastic model: -Im(k_2) = ... with functions for μ,η, etc as well as how the mantle temperature is found
+%        which is used in the model and why
+%
+% 1D Energy Balance Climate Model
+%   Derivation from heat equation
+%   A: Earth-like model functions;
+%     From WK97
+%     SMS08 -> choose I_2, A_2
+%     NC79 -> D_0
+%   B: Discretisation and Time evolution;
+%     d/dλ -> central, 0 at poles
+%     d^2/dλ^2 -> central, forward backward and backward forward at poles
+%     d/dt -> forward, with time evolution by solving for n+1 from n
+%   C: Averaging and Habitability;
+%     generalising and discretising the continuous averages
+%     Use of averages in finding equilibrium / globally averaged temperatures
+%     Demonstation of taking temperature data, applying habitability and averages
+%
+% Investigating Earth-like Exoplanets;
+%   A: Varying semimajoraxis and eccentricity;
+%     Quantitative relationships -> T^4 propto a^-2 (1-e^2)^-1/2
+%     Qualitative relationships -> latitude bands with time averaging 
+%   B: Varying obliquity;
+%     latitudes via time averaging -> melting of poles + boiling of poles when direct
+%   C: Varying ocean fraction with eccentricity and obliquity;
+%     how eccentricity allows for IAF
+%     how obliquity allows for IAF
+%     when model is susceptible to Ice-Albedo feedback
+%     relation to thermal timescale
+%
+% Earth-like exomoon modifications and results;
+%   A: Eclipsing;
+%     explicit quantification with 2 independent 2-body solutions -> a_moon only param with major role
+%     problems with timestep and need to be quantified to a single number
+%     analytical model and assumptions, result + fit to 2-body model data
+%   B: Reflectance and Emission from the Gas giant;
+%     F_ref, F_gas...
+%     assumption of blackbody for gas giant, use of 0DEBCM for gas giant, use of Mendez for time averaged radiation 
+%   C: Tidal heating;
+%     Viscoelastic model outline;
+%       How mantle temperature is found with convective cooling balancing tidal heating
+%       assumption of heat flow throughout entire surface evenly -> no volcanos
+%     Why tidal heating can cut off very dramatically
+%   D: Impact on previous results;
+%     Quantitative change to semimajoraxis / eccentricity relations
+%       ~> const TH/eclipsing, variable reflectance/emission
+%     qualitative obliquity -> flattening due to TH independent of star
+%     qualitative semimajor axis latitude plot changes
+%
+% Exomoon specific results;
+%   Qualitative latitude plots;
+%     a_moon -> eclipsing, reflectance/emission, TH
+%     e_moon -> reflectance/emission, TH
+%     *R_moon* -> TH   %%% !no data yet! %%% 
+
 %%%%% Document %%%%%
 \begin{document}
 
