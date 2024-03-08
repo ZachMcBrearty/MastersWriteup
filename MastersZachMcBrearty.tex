@@ -85,7 +85,7 @@
 %        viscoelastic model: -Im(k_2) = ... with functions for μ,η, etc as well as how the mantle temperature is found
 %        which is used in the model and why
 %
-% 1D Energy Balance Climate Model
+% 1D Energy Balance Climate Model;
 %   Derivation from heat equation
 %   A: Earth-like model functions;
 %     From WK97
@@ -130,12 +130,11 @@
 %       ~> const TH/eclipsing, variable reflectance/emission
 %     qualitative obliquity -> flattening due to TH independent of star
 %     qualitative semimajor axis latitude plot changes
-%
-% Exomoon specific results;
-%   Qualitative latitude plots;
-%     a_moon -> eclipsing, reflectance/emission, TH
-%     e_moon -> reflectance/emission, TH
-%     *R_moon* -> TH   %%% !no data yet! %%% 
+%   E: Exomoon specific results;
+%     Qualitative latitude plots;
+%       a_moon -> eclipsing, reflectance/emission, TH
+%       e_moon -> reflectance/emission, TH
+%       *R_moon* -> TH   %%% !no data yet! %%% 
 
 %%%%% Document %%%%%
 \begin{document}
@@ -168,12 +167,16 @@
 %% Generally better titles for sections and subsections %%
 
 \section{Introduction} \label{sec:Introduction} %% add subsections balance things out %%
-
+% Introduction;
+%
 \subsection{Exoplanet and Exomoon detection}
-%Exoplanet/Exomoon habitability motivation
-% > Search for extraterrestrial life
-% > Settling other worlds
-% > Current missions to find exoplanets and exomoons
+%   A?: Exoplanets and Exomoons;
+%     History
+%     Methods of detection
+%     Current missions
+%     + [maybe] Artemis / ILRS -> first steps towards exoplanets
+%
+% History
 When the first exoplanet was discovered is up for debate depending on classification \cite{ESA_2019}.
 To give a summary:
 The first evidence for an exoplanet came in 1988 but was attributed to stellar activity.
@@ -182,6 +185,7 @@ This confirmation happened many years after 1992 when the first exoplanets were 
 However the intensity of radiation from these pulsars make life on these exoplanets impossible.
 Then the first potentially habitable exoplants were found in 1995; potentially habitable because they orbit a Sun-like star.
 
+% Methods of detection / Current missions
 Exoplanets are now found in a variety of indirect and direct methods.
 Indirect methods include pulsar timing, radial velocity, astrometry, and gravitational lensing.
 Direct methods include transits and direct imaging via coronagraph.
@@ -196,19 +200,15 @@ Further, the launch of the JWST has enabled the direct detection of earth-sized 
 
 The culmination of all these methods is collated by the Encyclopaedia of Exoplanetary Systems \cite{ExoEu} who report a total of 5641 exoplanets confirmed but no exomoons.
 
+% [maybe] Artemis / ILRS
 Reaching these exoplanets is a project for the far future, however current missions are building up to this auspicious goal.
 The one recent (and on going) mission is the Artemis Plan \cite{NASA_Artemis} which plans to build a Base Camp on the lunar surface and setup Gateway in lunar orbit.
 Additionally, the China National Space Administration also plan to return to the moon with the International Lunar Research Station \cite{CNSA_ILRS}.
 Both these projects will allow for human settlement away from the Earth, and are vital in progressing further out into our own solar system and beyond.
 
 \subsection{Energy balance models}
-% Climate model
-% > 0D-Equation and where it comes from
-
-% > 1D-Equation + what the parameters are 
-
-% > Ignoring longitude dimension (How/Why)
-
+%   B: Energy Balance Models;
+%     0DEBCM -> not dynamic, but still useful for establishing relationships between parameters e.g. Mendez
 Analysing the habitability of exoplanets can be difficult.
 The Trappist-1 system is an excellent example. In the system seven Earth-like planets were found within the habitable zone of their host star \cite{GTD2017}.
 However they are not habitable due to a mixture of being tidally-locked to the star and experiencing extreme solar winds which have probably stripped them of any atmosphere long ago \cite{Cohen2024, VanLooveren2024}.
@@ -228,37 +228,114 @@ This assumption implies that the planet is not tidally locked and has good diffu
 While this 0DEBM is powerful, there are limitations.
 The temperature produced is an average over time which means extreme temperatures are ignored.
 Different latitude bands experience different amounts of insolation depending on time and obliquity, thus the assumption of even energy distribution is not entirely valid.
-This is especially apparent on the Earth where the poles have much lower temperatures (i.e. freezing) than the equator.
+This is especially apparent on the Earth where the poles have much lower temperatures (i.e. freezing) compared to the equator.
 
+%     1DEBCM -> dynamic, resolve latitude bands
+%     ~> both assume heat spread out evenly (0D -> over the entire planet, 1D -> within each latitude band)
+%
 These problems can be addressed with a 1-D Energy Balance Climate Model (1DEBCM).
 The 1DEBCM is given in latitude, $\lambda$, coordinates as
 \begin{equation}
   C(\lambda, T) \partialderiv{T(t, \lambda)}{t} = D\left[\partialderivsecnd{T(t, \lambda)}{\lambda} - \tan\lambda\partialderiv{T(t, \lambda)}{\lambda}\right] + S(\lambda, t)(1-A(T)) - I(T),
   \label{eq:1DEBCM}
 \end{equation}
-Where $C$ is the heat capacity for a latitude band, $D$ is the diffusion constant regulating the horizontal transport of heat between latitude bands, $I$ is the generalised IR emission for a latitude band. The other terms are the same as the 0DEBM.
-Forms for these functions are given in Section \ref{ssec:EarthLikeModel}.
+where $C$ is the heat capacity for a latitude band, $D$ is the diffusion constant regulating the horizontal transport of heat between latitude bands, $I$ is the generalised IR emission for a latitude band. The other terms are the same as the 0DEBM.
+Specific forms for these functions for the Earth are given in Section \ref{ssec:EarthLikeModel}.
 
 The 1DEBCM can be derived from the heat equation (see Section \ref{sec:1DEBCM}) and was originally developed by North and Coakley 1979 (NC79) \cite{NC79} to study the Earth.
 It was then further applied by Williams and Kasting 1997 (WK97) \cite{WK97} to study obliquity dependent habitability and then by Spiegel et al in 2008 (SMS08) \cite{SMS08} and 2009 \cite{SMS09} to study quantify habitability and then study obliquity dependent habitability.
 Spiegel's work was furthered by Dressing et al 2010 \cite{Dressing10} where eccentricity dependent habitability was investigated.
 
-\subsection{Earth as a baseline}
+%     Thermal timescale definition τ = CT / I
+A useful measure of how effective the model is at changing temperatures is the thermal timescale,
+\begin{equation}
+  \tau = \frac{C T}{I},
+\end{equation}
+which is the energy in the model divided by the speed of removal of that heat via IR emission.
+This definition suggests that a larger heat capacity requires a longer time period to change.
+
+%     Ice-Albedo feedback due to dynamic model ~> relate to thermal timescale
+%
+An aspect of the 1DEBCM which is not present in the 0DEBCM is ice-albedo-feedback (IAB).
+It is not present in the 0DEBCM because the albedo is constant and the model is not dynamic.
+
+In the 1DEBCM, albedo is a function of temperature where lower temperatures have high albedo and high temperatures have low albedo.
+If temperature decreases, more ice forms thus albedo increases.
+This increased albedo means more insolation is reflected, thus the model has even less input heat and so cools further and forms more ice.
+
+Thus IAB is positive feedback loop between ice formation and albedo which can result in a `snowball' model which is entirely covered in ice.
+The susceptibility of the model to IAB can be estimated using the thermal timescale.
+
+This is reflected in Section \ref{ssec:qualitative_oceanfraction} where ocean fraction (thus heat capacity) in the model is varied, and it is found that low ocean fraction (low heat capacity) is much more susceptible to IAB due to the smaller thermal timescale.
+Two main sources of reduced temperatures are investigated.
+The first source is eccentricity, where IAB can happen if the planet spends a long time away from the star and cools to a snowball state.
+The second is obliquity, where IAB can freeze the pole which is facing away from the Sun and then reflect enough light when facing the Sun to allow the entire model to fall into a snowball state.
+
+It is found that obliquity requires higher minimum ocean fraction than eccentricity to avoid IAB and falling into a snowball state, thus is a more powerful constraint on the habitability if the ocean fraction of an exoplanet is known. The disadvantage of this is the eccentricity of the orbit is much easier to observe than the obliquity of the planet relative to the star it orbits.
+
+%     Using Earth as a baseline / validation ~> introduce NC79 equation
+%
+% \subsection{Earth as a baseline} % now just part of the subsection
 % Earth as a baseline and Milankovitch cycles
 % > using Earth to constrain certain parameters of the model to be realistic
 % > varying parameters and seeing where the Earth moves in that space gives insight to the history and evolution of the Earth
 
-First the parameters of the 1DEBCM must be validated against known data, in this the Earth ...
+The 1DEBCM must be validated against known data.
+To do this a similar process to the one WK97 use to calibrate their model is followed.
+NC79 used data from various sources and developed a model using Legendre polynomials for latitude variation and sine and cosine functions for time variation.
+The first 3 terms of the global temperature model are given in their eqn. (4) as
+\begin{equation}
+  T(\lambda, t)[\degrees\text{C}] = 14.2 + 15.5 \cos(\omega t + \phi) P_1(\sin\lambda) - 30.2 P_2(\sin(\lambda)), \label{eq:NC_timedep}
+\end{equation}
+where $P_i$ is the $i^\text{th}$ Legendre polynomial.
+Taking the time-average of this function over a year period gives
+\begin{equation}
+  \begin{split}
+    T(\lambda)[\text{K}] & = 14.2 + 273 - 30.2 (3 \sin^2(\lambda) - 1) / 2 \\
+                         & = 302.3 - 45.3\sin^2(\lambda),
+  \end{split}
+  \label{eq:NC_timeavg}
+\end{equation}
+where the temperature has been converted to Kelvin, and the second legrendre polynomial is expanded as $P_2(x) =(3x^2-1) / 2$.
+The average of $\cos(\omega t + \phi)$ over an period $T = 2\pi / \omega$ is $0$, so the first legendre polynomial is not needed.
+This time-averaged model is then used to fix the diffusion $D$ for the model in Section \ref{ssec:EarthLikeModel}.
 
 % Exoplanets (i.e. moving Earth around)
 % > Describe how varying parameters can lead to habitability parameter space
 % > Suggest by generating parameter spaces that new discoveries can be quickly checked  
 
-The 1DEBCM can then be used to ...
+% The 1DEBCM can then be used to ...
 
 \subsection{Habitability}
+%   C: Averaging and Habitability;
+%     LWR and HC habitability functions
+%     SMS08 averaging integrals ~> note that they are specifically for habitability, generalisations in Sec2C
+The temperature data in a parameter space must then be processed to find habitability.
 
-The temperature data in a parameter space must then be processed to find habitability...
+The two habitability functions in this paper are Liquid Water Requirement (LWR) and Human Compatible (HC).
+LWR is probably the more familiar of the two where a temperature between the melting point and boiling point of water is habitable, functionally given as
+\begin{equation}
+  H_\text{LWR}(T) =
+  \begin{cases}
+    1 & 0\degreesC \le T \le 100\degreesC \\
+    0 & \text{Otherwise.}
+  \end{cases}
+  \label{eq:H_LWR}
+\end{equation}
+The alternatively, the HC habitability is defined with a smaller range of values,
+\begin{equation}
+  H_\text{HC}(T) =
+  \begin{cases}
+    1 & 0\degreesC \le T \le 30\degreesC \\
+    0 & \text{Otherwise,}
+  \end{cases}
+  \label{eq:H_HC}
+\end{equation}
+with the additional stipulation that if a latitude band experiences a temperature greater than $40\degreesC$ or less than $-10\degreesC$ then the band is considered uninhabitable for all time.
+The motivation for this temperature range and restriction of extreme temperatures comes from the ability for humans to self regulate their internal temperature.
+The typical internal temperature for a human is $37\degreesC$.
+To maintain this temperature thermoregulation occurs, typically involving sweating to cool down.
+This motivates the definition 
 
 SMS08 quantifies habitability in 3 main ways.
 The first is the time-averaged habitability, $f_\text{time}$, which is given in their eqn. (6) as
@@ -280,15 +357,29 @@ Finally the combination of these two measures results in the total habitability,
 \end{equation}
 where in all three cases the semimajor axis $a$ has been replaced by a generalised parameter (or set of parameters) $q$.
 This paper uses the discrete form of these equations in Section \ref{ssec:habiAver} in order to both quantify when a model has reached an stable average (i.e. equilibrium) temperature and for quantifying the habitability of a model which varies in time and latitude.
-Also in given in Section \ref{ssec:habiAver} are the two habitability functions used throughout this paper.
+% Also in given in Section \ref{ssec:habiAver} are the two habitability functions used throughout this paper.
 
 \subsection{Exomoons}
-% Exomoons
-% > How they differ from exoplanets
-% > TH, Eclipsing, Reflectance
+%   D: Modifications for Exomoons;
+%     Eclipsing;
+%       2 independent 2-body solutions
+%       Analytical approach
+%       ε, S(1-A) -> S(1-ε)(1-A)
+%     Reflectance and Emission from Gas giant;
+%       GG obeys 0DEBCM
+%       F_ref = SA_gas / a_moon^2 sqrt(1-e_moon^2)
+%       F_gas = σT_gas^4 / a_moon^2 sqrt(1-e_moon^2)
+%     Tidal heating;
+%        Main Equation F_th propto - 21/2 Im(k_2) G^3/2 ...
+%        fixed-Q model: -Im(k_2) = k_2 / Q
+%        viscoelastic model: -Im(k_2) = ... with functions for μ,η, etc as well as how the mantle temperature is found
+%        which is used in the model and why
 In order to investigate exomoons the 1DEBCM must be modified...
 
 \section{1-D Energy Balance Climate Model}\label{sec:1DEBCM}
+% 1D Energy Balance Climate Model;
+%   Derivation from heat equation
+%
 % Rederive 1DEBCM from standard heat eqn
 The EBCM can be derived from the standard heat equation given by
 \begin{equation}
@@ -313,43 +404,13 @@ The original equation can be recovered by defining $\alpha / r^2 \equiv D / C$ f
 Then adding incoming solar radiation $S$ (insolation), which is reduced by planetary albedo $A$, and outgoing IR-emission $I$ to the PDE.
 Thus the original form of the 1D EBCM in eqn. \eqref{eq:1DEBCM} is recovered.
 
-\subsection{Discretisation of the climate model} \label{ssec:DiscretisationPDE}
-% choice of discretisation
-Numerically integrating the EBCM requires the derivatives to be discretised.
-Spatially the planet can be split into $S$ latitude bands, separated by
-\begin{equation}
-  \Delta\lambda = \frac{\pi\radians}{S-1} = \frac{180\degrees}{S-1},
-\end{equation}
-with spatial indexing of each band from $m=0, 1, \dots, S-1$.
-Similarly, a temporal indexing of $n=0, 1, \dots$ is used to discretise time in steps of $\Delta t$.
-Thus $T^m_n$ is the temperature at the $m$\textsuperscript{th} timestep for the $n$\textsuperscript{th} latitude band.
-
-% choice of partial derivatives
-The spatial derivatives can then be approximated by the central difference and second order central difference:
-\begin{align}
-  \partialderiv{T^m_n}{\lambda}      & = \frac{T^{m+1}_n - T^{m-1}_n}{2 \Delta\lambda},     \label{eq:space_1}        \\
-  \partialderivsecnd{T^m_n}{\lambda} & = \frac{T^{m+2}_n -2T^m_n + T^{m-2}_n}{(2 \Delta\lambda)^2},\label{eq:space_2}
-\end{align}
-and the temporal derivative can be approximated as a forward difference,
-\begin{equation}
-  \partialderiv{T^m_n}{t} = \frac{T^m_{n+1} - T^m_n}{\Delta t},\label{eq:time_1}
-\end{equation}
-with numerical stability analysed in appendix \ref{appx:NumStability}.
-Evolving the EBCM is performed by solving eqn. \eqref{eq:time_1} for $T^m_{n+1}$ in terms of the parameter and temperature values at timestep $n$.
-
-% choice of edge case partial derivatives
-However, a problem arises at the edges of the model as $m=-2, -1, S, S+1$ are not defined.
-To fix this the derivatives at $m=0$ ($m=S-1$) are discretised as forward then backward (backward then forward) derivatives.
-By imposing that ${\partial T^{m=0, S-1}_n}/{\partial \lambda} = 0$, the second order derivatives then reduce to
-\begin{alignat}{2}
-  \partialderivsecnd{T^{m=0}_n}{\lambda}   & = \frac{1}{\Delta\lambda  }\left(\partialderiv{T^{m=1}_n}{\lambda} - \partialderiv{T^{m=0}_n}{\lambda}\right)    &  & = \frac{T^{m=1}_n - T^{m=0}_n}{(\Delta\lambda)^2}
-  \label{eq:forward_backward}                                                                                                                                                                                     \\
-  \partialderivsecnd{T^{m=S-1}_n}{\lambda} & = \frac{1}{\Delta\lambda  }\left(\partialderiv{T^{m=S-1}_n}{\lambda} - \partialderiv{T^{m=S-2}_n}{\lambda}\right) &  & = \frac{T^{m=S-2}_n - T^{m=S-1}_n}{(\Delta\lambda)^2}.
-  \label{eq:backward_forward}
-\end{alignat}
-Furthermore, the treatment imposed for the $m=1$ and $m=S-2$ second order derivatives is much the same, using central-backward and central-forward derivatives respectively.
-
-\subsection{Earth-like model} \label{ssec:EarthLikeModel}
+\subsection{Earth-like model functions} \label{ssec:EarthLikeModel}
+%   A: Earth-like model functions;
+%     From WK97
+%     SMS08 -> choose I_2, A_2
+%     NC79 -> D_0
+%     Default values table
+%
 \begin{table*}
   \begin{tabular}{|c|c|c|c|c|c|}
     \hline
@@ -391,24 +452,7 @@ In order to investigate the Earth and Earth-like planets, the parameters and fun
 In this analysis the forms of the Earth-like functions are taken from Williams and Kastings (WK97) \cite{WK97}, and the Earth-like model is compared against a model derived from North and Coakley 1979 (NC79) \cite{NC79}.
 
 % choice of D_0 by fitting to NC97
-%%% Move to introduction as a "comparison model"? %%%
-NC79 take data from various sources and develop a model using Legendre polynomials for latitude variation and sine and cosine functions for time variation.
-The first 3 terms of the global temperature model are given in eqn. (4) of NC79 as
-\begin{equation}
-  T(\lambda, t)[\degrees\text{C}] = 14.2 + 15.5 \cos(\omega t + \phi) P_1(\sin\lambda) - 30.2 P_2(\sin(\lambda)), \label{eq:NC_timedep}
-\end{equation}
-where $P_i$ is the $i^\text{th}$ Legendre polynomial.
-Taking the time-average of this function over a year period gives
-\begin{equation}
-  \begin{split}
-    T(\lambda)[\text{K}] & = 14.2 + 273 - 30.2 (3 \sin^2(\lambda) - 1) / 2 \\
-                         & = 302.3 - 45.3\sin^2(\lambda),
-  \end{split}
-  \label{eq:NC_timeavg}
-\end{equation}
-where the temperature has been converted to Kelvin, and the second legrendre polynomial is expanded as $P_2(x) =(3x^2-1) / 2$.
-The average of $\cos(\omega t + \phi)$ over an period $T = 2\pi / \omega$ is $0$, so the first legendre polynomial is not needed.
-This gives a latitude dependent model for the Earth which the Earth-like model can be fitted to.
+%%% Moved to introduction as a "comparison model" %%%
 
 % Diffusion
 The diffusion constant, $D$, varies with orbital and atmospheric parameters as
@@ -481,7 +525,7 @@ It is important to average over a day insolation as the model does not have a lo
 The distance from the Sun is variable due to eccentricity.
 For a 2-body system this distance can be calculated through an iterative method as follows
 \begin{equation}
-  r = a (1 - e \cos E), \label{eq:two_body_distance}
+  r(t) = a (1 - e \cos E(t)), \label{eq:two_body_distance}
 \end{equation}
 where $a$ and $e$ are semimajor axis and eccentricity respectively, and the eccentricity anomaly $E$ is given by iteration
 \begin{equation}
@@ -510,16 +554,61 @@ Between $65\degrees$ to $45\degrees$ the habitability decreases linearly, repres
 The area averaged habitability changes in steps as each discrete latitude band becomes habitable or uninhabitable.
 It is periodic but difficult to predict within each year.
 
-\subsection{Habitability and Averaging} \label{ssec:habiAver} %% move to sec 2, rename to habitability and averaging %%
 
+\subsection{Discretisation and Time evolution} \label{ssec:DiscretisationPDE}
+%   B: Discretisation and Time evolution;
+%     d/dλ -> central, 0 at poles
+%     d^2/dλ^2 -> central, forward backward and backward forward at poles
+%     d/dt -> forward, with time evolution by solving for n+1 from n
+%
+% choice of discretisation
+Numerically integrating the EBCM requires the derivatives to be discretised.
+Spatially the planet can be split into $S$ latitude bands, separated by
+\begin{equation}
+  \Delta\lambda = \frac{\pi\radians}{S-1} = \frac{180\degrees}{S-1},
+\end{equation}
+with spatial indexing of each band from $m=0, 1, \dots, S-1$.
+Similarly, a temporal indexing of $n=0, 1, \dots$ is used to discretise time in steps of $\Delta t$.
+Thus $T^m_n$ is the temperature at the $m$\textsuperscript{th} timestep for the $n$\textsuperscript{th} latitude band.
+
+% choice of partial derivatives
+The spatial derivatives can then be approximated by the central difference and second order central difference:
+\begin{align}
+  \partialderiv{T^m_n}{\lambda}      & = \frac{T^{m+1}_n - T^{m-1}_n}{2 \Delta\lambda},     \label{eq:space_1}        \\
+  \partialderivsecnd{T^m_n}{\lambda} & = \frac{T^{m+2}_n -2T^m_n + T^{m-2}_n}{(2 \Delta\lambda)^2},\label{eq:space_2}
+\end{align}
+and the temporal derivative can be approximated as a forward difference,
+\begin{equation}
+  \partialderiv{T^m_n}{t} = \frac{T^m_{n+1} - T^m_n}{\Delta t},\label{eq:time_1}
+\end{equation}
+with numerical stability analysed in appendix \ref{appx:NumStability}.
+Evolving the EBCM is performed by solving eqn. \eqref{eq:time_1} for $T^m_{n+1}$ in terms of the parameter and temperature values at timestep $n$.
+
+% choice of edge case partial derivatives
+However, a problem arises at the edges of the model as $m=-2, -1, S, S+1$ are not defined.
+To fix this the derivatives at $m=0$ ($m=S-1$) are discretised as forward then backward (backward then forward) derivatives.
+By imposing that ${\partial T^{m=0, S-1}_n}/{\partial \lambda} = 0$, the second order derivatives then reduce to
+\begin{alignat}{2}
+  \partialderivsecnd{T^{m=0}_n}{\lambda}   & = \frac{1}{\Delta\lambda  }\left(\partialderiv{T^{m=1}_n}{\lambda} - \partialderiv{T^{m=0}_n}{\lambda}\right)    &  & = \frac{T^{m=1}_n - T^{m=0}_n}{(\Delta\lambda)^2}
+  \label{eq:forward_backward}                                                                                                                                                                                     \\
+  \partialderivsecnd{T^{m=S-1}_n}{\lambda} & = \frac{1}{\Delta\lambda  }\left(\partialderiv{T^{m=S-1}_n}{\lambda} - \partialderiv{T^{m=S-2}_n}{\lambda}\right) &  & = \frac{T^{m=S-2}_n - T^{m=S-1}_n}{(\Delta\lambda)^2}.
+  \label{eq:backward_forward}
+\end{alignat}
+Furthermore, the treatment imposed for the $m=1$ and $m=S-2$ second order derivatives is much the same, using central-backward and central-forward derivatives respectively.
+
+\subsection{Averaging and Habitability} \label{ssec:habiAver}
+%   C: Averaging and Habitability;
+%     generalising and discretising the continuous averages
+%     Use of averages in finding equilibrium / globally averaged temperatures
+%     Demonstation of taking temperature data, applying habitability and averages
 Analysing the data produced requires the use of area-weighted averaging and time averaging from SMS08.
 The original equations are given as continuous integrals, but are discretised in a similar way to the derivatives in \ref{ssec:DiscretisationPDE}.
 Thus the time averaging, area-weighted averaging, and total averaging are given by
 \begin{equation}
-  \begin{split}
-    Q^m_{p \to q} & = \frac{\sum_{n=p}^{q} Q^m_n \Delta t} {\sum_{n=p}^{q} \Delta t} \\
-                  & = \frac{\sum_{n=p}^{q} Q^m_n}{t_q-t_p}
-  \end{split},
+  % \begin{split}
+    Q^m_{p \to q}  = \frac{\sum_{n=p}^{q} Q^m_n \Delta t} {\sum_{n=p}^{q} \Delta t} 
+                   = \frac{\sum_{n=p}^{q} Q^m_n}{t_q-t_p}
+  % \end{split},
   \label{eq:Q_timeaverage}
 \end{equation}
 \begin{equation}
@@ -527,7 +616,7 @@ Thus the time averaging, area-weighted averaging, and total averaging are given 
   \label{eq:Q_areaaveraged}
 \end{equation}
 \begin{equation}
-  \bar{Q}_{p \to q} = \frac{\sum_{n=p}^{q} \sum_{m = 0}^{S-1} Q^m_n \cos(\lambda_m) \Delta\lambda}{2(q-p)},
+  \bar{Q}_{p \to q} = \frac{\sum_{n=p}^{q} \sum_{m = 0}^{S-1} Q^m_n \cos(\lambda_m) \Delta\lambda}{2(t_q-t_p)},
   \label{eq:Q_totalaverage}
 \end{equation}
 respectively, with the time averaging happening between a time $t_p$ and $t_q$.
@@ -553,7 +642,7 @@ The classical habitability function is the Liquid Water Requirement (LWR) given 
     1 & 0\degreesC \le T \le 100\degreesC \\
     0 & \text{Otherwise}
   \end{cases},
-  \label{eq:H_LWR}
+  \label{eq:H_LWR_}
 \end{equation}
 Thus a temperature is habitable if it is between the boiling and melting points of water.
 
@@ -572,13 +661,19 @@ thus a conservative temperature at which habitability reduces is taken to be $30
     1 & 0\degreesC \le T \le 30\degreesC \\
     0 & \text{Otherwise}
   \end{cases},
-  \label{eq:H_HC}
+  \label{eq:H_HC_}
 \end{equation}
 with the additional constraint that temperatures greater than $40\degreesC$ or less than $-10\degreesC$ in a latitude band sets the habitability of the band to 0 for all time.
 
-\section{Earth-like exoplanets} \label{sec:Exoplanets} %% move to sec 2 %%%
-\subsection{Investigating time-averaged solar flux} \label{ssec:InvTimeAveragedSolarFlux}
-
+\section{Investigating Earth-like Exoplanets} \label{sec:Exoplanets}
+% Investigating Earth-like Exoplanets;
+%
+\subsection{Varying semimajoraxis and eccentricity} \label{ssec:InvTimeAveragedSolarFlux}
+%   A: Varying semimajoraxis and eccentricity;
+%     Quantitative relationships -> T^4 propto a^-2 (1-e^2)^-1/2
+%     Qualitative relationships -> latitude bands with time averaging 
+%
+% Quantitative
 \begin{figure}[t]
   \includegraphics[width=0.8\linewidth]{images_rewrite/convergence_varying_a_0.5to1.5.png}
   \caption{
@@ -660,7 +755,8 @@ Lower eccentricities allow for polar ice caps to form which then significantly l
 
 As seen from the vertical lines in Fig. \ref{fig:planet_eccentricity}, the Earth has moved in this lower eccentricity region for its entire history, suggesting that the presence of the polar caps has been reasonably constant for the recent past.
 
-\subsection{Semimajor axis and eccentricity} \label{ssec:qualitative_semimajoraxis_eccentricity}
+% \subsection{Semimajor axis and eccentricity} \label{ssec:qualitative_semimajoraxis_eccentricity}
+% Qualitative
 \begin{figure}[t]
   % \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_humancomp_time.png}
   % \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_humancomp_area.png}
@@ -749,7 +845,10 @@ Alternatively, the HC habitability indicates that high eccentricities have extre
 
 
 
-\subsection{Obliquity} \label{ssec:qualitative_obliquity}
+\subsection{Varying obliquity} \label{ssec:qualitative_obliquity}
+%   B: Varying obliquity;
+%     latitudes via time averaging -> melting of poles + boiling of poles when direct
+%
 \begin{figure}[t]
   \includegraphics[width=0.495\linewidth]{images_rewrite/obliquity_humancomp_time.png}
   \includegraphics[width=0.495\linewidth]{images_rewrite/obliquity_humancomp_area.png}
@@ -828,7 +927,13 @@ In this range the habitability is fairly constant.
 % > "island of stability" at higher rotation rates
 % > Three plot of obliquity showing the "island" growing / stabilising
 
-\subsection{Ocean fraction} \label{ssec:qualitative_oceanfraction}
+\subsection{Varying ocean fraction with eccentricity and obliquity} \label{ssec:qualitative_oceanfraction}
+%   C: Varying ocean fraction with eccentricity and obliquity;
+%     how eccentricity allows for IAF
+%     how obliquity allows for IAF
+%     when model is susceptible to Ice-Albedo feedback
+%     relation to thermal timescale
+%
 \begin{figure}[t]
   \includegraphics[width=0.495\linewidth]{images_rewrite/dual_eccentricity_0_0.5_uniform_ocean_fraction_0_1.png}
   \includegraphics[width=0.495\linewidth]{images_rewrite/dual_obliquity_0_90_uniform_ocean_fraction_0_1.png}
@@ -902,9 +1007,15 @@ The minimum ocean fraction in the obliquity case varies with an `S' shape and le
 Similar to the eccentricity case, high obliquities can partially recover from the snowball. In this case it is due to the pole facing the Sun melting for half a year due to constant insolation before refreezing when facing away from the Sun.
 There are nearly no variations due to changing ocean fraction above $f_\text{ocean} = 0.2$ in the eccentricity case, and few variations above $f_\text{ocean} = 0.4$ for the obliquity case.
 
-\section{Exomoons} \label{sec:Exomoons}
+\section{Earth-like exomoon modifications and results} \label{sec:Exomoons}
+% Earth-like exomoon modifications and results;
+%
 \subsection{Eclipsing} \label{ssec:InvEclipsing}
-
+%   A: Eclipsing;
+%     explicit quantification with 2 independent 2-body solutions -> a_moon only param with major role
+%     problems with timestep and need to be quantified to a single number
+%     analytical model and assumptions, result + fit to 2-body model data
+%
 \begin{figure}[t]
   \includegraphics[width=0.5\linewidth]{images_rewrite/eclipsing diagram.png}
   \caption{
@@ -974,7 +1085,20 @@ for a planet of radius $R_\text{gas}$ and moon semimajor axis $a_\text{moon}$.
 This relation is investigated in Fig. \ref{fig:quantitative_eclipsing_moon_semimajor_axis} with a free parameter in place of $R_\text{gas}$.
 The value of the free parameter is $(7.013\pm 0.008) \times 10^7 \text{m}$ which is extremely close to the radius of Jupiter, as to be expected.
 
+\subsection{Reflectance and Emission from the Gas giant}
+%   B: Reflectance and Emission from the Gas giant;
+%     F_ref, F_gas...
+%     assumption of blackbody for gas giant, use of 0DEBCM for gas giant, use of Mendez for time averaged radiation 
+%
+blah blah 
+
 \subsection{Tidal heating} \label{ssec:InvTidalHeating}
+%   C: Tidal heating;
+%     Viscoelastic model outline;
+%       How mantle temperature is found with convective cooling balancing tidal heating
+%       assumption of heat flow throughout entire surface evenly -> no volcanos
+%     Why tidal heating can cut off very dramatically
+%
 \begin{table*}
   \begin{tabular}{|c|c|c|c|c|c|c|c|}
     \hline
@@ -1026,7 +1150,14 @@ The orbital frequency, density, and radius of the moon are $\omega$, $\rho$, and
 \cite{DHT2015}
 \cite{RN21}
 
-\subsection{Results}
+
+\subsection{Impact on previous results}
+%   D: Impact on previous results;
+%     Quantitative change to semimajoraxis / eccentricity relations
+%       ~> const TH/eclipsing, variable reflectance/emission
+%     qualitative obliquity -> flattening due to TH independent of star
+%     qualitative semimajor axis latitude plot changes
+%
 \begin{figure}[t]
   \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_humancomp_area_combined.png}
   \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_planetary_2_moon.png}
@@ -1078,12 +1209,14 @@ Temperature increases.
 Temperature range decreases due to insolation playing smaller role (proportionally) in determining the planet climate.
 The variations due to obliquity become smaller as any insolation variation across the planet are dampened by the uniform tidal heating.
 
-% with constant TH -> vary a_gas-e_gas to see how habitability moves
-% const a_gas/e_gas -> vary a_moon-e_moon to see habitability relations
-% vary planet size/radius/mass? 
-% \subsection{Developing and investigating a depth model} \label{ssec:DevInvDepthModel} % -> lower priority
-% % Derive depth model, referencing sec2
-% % setup system for ocean planet habitability under an ice layer with tidal heating
+\subsection{Exomoon specific results} \label{ssec:Exomoon_specific_results}
+%   E: Exomoon specific results;
+%     Qualitative latitude plots;
+%       a_moon -> eclipsing, reflectance/emission, TH
+%       e_moon -> reflectance/emission, TH
+%       *R_moon* -> TH   %%% !no data yet! %%% 
+%
+blah blah blah 
 
 \section{Discussion} \label{sec:Discussion}
 Research motivated by climate change suggests that ice melting can release CO$_2$ which is not accounted for in this model.
