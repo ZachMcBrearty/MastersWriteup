@@ -1,31 +1,31 @@
 \contentsline {title}{Orbital Constraints on Exoplanet Habitability}{1}{}
 \contentsline {abstract}{Abstract}{1}{}
 \tocdepth@munge 
-\contentsline {section}{\numberline {}Contents}{1}{}
+\contentsline {section}{\numberline {}Contents}{2}{}
 \tocdepth@restore 
 \contentsline {section}{\numberline {1}Introduction}{3}{}
 \contentsline {subsection}{\numberline {A}Exoplanet and Exomoon detection}{3}{}
 \contentsline {subsection}{\numberline {B}Energy balance models}{3}{}
 \contentsline {subsection}{\numberline {C}Habitability}{5}{}
-\contentsline {subsection}{\numberline {D}Exomoons}{6}{}
-\contentsline {section}{\numberline {2}1-D Energy Balance Climate Model}{6}{}
-\contentsline {subsection}{\numberline {A}Earth-like model functions}{7}{}
-\contentsline {subsection}{\numberline {B}Discretisation and Time evolution}{11}{}
-\contentsline {subsection}{\numberline {C}Averaging and Habitability}{11}{}
-\contentsline {section}{\numberline {3}Investigating Earth-like Exoplanets}{13}{}
-\contentsline {subsection}{\numberline {A}Varying semimajoraxis and eccentricity}{13}{}
-\contentsline {subsection}{\numberline {B}Varying obliquity}{18}{}
-\contentsline {subsection}{\numberline {C}Varying ocean fraction with eccentricity and obliquity}{19}{}
-\contentsline {section}{\numberline {4}Earth-like exomoon modifications and results}{21}{}
-\contentsline {subsection}{\numberline {A}Eclipsing}{21}{}
-\contentsline {subsection}{\numberline {B}Reflectance and Emission from the Gas giant}{23}{}
-\contentsline {subsection}{\numberline {C}Tidal heating}{23}{}
-\contentsline {subsection}{\numberline {D}Impact on previous results}{24}{}
-\contentsline {subsection}{\numberline {E}Exomoon specific results}{25}{}
-\contentsline {section}{\numberline {5}Discussion}{25}{}
-\contentsline {section}{\numberline {6}Conclusion}{26}{}
-\contentsline {section}{\numberline {}References}{26}{}
+\contentsline {subsection}{\numberline {D}Modifications for Exomoons}{6}{}
+\contentsline {section}{\numberline {2}1-D Energy Balance Climate Model}{7}{}
+\contentsline {subsection}{\numberline {A}Earth-like model functions}{8}{}
+\contentsline {subsection}{\numberline {B}Discretisation and Time evolution}{12}{}
+\contentsline {subsection}{\numberline {C}Averaging and Habitability}{12}{}
+\contentsline {section}{\numberline {3}Investigating Earth-like Exoplanets}{14}{}
+\contentsline {subsection}{\numberline {A}Varying semimajoraxis and eccentricity}{14}{}
+\contentsline {subsection}{\numberline {B}Varying obliquity}{19}{}
+\contentsline {subsection}{\numberline {C}Varying ocean fraction with eccentricity and obliquity}{20}{}
+\contentsline {section}{\numberline {4}Earth-like exomoon modifications and results}{22}{}
+\contentsline {subsection}{\numberline {A}Eclipsing}{22}{}
+\contentsline {subsection}{\numberline {B}Reflectance and Emission from the Gas giant}{24}{}
+\contentsline {subsection}{\numberline {C}Tidal heating}{24}{}
+\contentsline {subsection}{\numberline {D}Impact on previous results}{25}{}
+\contentsline {subsection}{\numberline {E}Exomoon specific results}{26}{}
+\contentsline {section}{\numberline {5}Discussion}{27}{}
+\contentsline {section}{\numberline {6}Conclusion}{28}{}
+\contentsline {section}{\numberline {}References}{28}{}
 \appendix 
-\contentsline {section}{\numberline {A}Numerical stability of the 1D EBCM}{28}{}
-\contentsline {section}{\numberline {B}Tidal heating equations and method}{28}{}
-\contentsline {section}{\numberline {}Scientific Summary for a General Audience}{29}{}
+\contentsline {section}{\numberline {A}Numerical stability of the 1D EBCM}{30}{}
+\contentsline {section}{\numberline {B}Tidal heating equations and method}{30}{}
+\contentsline {section}{\numberline {}Scientific Summary for a General Audience}{31}{}

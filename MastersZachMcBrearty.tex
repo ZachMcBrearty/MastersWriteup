@@ -61,11 +61,11 @@
 %     Current missions
 %     + [maybe] Artemis / ILRS -> first steps towards exoplanets
 %   B: Energy Balance Models;
-%     0DEBCM -> not dynamic, but still useful for establishing relationships between parameters e.g. Mendez
+%     0DEBM -> not dynamic, but still useful for establishing relationships between parameters e.g. Mendez
 %     1DEBCM -> dynamic, resolve latitude bands
 %     ~> both assume heat spread out evenly (0D -> over the entire planet, 1D -> within each latitude band)
 %     Thermal timescale definition τ = CT / I
-%     Ice-Albedo feedback due to dynamic model ~> relate to thermal timescale
+%     IAB due to dynamic model ~> relate to thermal timescale
 %     Using Earth as a baseline / validation ~> introduce NC79 equation
 %   C: Averaging and Habitability;
 %     LWR and HC habitability functions
@@ -76,7 +76,7 @@
 %       Analytical approach
 %       ε, S(1-A) -> S(1-ε)(1-A)
 %     Reflectance and Emission from Gas giant;
-%       GG obeys 0DEBCM
+%       GG obeys 0DEBM
 %       F_ref = SA_gas / a_moon^2 sqrt(1-e_moon^2)
 %       F_gas = σT_gas^4 / a_moon^2 sqrt(1-e_moon^2)
 %     Tidal heating;
@@ -109,7 +109,7 @@
 %   C: Varying ocean fraction with eccentricity and obliquity;
 %     how eccentricity allows for IAF
 %     how obliquity allows for IAF
-%     when model is susceptible to Ice-Albedo feedback
+%     when model is susceptible to IAB
 %     relation to thermal timescale
 %
 % Earth-like exomoon modifications and results;
@@ -119,7 +119,7 @@
 %     analytical model and assumptions, result + fit to 2-body model data
 %   B: Reflectance and Emission from the Gas giant;
 %     F_ref, F_gas...
-%     assumption of blackbody for gas giant, use of 0DEBCM for gas giant, use of Mendez for time averaged radiation 
+%     assumption of blackbody for gas giant, use of 0DEBM for gas giant, use of Mendez for time averaged radiation 
 %   C: Tidal heating;
 %     Viscoelastic model outline;
 %       How mantle temperature is found with convective cooling balancing tidal heating
@@ -158,6 +158,8 @@
 \maketitle
 %\thispagestyle{plain} % produces page number for front page
 
+\newpage
+
 \tableofcontents
 % \let\toc@pre\relax
 % \let\toc@post\relax
@@ -169,7 +171,7 @@
 \section{Introduction} \label{sec:Introduction} %% add subsections balance things out %%
 % Introduction;
 %
-\subsection{Exoplanet and Exomoon detection}
+\subsection{Exoplanet and Exomoon detection} \label{ssec:ExoplanetExomoonDetection}
 %   A?: Exoplanets and Exomoons;
 %     History
 %     Methods of detection
@@ -206,9 +208,9 @@ The one recent (and on going) mission is the Artemis Plan \cite{NASA_Artemis} wh
 Additionally, the China National Space Administration also plan to return to the moon with the International Lunar Research Station \cite{CNSA_ILRS}.
 Both these projects will allow for human settlement away from the Earth, and are vital in progressing further out into our own solar system and beyond.
 
-\subsection{Energy balance models}
+\subsection{Energy balance models} \label{ssec:EBM_intro}
 %   B: Energy Balance Models;
-%     0DEBCM -> not dynamic, but still useful for establishing relationships between parameters e.g. Mendez
+%     0DEBM -> not dynamic, but still useful for establishing relationships between parameters e.g. Mendez
 Analysing the habitability of exoplanets can be difficult.
 The Trappist-1 system is an excellent example. In the system seven Earth-like planets were found within the habitable zone of their host star \cite{GTD2017}.
 However they are not habitable due to a mixture of being tidally-locked to the star and experiencing extreme solar winds which have probably stripped them of any atmosphere long ago \cite{Cohen2024, VanLooveren2024}.
@@ -218,55 +220,58 @@ One way to model the exoplanets is with an energy balance model, where incoming 
 If no time dependence is considered then the 0-D Energy Balance Model (0DEBM) is 
 \begin{equation}
   \pi r^2 S(1-A) = 4 \pi r^2 \sigma T^4,
-  \label{eq:0DEBCM}
+  \label{eq:0DEBM}
 \end{equation}
 where $r$ is the radius of the planet, $S$ is the incoming solar radiation (insolation) which is reduced by the albedo of the planet $A$.
-The blackbody term is given by the Stefan-Boltzmann constant $\sigma$ and the temperature of the planet $T$.
+The blackbody term is given by the Stefan-Boltzmann constant, $\sigma$, and the temperature of the planet $T$.
 This model does not resolve the planet's surface, and comes with a variety of assumptions such as energy being distributed equally over the entire planet's surface.
 This assumption implies that the planet is not tidally locked and has good diffusion mechanisms to spread out heat.
 
 While this 0DEBM is powerful, there are limitations.
 The temperature produced is an average over time which means extreme temperatures are ignored.
-Different latitude bands experience different amounts of insolation depending on time and obliquity, thus the assumption of even energy distribution is not entirely valid.
+Additionally, different latitude bands experience different amounts of insolation depending on time and obliquity, thus the assumption of even energy distribution is not entirely valid.
 This is especially apparent on the Earth where the poles have much lower temperatures (i.e. freezing) compared to the equator.
 
 %     1DEBCM -> dynamic, resolve latitude bands
 %     ~> both assume heat spread out evenly (0D -> over the entire planet, 1D -> within each latitude band)
 %
 These problems can be addressed with a 1-D Energy Balance Climate Model (1DEBCM).
-The 1DEBCM is given in latitude, $\lambda$, coordinates as
+The 1DEBCM is given in latitude, $\lambda$, and time, $t$, coordinates as
 \begin{equation}
   C(\lambda, T) \partialderiv{T(t, \lambda)}{t} = D\left[\partialderivsecnd{T(t, \lambda)}{\lambda} - \tan\lambda\partialderiv{T(t, \lambda)}{\lambda}\right] + S(\lambda, t)(1-A(T)) - I(T),
   \label{eq:1DEBCM}
 \end{equation}
-where $C$ is the heat capacity for a latitude band, $D$ is the diffusion constant regulating the horizontal transport of heat between latitude bands, $I$ is the generalised IR emission for a latitude band. The other terms are the same as the 0DEBM.
-Specific forms for these functions for the Earth are given in Section \ref{ssec:EarthLikeModel}.
+where $C$ is the heat capacity for a latitude band, $D$ is the diffusion constant regulating the horizontal transport of heat between latitude bands, $I$ is the generalised IR emission for a latitude band. 
+The other terms are the same as the 0DEBM.
+Specific forms for these functions for the Earth-like model are given in Section \ref{ssec:EarthLikeModel}.
+This model still assumes that the planet is not tidally locked, and that the insolation received is thus an average over a day (diurnally averaged) which is spread over the entire latitude band.
+The assumption that all latitudes are the same temperature is lifted compared to the 0DEBM.
 
 The 1DEBCM can be derived from the heat equation (see Section \ref{sec:1DEBCM}) and was originally developed by North and Coakley 1979 (NC79) \cite{NC79} to study the Earth.
 It was then further applied by Williams and Kasting 1997 (WK97) \cite{WK97} to study obliquity dependent habitability and then by Spiegel et al in 2008 (SMS08) \cite{SMS08} and 2009 \cite{SMS09} to study quantify habitability and then study obliquity dependent habitability.
-Spiegel's work was furthered by Dressing et al 2010 \cite{Dressing10} where eccentricity dependent habitability was investigated.
+Spiegel's work was furthered by Dressing et al 2010 (Dressing10) \cite{Dressing10} where eccentricity dependent habitability was investigated.
+This paper investigates the effects of varying semimajor axis and eccentricity on habitability (Sec. \ref{ssec:InvTimeAveragedSolarFlux}), as well as obliquity dependence of habitability (Sec. \ref{ssec:qualitative_obliquity}), and the minimum ratio of ocean to land for the planet to prevent ice-albedo-feedback (Sec. \ref{ssec:qualitative_oceanfraction}).
 
-%     Thermal timescale definition τ = CT / I
-A useful measure of how effective the model is at changing temperatures is the thermal timescale,
-\begin{equation}
-  \tau = \frac{C T}{I},
-\end{equation}
-which is the energy in the model divided by the speed of removal of that heat via IR emission.
-This definition suggests that a larger heat capacity requires a longer time period to change.
-
-%     Ice-Albedo feedback due to dynamic model ~> relate to thermal timescale
+%     IAB due to dynamic model ~> relate to thermal timescale
 %
-An aspect of the 1DEBCM which is not present in the 0DEBCM is ice-albedo-feedback (IAB).
-It is not present in the 0DEBCM because the albedo is constant and the model is not dynamic.
+An aspect of the 1DEBCM which is not present in the 0DEBM is ice-albedo-feedback (IAB).
+It is not present in the 0DEBM because the albedo is constant and the model is not dynamic.
 
 In the 1DEBCM, albedo is a function of temperature where lower temperatures have high albedo and high temperatures have low albedo.
 If temperature decreases, more ice forms thus albedo increases.
 This increased albedo means more insolation is reflected, thus the model has even less input heat and so cools further and forms more ice.
 
 Thus IAB is positive feedback loop between ice formation and albedo which can result in a `snowball' model which is entirely covered in ice.
-The susceptibility of the model to IAB can be estimated using the thermal timescale.
+The susceptibility of the model to IAB can be estimated using the thermal timescale,
+%     Thermal timescale definition τ = CT / I
+\begin{equation}
+  \tau = \frac{C T}{I},
+  \label{eq:ThermalTimescale}
+\end{equation}
+which is the energy in the model divided by the speed of removal of that heat via IR emission.
+This definition suggests that a larger heat capacity requires a longer time period to change, thus should be less susceptible to IAB.
 
-This is reflected in Section \ref{ssec:qualitative_oceanfraction} where ocean fraction (thus heat capacity) in the model is varied, and it is found that low ocean fraction (low heat capacity) is much more susceptible to IAB due to the smaller thermal timescale.
+This is reflected in Sec. \ref{ssec:qualitative_oceanfraction} where ocean fraction (thus heat capacity) in the model is varied, and it is found that low ocean fraction (low heat capacity) is much more susceptible to IAB due to the smaller thermal timescale.
 Two main sources of reduced temperatures are investigated.
 The first source is eccentricity, where IAB can happen if the planet spends a long time away from the star and cools to a snowball state.
 The second is obliquity, where IAB can freeze the pole which is facing away from the Sun and then reflect enough light when facing the Sun to allow the entire model to fall into a snowball state.
@@ -285,7 +290,8 @@ To do this a similar process to the one WK97 use to calibrate their model is fol
 NC79 used data from various sources and developed a model using Legendre polynomials for latitude variation and sine and cosine functions for time variation.
 The first 3 terms of the global temperature model are given in their eqn. (4) as
 \begin{equation}
-  T(\lambda, t)[\degrees\text{C}] = 14.2 + 15.5 \cos(\omega t + \phi) P_1(\sin\lambda) - 30.2 P_2(\sin(\lambda)), \label{eq:NC_timedep}
+  T(\lambda, t)[\degrees\text{C}] = 14.2 + 15.5 \cos(\omega t + \phi) P_1(\sin\lambda) - 30.2 P_2(\sin(\lambda)),
+  \label{eq:NC_timedep}
 \end{equation}
 where $P_i$ is the $i^\text{th}$ Legendre polynomial.
 Taking the time-average of this function over a year period gives
@@ -306,14 +312,14 @@ This time-averaged model is then used to fix the diffusion $D$ for the model in 
 
 % The 1DEBCM can then be used to ...
 
-\subsection{Habitability}
+\subsection{Habitability} \label{ssec:Habitability_intro}
 %   C: Averaging and Habitability;
 %     LWR and HC habitability functions
 %     SMS08 averaging integrals ~> note that they are specifically for habitability, generalisations in Sec2C
-The temperature data in a parameter space must then be processed to find habitability.
+Once the model has been run for a particular set of variables, lots of temperature data for time and latitude must then be processed to evaluate the habitability of the model.
 
-The two habitability functions in this paper are Liquid Water Requirement (LWR) and Human Compatible (HC).
-LWR is probably the more familiar of the two where a temperature between the melting point and boiling point of water is habitable, functionally given as
+The two habitability functions used in this paper are Liquid Water Requirement (LWR) and Human Compatible (HC).
+LWR is the more familiar of the two where a temperature between the melting point and boiling point of water is habitable, functionally given as
 \begin{equation}
   H_\text{LWR}(T) =
   \begin{cases}
@@ -333,9 +339,10 @@ The alternatively, the HC habitability is defined with a smaller range of values
 \end{equation}
 with the additional stipulation that if a latitude band experiences a temperature greater than $40\degreesC$ or less than $-10\degreesC$ then the band is considered uninhabitable for all time.
 The motivation for this temperature range and restriction of extreme temperatures comes from the ability for humans to self regulate their internal temperature.
-The typical internal temperature for a human is $37\degreesC$.
-To maintain this temperature thermoregulation occurs, typically involving sweating to cool down.
-This motivates the definition 
+The typical temperature used to assess human survivability is a wet bulb temperature of $T_w = 30\degreesC$.
+However this value can underestimate the onset of hyperthermia and overestimate lethality \cite{LuRomps2023}.
+This motivates the underestimate of habitability decreasing at $30\degreesC$ and being lethal at the higher $40\degreesC$.
+The minimum temperature is simply a symmetry of the maximum case, and is less important due to cold places staying cold due to IAB.
 
 SMS08 quantifies habitability in 3 main ways.
 The first is the time-averaged habitability, $f_\text{time}$, which is given in their eqn. (6) as
@@ -359,31 +366,64 @@ where in all three cases the semimajor axis $a$ has been replaced by a generalis
 This paper uses the discrete form of these equations in Section \ref{ssec:habiAver} in order to both quantify when a model has reached an stable average (i.e. equilibrium) temperature and for quantifying the habitability of a model which varies in time and latitude.
 % Also in given in Section \ref{ssec:habiAver} are the two habitability functions used throughout this paper.
 
-\subsection{Exomoons}
+\subsection{Modifications for Exomoons} \label{ssec:ModificationsForExomoons}
 %   D: Modifications for Exomoons;
-%     Eclipsing;
-%       2 independent 2-body solutions
-%       Analytical approach
-%       ε, S(1-A) -> S(1-ε)(1-A)
-%     Reflectance and Emission from Gas giant;
-%       GG obeys 0DEBCM
-%       F_ref = SA_gas / a_moon^2 sqrt(1-e_moon^2)
-%       F_gas = σT_gas^4 / a_moon^2 sqrt(1-e_moon^2)
-%     Tidal heating;
-%        Main Equation F_th propto - 21/2 Im(k_2) G^3/2 ...
-%        fixed-Q model: -Im(k_2) = k_2 / Q
-%        viscoelastic model: -Im(k_2) = ... with functions for μ,η, etc as well as how the mantle temperature is found
-%        which is used in the model and why
-In order to investigate exomoons the 1DEBCM must be modified...
+%     Validity of Earth-sized moons
+In this paper the moon is an Earth-sized moon and the planet is a Jupiter-sized gas giant.
+In our own solar system there are no moons which come close the size of the Earth, which presents the question: do Earth-sized exomoons exist?
+The answer is in two parts.
+First, mass $m > 0.12 M_\text{Earth}$ and a strong magnetic field \cite{WKW1997} would be required for a ``substaintial and long-lived atmosphere'', thus the exomoons must be high mass.
+Second, mechanisms such as binary capture \cite{Williams2013} can allow for high mass moons where the usual accretion models, such as those that formed the moons seen in the outer solar system, do not. 
+
+In order to investigate exomoons the 1DEBCM must be modified to include three heat sources and a reduction to insolation.
+
+In section \ref{ssec:eclipsing} eclipsing is investigated and quantified into an eclipsing fraction $\epsilon$.
+This eclipsing fraction is added to the model as a reduction to the insolation,
+\begin{equation}
+  S(1-A) \to S(1-A)(1-\epsilon),
+  \label{eq:reduction_insolation}
+\end{equation}
+
+In section \ref{ssec:ref_emiss_gg} the flux received from the moon due to light from the sun being reflected by the gas giant as well as the emission of light from the gas giant are quantified and added to the model as $F_\text{ref}$ and $F_\text{emiss}$ respectively.
+The reflected light from the gas giant is supposed to be from the light not absorbed by the gas giant, which is just the incident light from the sun times the albedo of the gas giant.
+The emission of the light from the gas giant is then emission of a blackbody in equilibrium given by the 0DEBM.
+The moon model assumes that the gas giant has radiated all of it's heat of formation and thus is in thermal equilibrium with the sun.
+This is not the case for Jupiter in our own solar system, which the model bases the gas giant after \cite{LJW2018}, but the additional heat is small.
+
+In section \ref{ssec:TidalHeating} the tidal heating of the moon due to it's elliptical orbit around the gas giant is quantified.
+Tidal heating equations are described in detail for the specific case of Io in \cite{YP1981, Segatz1988} and for general exoplanets in \cite{DobosTurner2015, DHT2017}.
+The general equation for tidal heating is given by
+\begin{equation}
+  F_\text{th} = -\frac{21}{8\pi} \text{Im}(k_2) \frac{G^{3/2} M_\text{gas}^{5/2} R_\text{moon}^{3} e_\text{moon}^2}{a_\text{moon}^{15/2}},
+  \label{eq:tidalheating_flux}
+\end{equation}
+where the mass, radius, eccentricity, and semimajor axis of the subscripted body are given by $M$, $R$, $e$, and $a$ respectively.
+Specific values for $-\text{Im}(k_2)$ are derived from different rheologies and material compositions of the moon.
+In this paper the Maxwell rheology from Henning et al \cite{Henning2009} is used as well as the material compositions from Dobos and Turner \cite{DobosTurner2015}.
+
+Thus the moon model is, with all modifications made, given by
+\begin{equation}
+  \begin{split}
+    C \partialderiv{T}{t} =& D\left[\partialderivsecnd{T}{\lambda} - \tan\lambda\partialderiv{T}{\lambda}\right] - I(T) \\
+    & + F_\text{ref} + F_\text{emiss} + F_\text{th} + S(1-A_\text{moon})(1-\epsilon).
+  \end{split}
+  \label{eq:1DEBCM_moon}
+\end{equation}
+
+% ++ What is done with Moon model
+With this moon model the habitable zones investigated in Sec. \ref{sec:Exoplanets} can be revisited to see how they are affected by the changes (Sec. \ref{ssec:Impact_previous_results}).
+New habitable zones also emerge depending on the moon's parameters.
+The semimajor axis and eccentricity of the moon's orbit are investigated in Sec. \ref{ssec:Exomoon_specific_results}.
 
 \section{1-D Energy Balance Climate Model}\label{sec:1DEBCM}
 % 1D Energy Balance Climate Model;
 %   Derivation from heat equation
 %
 % Rederive 1DEBCM from standard heat eqn
-The EBCM can be derived from the standard heat equation given by
+The 1DEBCM can be derived from the standard heat equation given by
 \begin{equation}
   \partialderiv{T}{t} = \alpha \nabla^2 T,
+  \label{eq:heat_eqn}
 \end{equation}
 where $T(t, r, \theta, \phi)$ is the temperature at time $t$, radius $r$, co-latitude $\theta$, and longitude $\phi$.
 The constant $\alpha$ is related to the heat capacity and diffusion rate of the system.
@@ -391,14 +431,16 @@ Expanding the laplacian in spherical coordinates the equation becomes
 \begin{equation}
   \partialderiv{T}{t} = \alpha \left[\frac{1}{r} \partialderivsecnd{}{r} (r T)
     + \frac{1}{r^2 \sin\theta} \partialderiv{}{\theta}\left(\sin\theta \partialderiv{T}{\theta}\right)
-    + \frac{1}{r^2 \sin^2\theta} \partialderivsecnd{T}{\theta} \right]. \label{eq:FullyExpandedHeatEqn}
+    + \frac{1}{r^2 \sin^2\theta} \partialderivsecnd{T}{\theta} \right]. 
+    \label{eq:FullyExpandedHeatEqn}
 \end{equation}
-The EBCM is arrived at by first letting $T(t, r, \theta, \phi) = T(t, \lambda)$, with latitude $\lambda = \pi - \theta$. Thus the equation simplifies to
+The 1DEBCM is arrived at by first letting $T(t, r, \theta, \phi) = T(t, \lambda)$, with latitude $\lambda = \pi - \theta$. Thus the equation simplifies to
 \begin{equation}
   \begin{split}
     \partialderiv{T}{t} & = \frac{\alpha}{r^2 \sin\theta} \partialderiv{}{\theta}\left(\sin\theta \partialderiv{T}{\theta}\right)   \\
                         & = \frac{\alpha}{r^2} \left(\partialderivsecnd{T}{\lambda} - \tan\lambda \partialderiv{T}{\lambda}\right).
   \end{split}
+  \label{eq:1DEBCM_kernel}
 \end{equation}
 The original equation can be recovered by defining $\alpha / r^2 \equiv D / C$ for diffusion constant $D$ and heat capacity $C$.
 Then adding incoming solar radiation $S$ (insolation), which is reduced by planetary albedo $A$, and outgoing IR-emission $I$ to the PDE.
@@ -449,7 +491,7 @@ Thus the original form of the 1D EBCM in eqn. \eqref{eq:1DEBCM} is recovered.
 \end{figure}
 
 In order to investigate the Earth and Earth-like planets, the parameters and functions which define the Earth must be established.
-In this analysis the forms of the Earth-like functions are taken from Williams and Kastings (WK97) \cite{WK97}, and the Earth-like model is compared against a model derived from North and Coakley 1979 (NC79) \cite{NC79}.
+In this analysis the forms of the Earth-like functions are taken from WK97, and the Earth-like model is compared against a model derived from NC79.
 
 % choice of D_0 by fitting to NC97
 %%% Moved to introduction as a "comparison model" %%%
@@ -460,18 +502,20 @@ The diffusion constant, $D$, varies with orbital and atmospheric parameters as
   \frac{D}{D_0} = \frac{p}{p_0} \frac{c_p}{c_{p,0}} \left(\frac{m}{28}\right)^{-2} \left(\frac{\Omega}{1\ \text{day}^{-1}}\right)^{-2},
   \label{eq:diffusion_eqn}
 \end{equation}
-where $D_0 = 0.56 \diffusion$ is from fitting to eqn. \ref{eq:NC_timeavg} as shown in Fig. \ref{fig:NC_fit}.
-The atmospheric pressure $p$ is relative to one atmosphere of pressure, $p_0 = 101 \ \text{kPa}$.
-The heat capacity $c_p$ of the atmosphere is relative to $c_{p,0} = 1\times10^3 \ \text{g}^{-1} \text{K}^{-1}$ which is the heat capacity of nitrogen gas.
+where $D_0 = 0.56 \diffusion$ is from fitting to eqn. \eqref{eq:NC_timeavg} as shown in Fig. \ref{fig:NC_fit}.
+The atmospheric pressure, $p$, is relative to one atmosphere of pressure, $p_0 = 101 \ \text{kPa}$.
+The heat capacity, $c_p$, of the atmosphere is relative to $c_{p,0} = 1\times10^3 \ \text{g}^{-1} \text{K}^{-1}$, which is the heat capacity of nitrogen gas.
 Average mass of particles in the atmosphere is given by $m$ and is relative to the nitrogen molecule.
-Rotation rate of the planet $\Omega$ is relative to Earth's $1$ rotation per day.
+Rotation rate of the planet, $\Omega$, is relative to Earth's $1$ rotation per day.
 These parameters can be extended to be time variable, such as having CO$_2$ emissions increase pressure, change heat capacity, and change mass of particles.
-However this paper only considers varying the rotation rate of the planet. %%% does it %%%
+However this is beyond the scope of this paper.
+% However this paper only considers varying the rotation rate of the planet. %%% does it %%%
 
 % Heat capacity
 Heat capacity, $C(\lambda, T)$, varies with latitude through the ocean-land fraction, $f_\text{o}(\lambda)$, and with temperature through the ice-ocean fraction, $f_\text{i}(T)$, as
 \begin{equation}
   C(\lambda, T) = (1 - f_\text{o}(\lambda)) C_\text{land} + f_\text{o}(\lambda) ((1-f_\text{i}(T)) C_\text{ocean} + f_\text{i}(T) C_\text{ice}(T)),
+  \label{eq:heat_capacity}
 \end{equation}
 Where $C_{\text{land}} = 5.25\times10^6 \heatcap$ and $C_{\text{ocean}} = 40 \times C_{\text{land}}$ are constant, and
 \begin{equation}
@@ -480,6 +524,7 @@ Where $C_{\text{land}} = 5.25\times10^6 \heatcap$ and $C_{\text{ocean}} = 40 \ti
     9.2 C_\text{land} & T \ge 263\text{K} \\
     2.0 C_\text{land} & T < 263\text{K},
   \end{cases}
+  \label{eq:heat_capacity_ice}
 \end{equation}
 which encapsulates the additional energy requirements of the heat of fusion, and expects that the water would be entirely frozen below $-10\degrees$C.
 % choice of 0.7-uniform
@@ -490,13 +535,13 @@ This is a simplification as the Earth has an uneven distribution of land and oce
 With definitions of diffusion and heat capacity, the timestep and latitude step which are numerically stable can be calculated.
 To do this the EBCM is investigated with a plane wave solution and boundaries on the timestep and latitude step are found.
 The explicit calculation of this is shown in appx. \ref{appx:NumStability}, with the result that, for constant diffusion and timestep, a lower heat capacity requires a larger latitude step.
-The default values for the model are then taken as a timestep of $\Delta t = 1$ day and $S = 61$ latitude nodes ($\Delta \lambda = 3\degrees$ separation)/
+The default values for the model are then taken as a timestep of $\Delta t = 1$ day and $S = 61$ latitude nodes ($\Delta \lambda = 3\degrees$ separation).
 These parameters give good resolution while being completely numerically stable.
-For planets with $f_\text{o} = 0$ a lower value of $S=31$ is chosen as it is stable for the land-only heat capacity value.
+For planets with $f_\text{o} = 0$ (see Sec. \ref{ssec:qualitative_oceanfraction}) a lower value of $S=31$ is chosen as it is stable for the land-only heat capacity value.
 
 % IR-emission
 % Albedo -> snow / water reflectance
-WK97 provides three sets of IR-emission and Albedo functions. Following the example of SMS08 and Dressing et al 2010 (here on Dressing10) \cite{Dressing10} the second set of IR and Albedo functions which are given by
+WK97 provides three sets of IR-emission and Albedo functions. Following the example of SMS08 and Dressing10, the second set of IR and Albedo functions which are given by
 \begin{equation}
   I(T) = I_2(T) = \frac{\sigma T^4}{1 + 0.5925 (T / 273 \text{K}) ^ 3}
 \end{equation}
@@ -509,23 +554,27 @@ The albedo function is a smooth scaling from low reflectivity of land and forest
 
 % Insolation -> why diurnally averaged (No longitude)
 The insolation function, $S$, is defined in WK97 as the day averaged incident (based on latitude) radiation from the sun,
-$$
-  S(\lambda, t) = \frac{q_0}{\pi} \left(\frac{1 \ \text{au}}{r(t)}\right)^2 (H(t) \sin{\lambda} \sin{\delta(t)} + \cos{\lambda} \cos{\delta(t)} \sin{H(t)})
-$$
+\begin{equation}
+  S(\lambda, t) = \frac{q_0}{\pi} \left(\frac{1 \ \text{au}}{r(t)}\right)^2 (H(t) \sin{\lambda} \sin{\delta(t)} + \cos{\lambda} \cos{\delta(t)} \sin{H(t)}),
+  \label{eq:diurnally_averaged_insolation}
+\end{equation}
 where $q_0=1360 \ \text{Wm}^{-2}$ is the insolation from the Sun,
 $r(t)$ is the distance from the Sun,
 $\cos H(t) = -\tan \lambda \tan \delta(t)$ is the radian half-day length with $0 < H < \pi$,
 and $\delta(t)$ is the solar declination defined by
-$$
-  \sin \delta(t) = -\sin \delta_0 \cos(L_s(t) + \pi/2)
-$$
+\begin{equation}
+  \sin \delta(t) = -\sin \delta_0 \cos(L_s(t) + \pi/2),
+  \label{eq:solar_declination}
+\end{equation}
 where $\delta_0$ is the obliquity of the planet and $L_s(t) = \omega t$ is orbital longitude from an orbital angular velocity found by Kepler's laws.
 It is important to average over a day insolation as the model does not have a longitude dimension, so cannot account for uneven distribution of the insolation, for example in the case of a tidally locked planet.
 
+%%% possibly needs moving to introduction %%%
 The distance from the Sun is variable due to eccentricity.
 For a 2-body system this distance can be calculated through an iterative method as follows
 \begin{equation}
-  r(t) = a (1 - e \cos E(t)), \label{eq:two_body_distance}
+  r(t) = a (1 - e \cos E(t)), 
+  \label{eq:two_body_distance}
 \end{equation}
 where $a$ and $e$ are semimajor axis and eccentricity respectively, and the eccentricity anomaly $E$ is given by iteration
 \begin{equation}
@@ -543,8 +592,10 @@ Three iterations with an eccentricity of $0.9$ gives an error in $E$ of 5\% (com
 The temperature distribution for the Earth model is shown in Fig. \ref{fig:Earth_lat_time} for 2 years after 190 years of evolution.
 There is clear periodicity in the model corresponding clearly with the seasonal variations experienced by the Earth.
 
+
+%%% MOVE TO BELOW %%%
 Also shown is the LWR habitability of this temperature data which has been time averaged with eqn. \eqref{eq:Q_timeaverage} and area averaged with eqn. \eqref{eq:Q_areaaveraged}.
-The time and area averaged habitability is $H_\text{Earth} = 0.84$, meaning that the Earth is, when using LWR, 84\% habitable.
+The time and area averaged habitability is $H_\text{Earth} = 0.84$, meaning that the Earth is, when using LWR, $84\%$ habitable.
 When using HC habitability this value is slightly reduced but the same to two significant figures.
 
 The time averaged habitability shows how the the equator is habitable all year around.
@@ -552,7 +603,7 @@ The poles are uninhabitable year round.
 Between $65\degrees$ to $45\degrees$ the habitability decreases linearly, representative of the variablity of the frost line.
 
 The area averaged habitability changes in steps as each discrete latitude band becomes habitable or uninhabitable.
-It is periodic but difficult to predict within each year.
+It is periodic, but difficult to predict within each year.
 
 
 \subsection{Discretisation and Time evolution} \label{ssec:DiscretisationPDE}
@@ -566,6 +617,7 @@ Numerically integrating the EBCM requires the derivatives to be discretised.
 Spatially the planet can be split into $S$ latitude bands, separated by
 \begin{equation}
   \Delta\lambda = \frac{\pi\radians}{S-1} = \frac{180\degrees}{S-1},
+  \label{eq:latitude_step}
 \end{equation}
 with spatial indexing of each band from $m=0, 1, \dots, S-1$.
 Similarly, a temporal indexing of $n=0, 1, \dots$ is used to discretise time in steps of $\Delta t$.
@@ -574,12 +626,13 @@ Thus $T^m_n$ is the temperature at the $m$\textsuperscript{th} timestep for the 
 % choice of partial derivatives
 The spatial derivatives can then be approximated by the central difference and second order central difference:
 \begin{align}
-  \partialderiv{T^m_n}{\lambda}      & = \frac{T^{m+1}_n - T^{m-1}_n}{2 \Delta\lambda},     \label{eq:space_1}        \\
-  \partialderivsecnd{T^m_n}{\lambda} & = \frac{T^{m+2}_n -2T^m_n + T^{m-2}_n}{(2 \Delta\lambda)^2},\label{eq:space_2}
-\end{align}
+  \partialderiv{T^m_n}{\lambda}      & = \frac{T^{m+1}_n - T^{m-1}_n}{2 \Delta\lambda},             \label{eq:space_1} \\
+  \partialderivsecnd{T^m_n}{\lambda} & = \frac{T^{m+2}_n -2T^m_n + T^{m-2}_n}{(2 \Delta\lambda)^2}, \label{eq:space_2}
+\end{align} 
 and the temporal derivative can be approximated as a forward difference,
 \begin{equation}
-  \partialderiv{T^m_n}{t} = \frac{T^m_{n+1} - T^m_n}{\Delta t},\label{eq:time_1}
+  \partialderiv{T^m_n}{t} = \frac{T^m_{n+1} - T^m_n}{\Delta t},
+  \label{eq:time_1}
 \end{equation}
 with numerical stability analysed in appendix \ref{appx:NumStability}.
 Evolving the EBCM is performed by solving eqn. \eqref{eq:time_1} for $T^m_{n+1}$ in terms of the parameter and temperature values at timestep $n$.
@@ -634,6 +687,7 @@ In most cases a value of $\epsilon = 10^{-3}$ is used and results in equilbrium 
 It is worth noting for some plots that a value of $\langle T \rangle = -1$ means the model did not reach an equilbrium temperature within the evolution time and value of $\epsilon$.
 This $\langle T \rangle = -1$
 
+%%%%%%%% BAD, DUPLICATE OF INTRODUCTION ::: REPLACE WITH DEMONSTRATION %%%%%%%%
 % Habitability
 The classical habitability function is the Liquid Water Requirement (LWR) given by
 \begin{equation}
@@ -680,10 +734,10 @@ with the additional constraint that temperatures greater than $40\degreesC$ or l
     A plot of the equilibrium temperature of the planet when varying its semimajor axis at constant eccentricity of $e=0.0167$.
     Overlaid on the plot are two curves which are fitted to the data by a least squares regression.
     The form of the curve is $\langle T \rangle = p_i a^{q_i}$.
-    % It is expected from a 0D EBCM (see eq. \eqref{eq:T_propto_a_e}) that $q_i = -0.5$.
+    % It is expected from a 0DEBM (see eq. \eqref{eq:T_propto_a_e}) that $q_i = -0.5$.
     % The first zone obeys the expected powerlaw nicely, with $q_1 = -0.505 \pm 0.004$.
     % The other free parameter for the first zone is $p_1 = 293.5 \pm 0.4$.
-    % The ``snowball'' zone after 1 au represents a sudden drop in temperature due to ice-albedo feedback, and follows a very different powerlaw to the first zone.
+    % The ``snowball'' zone after 1 au represents a sudden drop in temperature due to IAB, and follows a very different powerlaw to the first zone.
     % Free parameters for this zone are $p_2 = 210.2 \pm 0.2$ and $q_2 = -0.378 \pm 0.003$.
     Also shown are the orbits of Venus and Mars to highlight the range of values considered.
   }
@@ -699,23 +753,25 @@ with the additional constraint that temperatures greater than $40\degreesC$ or l
     % The proportionality constant $p = 292.6 \pm 0.2$ K.
     Also shown are the current and maximum theoretical value of Earth's eccentricity \cite{LA2010}.
     The minimum value is $0$.
-    There is a dip from the model at lower eccentricities due to ice-albedo feedback forming polar icecaps.
+    There is a dip from the model at lower eccentricities due to IAB forming polar icecaps.
   }
   \label{fig:planet_eccentricity}
 \end{figure}
 
 %%% Quantitatively investigate semimajor axis and eccentricity wrt temperature %%%
 % use 0D model and Mendez to find parameter relations
-General temperature relations for a planet can be found from the 0D EBCM.
+General temperature relations for a planet can be found from the 0DEBM.
 Time averaged insolation of an planet in an elliptical orbit is given by
 \begin{equation}
-  S = \langle F \rangle = \frac{q_0}{a^2 \sqrt{1-e^2}} \label{eq:avgInsolation},
+  S = \langle F \rangle = \frac{q_0}{a^2 \sqrt{1-e^2}},
+  \label{eq:avgInsolation}
 \end{equation}
 where $q_0 = L_{\text{Sun}}/4\pi a_{\text{Earth}}^2 \approx 1360 \ \text{Wm}^{-2}$ is the bolometric solar flux for Earth, $a$ and $e$ are the semimajor axis and eccentricity respectively of the planet \cite{Mendez2017}.
 
-By subsituting this relation into equation \eqref{eq:0DEBCM}, the temperature of a planet can be related to semimajor axis and eccentricity through
+By subsituting this relation into equation \eqref{eq:0DEBM}, the temperature of a planet can be related to semimajor axis and eccentricity through
 \begin{equation}
-  T \propto a^{-\frac{1}{2}} (1-e^2)^{-\frac{1}{8}}, \label{eq:T_propto_a_e}
+  T \propto a^{-\frac{1}{2}} (1-e^2)^{-\frac{1}{8}}, 
+  \label{eq:T_propto_a_e}
 \end{equation}
 with proportionality constant $(q_0 (1-A) / 4\sigma)^{1/4} = 255$ K for an Earth-like albedo of 0.3.
 
@@ -733,7 +789,7 @@ Both the first and second zones are described by $\langle T \rangle = p_1 a^{q_1
 However, the value of $p_1$ is $~38$ K higher than the expected proportionality, most likely due to the additional greenhouse effect present in the 1D model.
 
 The third zone with $a > 1$ au is a sudden departure from this expected powerlaw, with $p_2 = 210.2 \pm 0.2$ and $q_2 = -0.378 \pm 0.003$.
-This is due to ice-albedo feedback which works as follows.
+This is due to IAB which works as follows.
 As the planet cools, ice forms with a higher albedo than the land or ocean.
 This higher albedo means more light is reflected, thus the planet absorbs less heat, so cools more.
 This cycle continues until the planet reaches a much colder equilibrium than is expected by a fixed albedo method.
@@ -749,7 +805,7 @@ There are two main zones of interest in Figure \ref{fig:planet_eccentricity} whe
 
 The zone with $e > 0.2$ follows the relationship well, and the globally averaged temperature doesn't exceed the boiling point of water.
 On the other hand, the zone with $e < 0.2$ is up to $5$ K lower than the relationship.
-This dip is again due to ice-albedo feedback.
+This dip is again due to IAB.
 High eccentricities mean the planet gathers and stores enough thermal energy when close to the Sun to prevent polar ice caps from forming even when further away from the Sun.
 Lower eccentricities allow for polar ice caps to form which then significantly lower the global temperature.
 
@@ -811,7 +867,7 @@ This higher insolation gives rise to higher temperatures across the planet.
 This melts the poles which are otherwise frozen, and causes the already hot equator to become too hot to sustain life.
 
 Slighty increasing $a$ from $1$ au, the planet experiences a sharp drop in temperature.
-This is due to ice-albedo feedback where a small temperature decrease allows the icecaps to grow, and further decrease insolation until the entire planet is covered in ice.
+This is due to IAB where a small temperature decrease allows the icecaps to grow, and further decrease insolation until the entire planet is covered in ice.
 
 In this case the HC habitability means that an Earth-like planet would not be habitable at the orbits of our closest neighbours, Venus and Mars.
 
@@ -835,15 +891,13 @@ Varying both together can illuminate the habitability parameter space for orbits
 This is shown in Fig. \ref{fig:qualitative_semimajoraxis_eccentricity} where the semimajor axis and eccentricity of a planet are varied together.
 The top graph is a heatmap for the equilibrium temperature of the planet, and the bottom graphs are the processing of the temperature data using the LWR habitability and HC habitability which are then time and area averaged.
 
-The temperature heatmap highlights the drop off in temperature when ice-albedo feedback starts and the planet falls into a snowball.
+The temperature heatmap highlights the drop off in temperature when IAB starts and the planet falls into a snowball.
 There exist some above freezing temperatures for high eccentricity and high semimajor axis, likely due to the planets unfreezing when close the Sun, and refreezing when further away.
 
 Both habitabilites show similar shapes with different widths which is reflective of HC being more restrictive in temperature range than LWR.
 The differnce in the habitabilites is shown at high eccentricity.
 The LWR habitability suggests that there is a wide range of semimajor axis values where liquid water exists on the surface of the planet year-round at high eccentricities.
 Alternatively, the HC habitability indicates that high eccentricities have extremes of temperature which are not compatible with life, thus the actual habitability is lower.
-
-
 
 \subsection{Varying obliquity} \label{ssec:qualitative_obliquity}
 %   B: Varying obliquity;
@@ -931,7 +985,7 @@ In this range the habitability is fairly constant.
 %   C: Varying ocean fraction with eccentricity and obliquity;
 %     how eccentricity allows for IAF
 %     how obliquity allows for IAF
-%     when model is susceptible to Ice-Albedo feedback
+%     when model is susceptible to IAB
 %     relation to thermal timescale
 %
 \begin{figure}[t]
@@ -946,22 +1000,17 @@ In this range the habitability is fairly constant.
   \label{fig:qualitative_oceanfraction}
 \end{figure}
 
-The snowball state produced by ice-albedo feedback has been seen when varying semimajor axis (Figs. \ref{fig:planet_semimajoraxis} and \ref{fig:qualitative_semimajoraxis}) and partially when varying eccentricity (Fig. \ref{fig:planet_eccentricity}).
-A variable which influences susceptibility to ice-albedo feedback is the ocean fraction.
+The snowball state produced by IAB has been seen when varying semimajor axis (Figs. \ref{fig:planet_semimajoraxis} and \ref{fig:qualitative_semimajoraxis}) and partially when varying eccentricity (Fig. \ref{fig:planet_eccentricity}).
+A variable which influences susceptibility to IAB is the ocean fraction.
 
-The thermal timescale is defined as the time taken to emit all the energy in a latitude band via IR emission,
-\begin{equation}
-  \tau = \frac{C T}{I}
-  \label{eq:thermal_time_scale}
-\end{equation}
-This means that ocean, which has a higher heat capacity than land, has a larger thermal inertia.
+The thermal timescale (eqn. \eqref{eq:ThermalTimescale}) means that ocean, which has a higher heat capacity than land, has a larger thermal inertia.
 Larger thermal inertia means the ocean on the planet helps to reduce temperature variations which the planet experiences.
-Thus it is expected that planets with low ocean fraction will be susceptible to ice-albedo feedback in shorter timescales or with less forcing than high ocean fraction planets.
-The main variables influencing this forcing are the eccentricity and obliquity.
+Thus it is expected that planets with low ocean fraction will be susceptible to IAB in shorter timescales or with less forcing than high ocean fraction planets.
+The main orbital variables influencing this forcing are the eccentricity and obliquity.
 
 In an eccentric orbit the insolation decreases as the planet moves away from the Sun.
 This reduced insolation causes a lower temperature for a portion of the year.
-If the temperature is reduced enough, ice-albedo feedback can kick in and cause the planet to fall into a snowball state that it cannot recover from.
+If the temperature is reduced enough, IAB can kick in and cause the planet to fall into a snowball state that it cannot recover from.
 
 Obliquity can also cause snowball states.
 Obliquity for the Earth means seasons, where winter occurs in a hemisphere when that hemisphere points away the Sun because it is less directly insolated.
@@ -987,7 +1036,7 @@ Humans have survived iceages in the past by burning fuels and sheltering in cave
 We are yet to see if human life will survive extreme heat.
 
 In a similar way when varying obliquity the minimum ocean fraction starts at 0 and increases until a maximum at roughly $\delta = 45\degrees$.
-For $0\degrees < \delta < 10\degrees$ the planet does not fall into a snowball state as the permanent shadow region is not large enough to cause runaway ice-albedo feedback.
+For $0\degrees < \delta < 10\degrees$ the planet does not fall into a snowball state as the permanent shadow region is not large enough to cause runaway IAB.
 
 For Earth-like obliquities (between $22\degrees$ and $25\degrees$) the planet is susceptible to a snowball state only if the planet has ocean fraction less than roughly $15\%$.
 
@@ -1001,7 +1050,7 @@ This is likely due to the obliquity having a more localised effect on the polar 
 
 % Stability of the snowballing w.r.t. ocean fraction
 % > a-f_ocean plot showing snowball transition changing?
-Both variables cause the planet to be susceptible to ice-albedo feedback, and both cause full or partial recovery from snowball at extreme values.
+Both variables cause the planet to be susceptible to IAB, and both cause full or partial recovery from snowball at extreme values.
 For eccentricity the minimum ocean fraction varies approximately quadratically with eccentricity until $e = 0.4$ where the eccentricity is high enough to melt the induced snowball meaning the time averaged temperature increases.
 The minimum ocean fraction in the obliquity case varies with an `S' shape and levels out after $\delta = 40\degrees$ to a minimum ocean fraction of $f_\text{ocean, min} = 0.36$.
 Similar to the eccentricity case, high obliquities can partially recover from the snowball. In this case it is due to the pole facing the Sun melting for half a year due to constant insolation before refreezing when facing away from the Sun.
@@ -1010,19 +1059,26 @@ There are nearly no variations due to changing ocean fraction above $f_\text{oce
 \section{Earth-like exomoon modifications and results} \label{sec:Exomoons}
 % Earth-like exomoon modifications and results;
 %
-\subsection{Eclipsing} \label{ssec:InvEclipsing}
+\subsection{Eclipsing} \label{ssec:eclipsing}
+% %     Eclipsing;
+% %       2 independent 2-body solutions
+% %       Analytical approach
+% %       ε, S(1-A) -> S(1-ε)(1-A)
+% The reduction to insolation occurs when the moon is eclipsed by the gas giant.
+% The fraction of time the moon spends eclipsed can be quantified by %%%%%%
 %   A: Eclipsing;
 %     explicit quantification with 2 independent 2-body solutions -> a_moon only param with major role
 %     problems with timestep and need to be quantified to a single number
 %     analytical model and assumptions, result + fit to 2-body model data
 %
 \begin{figure}[t]
-  \includegraphics[width=0.5\linewidth]{images_rewrite/eclipsing diagram.png}
+  \includegraphics[width=0.6\linewidth]{images_rewrite/eclipsing_diagram.png}
   \caption{
-    A diagram of a planet in orbit around a star at a distance $a_{\text{gas}}$, and a moon in orbit of the planet at a distance $a_{\text{moon}}$.
+    A diagram of a gas giant (middle green hemisphere) in orbit around a star (left yellow shape) at a distance $a_{\text{gas}}$, and a moon (top right maroon circle) in orbit of the planet at a distance $a_{\text{moon}}$.
     The planet has radius $R_\text{gas}$.
-    The angle $2\theta$ corresponds to the angular size of the planet from the star.
+    The angle $\theta$ corresponds to half the angular size of the planet from the star.
     Inside the angle $2\alpha$ the moon is eclipsed by the planet.
+    The eclipsing fraction is thus defined as fraction of the orbit which is in shadow, $\epsilon = 2\alpha / 2\pi$.
   }
   \label{fig:quantitative_eclipsing}
 \end{figure}
@@ -1037,62 +1093,96 @@ There are nearly no variations due to changing ocean fraction above $f_\text{oce
   \label{fig:quantitative_eclipsing_moon_semimajor_axis}
 \end{figure}
 
-planet and moon orbits are (close to) co-planar.
-this means eclipsing
-quantify eclipsing using 2 independent 2-body solutions (distance \eqref{eq:two_body_distance}, angle \eqref{eq:two_body_angle})
- - requires timesteps of ~1 hour as eclipses are very short
-this establishes that eccentricity of the planet orbit has negligible effect.
-eccentricity of the moon as small effect (~1\%)
-semimajor axis of the planet also small
-Largest contributor is moon semimajor axis
+In order to add eclipsing to the model it must be known when the moon is behind the gas giant such that the sun is blocked.
+When modelling eclipsing, the gas giant and moon are assumed to have co-planar orbits such that the full radius of the gas giant is used.
+It is also assumed that in the umbra the moon is fully eclipsed, and in the penumbra the moon is half eclipsed.
+In reality the penumbra varies between 0\% eclipsed at the outer edge to 100\% eclipsed at the edge to the umbra.
 
-evolving the 2 independent solutions in parallel with the EBCM is impractical
-knowing that both eccentricities have very small effects leads to the setup for an analytical solution for circular orbits.
-\ref{fig:quantitative_eclipsing}
-where the sun has been assumed to be a point source (i.e. if $a_\text{gas} \gg 10*a_\text{moon}$)
+Initially, the eclipsing was quantified by solving for the distances and angles of the gas giant and moon using eqns. \eqref{eq:two_body_distance} and \eqref{eq:two_body_angle}.
+The eccentric anomaly, $E$, is related to the true anomaly, $\nu$, by,
+\begin{equation}
+  \cos \nu =  \frac{\cos E - e}{1 - e \cos E},
+  \label{eq:true_anomaly}
+\end{equation}
+where $e$ is the eccentricity of the orbit.
+By finding the x-y coordinates of the gas giant and moon, when the moon is eclipsed can be found.
+Due to the length of the eclipses a timestep of an hour must be used to evolve this eclipsing model.
+This would be impractical to run along side the 1 day timestep of the EBCM especially as the iteration process for finding the eccentric anomaly is time consuming.
+Varying the 4 orbital parameters in the eclipsing model gives insight into the eclipsing however.
+% a_gas : 0.05 -> 0.06
+% e_gas : 0.05 -> 0.052 , very random
+% a_moon : 0.05 -> 0.4 , 
+% e_moon : 0.0507 -> 0.05 , decreases with increases eccentricity
+Varying the eccentricity of the gas giant between $0$ and $0.9$ has a random effect on the eclipsing between the values $5\%$ and $5.2\%$, and increasing eccentricity of the moon from $e=0$ to $0.1$ decreases the eclipsing from $5.07\%$ to $5.02\%$.
+Varying the gas giant semimajor axis between $0.5$ au and $10$ au caused variation in the eclipsing fraction between $5\%$ and $6\%$. 
+The most important influence to the eclipsing was moon semimajor axis.
+Varying between $0.5$ mau and $10.5$ mau caused a decrease in eclipsing from $40\%$ to $2\%$ as seen in Fig. \ref{fig:quantitative_eclipsing_moon_semimajor_axis}.
 
-Eclipsing of the moon by the gas giant was initially investigated by finding the orbital distance and angle  for gravitational attraction which showed that varying the eccentricity of the moon or planet resulted in no change to time-averaged eclipsing fraction.
-Thus, the main influences of eclipsing are gas giant semimajor axis and moon semimajor axis, with moon semimajor axis being the most important factor.
+Knowing that the eccentricity of the orbits makes a negligible contribution to the motivates an analytical model with circular orbits.
+Using the assumption that the sun is a point source (valid if $a_\text{gas} \gg 10a_\text{moon}$, which is true in the cases considered in this paper) the diagram shown in Fig. \ref{fig:quantitative_eclipsing} is drawn and used to quantify the eclipsing fraction as follows.
 
-In order to add eclipsing to the EBCM without running the 2-body solution in parallel, the eclipsing fraction must be quantified.
-To do this the star is assumed to be a point source, and both planets are assumed to be in circular orbits which are coplanar.
-Figure \ref{fig:quantitative_eclipsing} shows the configuration of the system, including the angle $2\alpha$ which is the fraction of the moon's orbit which is spent being eclipsed.
-
-$\alpha$ can be related to the length $x$ by
+In order to find the eclipsing angle, $\alpha$, the distances $x$ and $y$ need to be found.
+The $x$ distance relates the angular size of the gas giant from the sun, $\theta$, to the eclipsing angle as
 \begin{equation}
-  \sin \alpha = \frac{x}{a_\text{moon}}, \label{eq:alpha_x_amoon}
+  x = a_\text{moon} \sin \alpha = (a_\text{gas} + y) \tan \theta,
+  \label{eq:x}
 \end{equation}
-$\theta$ can be related to the length $x$ by
+where the distance $y = a_\text{moon} \cos \alpha$ using the smaller triangle.
+Using the larger triangle, the angular size of the gas giant can also be found to be
 \begin{equation}
-  \sin \theta = \frac{x}{a_\text{gas} + a_\text{moon} \cos\alpha} = \frac{R_\text{gas}}{a_\text{gas}} , \label{eq:theta_x_agas}
+  \sin \theta = \frac{R_\text{gas}}{a_\text{gas}},
+  \label{eq:sintheta}
 \end{equation}
-combining eqns. \eqref{eq:alpha_x_amoon} and \eqref{eq:theta_x_agas} leads to
+which can then, in the small angle approximation that $\sin\theta = \tan\theta$, be related to the $\tan \theta$ term in eqn. \eqref{eq:x}.
+This leads to the relation of eclipsing angle to the radius of gas giant, and semimajor axes of the moon and gas giant as follows,
 \begin{equation}
-  (a_\text{gas} + a_\text{moon}\cos\alpha) \frac{R_\text{gas}}{a_\text{gas}} = a_\text{moon} \sin\alpha,
+  \frac{R_\text{gas}}{a_\text{moon}} + \frac{R_\text{gas}}{a_\text{gas}}\cos\alpha = \sin\alpha .
+  \label{eq:alpha}
 \end{equation}
-thus
+This equation can be solved for the eclipsing angle in the sine term by using that $R_\text{gas} \ll a_\text{gas}$ so ignoring the cosine term.
+The eclipsing fraction, $\epsilon$, can then be found by dividing 2 times the eclipsing angle by the full orbital angle $2\pi$
 \begin{equation}
-  \frac{R_\text{gas}}{a_\text{moon}} = \sin\alpha - \frac{R_\text{gas}}{a_\text{gas}}\cos\alpha,
-\end{equation}
-$\alpha$ can be solved for by approximating $R_\text{gas} \ll a_\text{gas}$.
-Dividing $2\alpha$ by the full $2\pi$ angle the moon rotates through, the eclipsing fraction can be found as
-\begin{equation}
-  \epsilon = \frac{2\alpha}{2\pi} = \frac{\arcsin(R_\text{gas} / a_\text{moon})}{\pi},
+  \epsilon = \frac{2\alpha}{2\pi} = \frac{1}{\pi}\arcsin{\frac{R_\text{gas}}{a_\text{moon}}} .
   \label{eq:eclipsing_fraction}
 \end{equation}
-for a planet of radius $R_\text{gas}$ and moon semimajor axis $a_\text{moon}$.
 
 This relation is investigated in Fig. \ref{fig:quantitative_eclipsing_moon_semimajor_axis} with a free parameter in place of $R_\text{gas}$.
 The value of the free parameter is $(7.013\pm 0.008) \times 10^7 \text{m}$ which is extremely close to the radius of Jupiter, as to be expected.
 
-\subsection{Reflectance and Emission from the Gas giant}
+\subsection{Reflectance and Emission from the Gas giant} \label{ssec:ref_emiss_gg}
 %   B: Reflectance and Emission from the Gas giant;
 %     F_ref, F_gas...
-%     assumption of blackbody for gas giant, use of 0DEBCM for gas giant, use of Mendez for time averaged radiation 
+%     assumption of blackbody for gas giant, use of 0DEBM for gas giant, use of Mendez for time averaged radiation 
 %
-blah blah 
+%     Reflectance and Emission from Gas giant;
+%       GG obeys 0DEBM
+%       F_ref = SA_gas / a_moon^2 sqrt(1-e_moon^2)
+%       F_gas = R_gas^2 σT_gas^4 / 4a_moon^2 sqrt(1-e_moon^2)
+Two sources of heat are indirectly from the star via the gas giant.
+First, light from the star can be reflected by the gas giant.
+The light absorbed by the gas giant is given by $S(1-A_\text{gas})$, thus light reflected is given by $SA_\text{gas}$.
+This must be reduced by the distance, $a_\text{moon}$, and the eccentricity, $e_\text{moon}$, of the moon's orbit,
+\begin{equation}
+  F_\text{ref} = \frac{SA_\text{gas}}{4\pi a_\text{moon}^2 \sqrt{1-e_\text{moon}^2}},
+  \label{eq:reflectance_flux}
+\end{equation}
+where $S = 1360 \flux$ is the same insolation as for the moon.
+The $4\pi a^2\sqrt{1-e^2}$ term in the denominator comes from eqn. \eqref{eq:avgInsolation} for average flux from a body. 
+Second, IR emission from the gas giant can heat up the moon.
+This IR emission can have two sources, the first and most obvious is the gas giant being heated by the star and then reradiating that heat in equilibrium.
+This can be described using the 0DEBM (eqn. \eqref{eq:0DEBM}) as 
+\begin{equation}
+    F_\text{emit} = \frac{4 \pi R_\text{gas}^2 \sigma T_\text{gas}^4}{4\pi a_\text{moon}^2 \sqrt{1-e_\text{moon}^2}}
+    = \frac{R_\text{gas}^2 S(1 - A_\text{gas})}{4 a_\text{moon}^2 \sqrt{1-e_\text{moon}^2}},
+    \label{eq:emission_flux}
+\end{equation}
+where this flux assumes that the gas giant is in equilibrium as expected by the 0DEBM with the variables given in Table. \ref{tab:default_params_moon}..
+An alternative source is residual heat of formation.
+For example, Jupiter is still slightly warmer than expected from equilbrium \cite{LJW2018}.
+This is not accounted for in this model, but could be added by setting the temperature directly instead of using the 0DEBM.
 
-\subsection{Tidal heating} \label{ssec:InvTidalHeating}
+
+\subsection{Tidal heating} \label{ssec:TidalHeating}
 %   C: Tidal heating;
 %     Viscoelastic model outline;
 %       How mantle temperature is found with convective cooling balancing tidal heating
@@ -1119,39 +1209,66 @@ blah blah
   \label{tab:default_params_moon}
 \end{table*}
 
-Tidal heating occurs when the core of the moon is compressed and relaxed by unequal gravitational forces as the moon moves through an elliptical orbit. 
-Segatz et al 1988 \cite{Segatz1988} provide models for the tidal heating in terms of both a `fixed-Q' model providing a constant tidal heating, and a suite of `viscoelastic' models which account for conditions of the material within the moon.
+% %     Tidal heating;
+% %        Main Equation F_th propto - 21/2 Im(k_2) G^3/2 ...
+% %        fixed-Q model: -Im(k_2) = k_2 / Q
+% %        viscoelastic model: -Im(k_2) = ... with functions for μ,η, etc as well as how the mantle temperature is found
+% %        which is used in the model and why
+% The final heat source is from tidal heating due to an elliptical orbit around the gas giant.
+% Ways of modelling this tidal heating include fixed-Q and viscoelastic methods. 
+% All the models follow the same governing equation,
+% \begin{equation}
+%   F_\text{th} = -\frac{21}{8\pi} \text{Im}(k_2) \frac{G^{3/2} M_\text{gas}^{5/2} R_\text{moon}^{3} e_\text{moon}^2}{a_\text{moon}^{15/2}},
+%   \label{eq:tidalheating_flux}
+% \end{equation}
+% where the value of $-\text{Im}(k_2)$ is model dependent.
 
-The `fixed-Q' model is given by
+% In the fixed-Q model, $-\text{Im}(k_2) = k_2 / Q$, where $k_2$ and $Q$ are determined by material properties of the moon.
+% This model has some failings.
+% The material properties of the moon will be directly influenced by the temperature of the mantle and core.
+% These temperatures are also directly influenced by the amount of flux the moon receives due to tidal heating and radiogenic heating.
+% This model is not responsive to this temperature dependence.
+
+% In contrast, viscoelastic models model temperature dependent convective cooling and tidal heating.
+% When in equilibrium, the tidal heating is equal to the convective cooling and the heat flows through the surface of the moon.
+% Henning et al \cite{Henning2009} present four different response models which vary in complexity.
+% This paper uses the Maxwell model from Henning which states that
+% \begin{equation}
+%   -\text{Im}(k_2) = \frac{57 \eta \omega} 
+%   {4 \beta \left[ 1 + \left(1 + \frac{19 \mu}{2 \beta}\right)^2 
+%   \left(\frac{\eta \omega}{\mu}\right)^2 
+%   \right]}
+% \end{equation}
+% where $\beta = \rho g R_\text{moon}$ has been described as gravitational stiffness term.
+% The temperature dependent functions for the viscosity, $\eta$, and shear modulus, $\mu$, are found in appx. \ref{appx:TidalHeatingEquationsMethod} \cite{DobosTurner2015}.
+
+% Tidal heating occurs when the core of the moon is compressed and relaxed by unequal gravitational forces as the moon moves through an elliptical orbit. 
+
+In the fixed-Q model, $-\text{Im}(k_2) = k_2 / Q$, where $k_2$ is the second Love number for the moon and $Q$ is the total dissipation factor due to friction, with both numbers constant.
+This model has some failings.
+The second Love number depends on material properties of the moon so will be directly influenced by the temperature of the mantle and core.
+These temperatures are also directly influenced by the amount of flux the moon receives due to tidal and radiogenic heating.
+This model is not responsive to this dynamic temperature dependence and requires a single temperature of the core to be picked.
+
+Alternatively, viscoelastic models allow for the core temperature to vary with respect to the amount of flux from tidal heating.
+To do this the stable point where tidal flux is equal to convective cooling for the core is found.
+Both the tidal heat and convective cooling are dependent on temperature of the core, thus this method finds temperature of the core at equilibrium.
+The implicit assumption here is that the moon has been in orbit long enough to have reached equilibrium between the tidal heating and convective cooling.
+This paper uses the Maxwell model from Henning et al \cite{Henning2009}, given by
 \begin{equation}
-  F_\text{f-Q} = \frac{21}{2} \frac{k_2}{Q} \frac{G^{3/2} M_\text{gas}^{5/2} R_\text{moon}^5 e_\text{moon}^2} {a_\text{moon}^{15/2}}
+  -\text{Im}(k_2) = \frac{57 \eta \omega} 
+  {4 \beta \left[ 1 + \left(1 + \frac{19 \mu}{2 \beta}\right)^2 
+  \left(\frac{\eta \omega}{\mu}\right)^2 \right]}
+  \label{eq:imk2_maxwell}
 \end{equation}
-where $k_2$ is the second love number for the moon and $Q$ is the total dissipation factor due to friction.
-%%% iffy %%%
-this assumes only viscous heating (segatz about io, probably relevant)
+where $\beta = \rho g R_\text{moon}$ has been described as gravitational stiffness term with $\rho$ being the density of material in the moon, $g$ being the moon's surface gravity, and $R$ being the radius of the moon.
+The temperature dependent forms of the viscosity, $\eta$, and shear modulus, $\mu$, are given in Henning et al \cite{DobosTurner2015} and in appx. \ref{appx:TidalHeatingEquationsMethod}. 
+The orbital frequency, $\omega$, and other parameters take (or can be derived from) the default values in Tab. \ref{tab:default_params_moon}.
 
-The $k_2 / Q$ term is a collection of various viscosity and shear modulus terms which are assumed to be constant.
-The model can be made more dynamic by replacing these constant terms with the imaginary part of the second-order Love number, $-\text{Im}(k_2)$:
-\begin{equation}
-  F_\text{VE} = -\frac{21}{2} \text{Im}(k_2) \frac{G^{3/2} M_\text{gas}^{5/2} R_\text{moon}^5 e_\text{moon}^2} {a_\text{moon}^{15/2}}
-\end{equation}
-where an anelastic Maxwell model is used to give the imaginary part of the second-order Love number as
-\begin{equation}
-  -\text{Im}(k_2) = \frac{57 \eta \omega} {4 \beta \left[ 1 
-  + \left(1 + \frac{19 \mu}{2 \beta}\right)^2 
-  \left(\frac{\eta \omega}{\mu}\right)^2 
-  \right]}
-\end{equation}
-where $\beta = \rho g R_\text{moon}$ has been described as gravitational stiffness term \cite{Henning2009}.
-The temperature dependent forms of the viscosity, $\eta$, and shear modulus, $\mu$, are given in Henning et al \cite{Henning2009} and in appx. \ref{appx:TidalHeatingEquationsMethod}. 
-The orbital frequency, density, and radius of the moon are $\omega$, $\rho$, and $R_\text{moon}$ respectively, with default values in table \ref{tab:default_params_moon}.
+The tidal heating can sharply cut off for certain orbital parameters when the tidal heating is less than convective cooling at all mantle temperatures so the core temperature at equilbrium is too low to heat the surface of the planet effectively.
 
 
-\cite{DHT2015}
-\cite{RN21}
-
-
-\subsection{Impact on previous results}
+\subsection{Impact on previous results} \label{ssec:Impact_previous_results}
 %   D: Impact on previous results;
 %     Quantitative change to semimajoraxis / eccentricity relations
 %       ~> const TH/eclipsing, variable reflectance/emission
@@ -1183,8 +1300,8 @@ The habitable zone moves further out as the additional energy flux generally rai
 
 This is also seen in the equilibrium temperatures, where a wider range of values are within the range for liquid water. 
 Seen in the orange set of data is a more exaggerated curve when falling to the snowball state than for the planetary model in blue.
-This is due to ice-albedo feedback playing less of a role in determining the climate of the planet as the tidal heating is independent of albedo.
-The tidal heating also helps to prevent the planet's temperature from decreasing to the point where ice-albedo feedback can dominate by providing a constant heat source when further from the star.
+This is due to IAB playing less of a role in determining the climate of the planet as the tidal heating is independent of albedo.
+The tidal heating also helps to prevent the planet's temperature from decreasing to the point where IAB can dominate by providing a constant heat source when further from the star.
 
 \begin{figure}[t]
   \includegraphics[width=0.495\linewidth]{images_rewrite/eccentricity_planetary_2_moon.png}
@@ -1192,8 +1309,8 @@ The tidal heating also helps to prevent the planet's temperature from decreasing
   % \includegraphics[width=0.495\linewidth]{images_rewrite/eccentricity_planetary_2_moon_small.png}
   % \includegraphics[width=0.495\linewidth]{images_rewrite/obliquity_planetary_2_moon_small.png}
   \caption{
-    Left: Comparison of the equilibrium temperatures when varying gas giant eccentricity for the planetary model (blue), and two moon models with different eccentricity (orange and green).
-    Right: Comparison of the equilibrium temperatures when varying obliquity for the planetary model (top), and two moon models with different eccentricity (middle and bottom).
+    Left: Comparison of the equilibrium temperatures when varying eccentricity for the planetary model (blue), and when varying gas giant eccentricity two moon models with different moon eccentricities (orange and green).
+    Right: Comparison of the equilibrium temperatures when varying obliquity for the planetary model (top) and two moon models with different eccentricity (middle and bottom).
     The y-axes are very different, as each has progressively smaller range in values.
   }
   \label{fig:eccentricity_obliquity_comparisions}
@@ -1201,7 +1318,7 @@ The tidal heating also helps to prevent the planet's temperature from decreasing
 
 eccentricity:
 The temperature generally increases.
-The dip at low eccentricity due to ice-albedo feedback is missing from the moon models.
+The dip at low eccentricity due to IAB is missing from the moon models.
 This is due to the generally higher temperature 
 
 obliquity:
@@ -1216,7 +1333,24 @@ The variations due to obliquity become smaller as any insolation variation acros
 %       e_moon -> reflectance/emission, TH
 %       *R_moon* -> TH   %%% !no data yet! %%% 
 %
-blah blah blah 
+\begin{figure}[t]
+  \includegraphics[width=0.495\linewidth]{images_rewrite/moonsemimajoraxis_humancomp_area_zoom.png}
+  \includegraphics[width=0.495\linewidth]{images_rewrite/mooneccentricity_humancomp_area_zoom.png}
+  \caption{
+    Left:  Time-averaged temperature heat map for each latitude band when varying moon semimajoraxis.
+    Right: Time-averaged temperature heat map for each latitude band when varying moon eccentricity.
+  }
+  \label{fig:moon_semimajoraxis_eccentricity}
+\end{figure}
+
+\ref{fig:moon_semimajoraxis_eccentricity}
+Variable moon semimajoraxis has a similar shape to the variable gas semimajoraxis.
+
+At high semimajor axis the tidal heating is less than the convective cooling, so `turns off'.
+It might be expected that the moon at the same distance as the Earth from the Sun would still be warm enough to be habitable.
+The high semimajoraxes and low eccentricities show that this is not the case as they are in snowball states.
+This is because to the reduction of insolation due to eclipsing is larger than the additional light reflected and emitted from the gas giant.
+As shown in Fig. \ref{fig:planet_semimajoraxis} even a small decrease in insolation, such as the decrease due to eclipsing, can lead to a snowball state.
 
 \section{Discussion} \label{sec:Discussion}
 Research motivated by climate change suggests that ice melting can release CO$_2$ which is not accounted for in this model.
@@ -1264,6 +1398,29 @@ For example: an ocean centered on one of the poles of the planet and increasing 
 \section{Tidal heating equations and method} \label{appx:TidalHeatingEquationsMethod}
 % What the equations are
 % How they are combined
+\begin{equation}
+  \eta = 
+  \begin{cases}
+    \eta_0 \exp{(E_a / R T)} & T < T_s \\
+    \eta_0 \exp{(E_a / R T)} \exp{(-B \phi)} & T_s < T < T_b \\
+    10^{-7} \exp{(40000\text{K} / T)} (1.35 \phi - 0.35)^{-5/2} & T_b < T < T_l \\
+    10^{-7} \exp{(40000\text{K} / T)} & T_l < T
+  \end{cases}
+\end{equation}
+$\eta_0 = 1.6 \times 10^5$ Pa s
+$T_s = 1600$ K
+$T_l = 2000$ K
+$T_b = T_s + f (T_l - T_s) = 1800$ K for $f=0.5$
+$E_a = 3\times10^5$ J.mol$^{-1}$
+
+\begin{equation}
+  \mu = 
+  \begin{cases}
+    5\times10^{10} & T < T_s \\
+    10^{\frac{8.2\times10^4\text{K}}{T} - 40.6} & T_s < T < T_b \\
+    10^{-7} & T_b < T
+  \end{cases}
+\end{equation}
 
 \clearpage
 
