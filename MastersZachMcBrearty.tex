@@ -28,12 +28,14 @@
 
 \usepackage{multirow}
 
+\usepackage{hyperref}
+
 % \usepackage[ddmmyyyy]{datetime2}
 
 \pagestyle{fancy}                           % Insert header
 \renewcommand{\headrulewidth}{0pt}
 \lhead{\small Zachery McBrearty}                          % Your name
-\rhead{\small Orbital Constraints on Exoplanet Habitability}            % Your report title               
+\rhead{\small Modelling the Habitability of Exoplanets and Exomoons}            % Your report title               
 
 \def\thesection{\arabic{section}}
 
@@ -101,7 +103,7 @@
 %     Demonstation of taking temperature data, applying habitability and averages
 %
 % Investigating Earth-like Exoplanets;
-%   A: Varying semimajoraxis and eccentricity;
+%   A: Varying semi-major axis and eccentricity;
 %     Quantitative relationships -> T^4 propto a^-2 (1-e^2)^-1/2
 %     Qualitative relationships -> latitude bands with time averaging 
 %   B: Varying obliquity;
@@ -126,10 +128,10 @@
 %       assumption of heat flow throughout entire surface evenly -> no volcanos
 %     Why tidal heating can cut off very dramatically
 %   D: Impact on previous results;
-%     Quantitative change to semimajoraxis / eccentricity relations
+%     Quantitative change to semi-major axis / eccentricity relations
 %       ~> const TH/eclipsing, variable reflectance/emission
 %     qualitative obliquity -> flattening due to TH independent of star
-%     qualitative semimajor axis latitude plot changes
+%     qualitative semi-major axis latitude plot changes
 %   E: Exomoon specific results;
 %     Qualitative latitude plots;
 %       a_moon -> eclipsing, reflectance/emission, TH
@@ -140,7 +142,7 @@
 \begin{document}
 
 
-\title{Orbital Constraints on Exoplanet Habitability}
+\title{Modelling the Habitability of Exoplanets and Exomoons}
 \date{Submitted: \today{}}
 \author{Zachery McBrearty}
 \affiliation{\normalfont Level 4 Project, MPhys Physics with Astronomy\\ Supervisor: Dr Richard Wilman \\ Second Supervisor: Dr Craig Testrow \\ Department of Physics, Durham University}
@@ -148,7 +150,7 @@
 \begin{abstract}
   %%% ABSTRACT %%%
   A 1-D energy balance climate model is developed in order to investigate how changing certain orbital parameters can result in changes to a planet's habitability.
-  Theoretical relationships between temperature, semimajoraxis, and eccentricity are derived from a 0-D energy balance model and are tested against the 1-D model and are found to be correct.
+  Theoretical relationships between temperature, semi-major axis, and eccentricity are derived from a 0-D energy balance model and are tested against the 1-D model and are found to be correct.
   A qualitative analysis of obliquity shows that there are optimal obliquities to minimise and maximise global temperature.
   The climates of exomoons orbiting gas giants are also investigated, including reflected light from the gas giant, eclipsing, and tidal heating.
   It is expected that these additional sources of heat move the habitable zones for the planet outwards.
@@ -171,7 +173,7 @@
 \section{Introduction} \label{sec:Introduction} %% add subsections balance things out %%
 % Introduction;
 %
-\subsection{Exoplanet and Exomoon detection} \label{ssec:ExoplanetExomoonDetection}
+\subsection{Exoplanet and Exomoon Detection} \label{ssec:ExoplanetExomoonDetection}
 %   A?: Exoplanets and Exomoons;
 %     History
 %     Methods of detection
@@ -208,7 +210,7 @@ The one recent (and on going) mission is the Artemis Plan \cite{NASA_Artemis} wh
 Additionally, the China National Space Administration also plan to return to the moon with the International Lunar Research Station \cite{CNSA_ILRS}.
 Both these projects will allow for human settlement away from the Earth, and are vital in progressing further out into our own solar system and beyond.
 
-\subsection{Energy balance models} \label{ssec:EBM_intro}
+\subsection{Energy Balance Models} \label{ssec:EBM_intro}
 %   B: Energy Balance Models;
 %     0DEBM -> not dynamic, but still useful for establishing relationships between parameters e.g. Mendez
 Analysing the habitability of exoplanets can be difficult.
@@ -250,7 +252,7 @@ The assumption that all latitudes are the same temperature is lifted compared to
 The 1DEBCM can be derived from the heat equation (see Section \ref{sec:1DEBCM}) and was originally developed by North and Coakley 1979 (NC79) \cite{NC79} to study the Earth.
 It was then further applied by Williams and Kasting 1997 (WK97) \cite{WK97} to study obliquity dependent habitability and then by Spiegel et al in 2008 (SMS08) \cite{SMS08} and 2009 \cite{SMS09} to study quantify habitability and then study obliquity dependent habitability.
 Spiegel's work was furthered by Dressing et al 2010 (Dressing10) \cite{Dressing10} where eccentricity dependent habitability was investigated.
-This paper investigates the effects of varying semimajor axis and eccentricity on habitability (Sec. \ref{ssec:InvTimeAveragedSolarFlux}), as well as obliquity dependence of habitability (Sec. \ref{ssec:qualitative_obliquity}), and the minimum ratio of ocean to land for the planet to prevent ice-albedo-feedback (Sec. \ref{ssec:qualitative_oceanfraction}).
+This paper investigates the effects of varying semi-major axis and eccentricity on habitability (Sec. \ref{ssec:InvTimeAveragedSolarFlux}), as well as obliquity dependence of habitability (Sec. \ref{ssec:qualitative_obliquity}), and the minimum ratio of ocean to land for the planet to prevent ice-albedo-feedback (Sec. \ref{ssec:qualitative_oceanfraction}).
 
 %     IAB due to dynamic model ~> relate to thermal timescale
 %
@@ -362,7 +364,7 @@ Finally the combination of these two measures results in the total habitability,
   f_\text{total}(q) = \frac{1}{2P} \int_{-\pi/2}^{\pi/2} \int_{0}^{P} H(q, \lambda, t) dt \cos(\lambda)d\lambda,
   \label{eqn:totalaverage}
 \end{equation}
-where in all three cases the semimajor axis $a$ has been replaced by a generalised parameter (or set of parameters) $q$.
+where in all three cases the semi-major axis $a$ has been replaced by a generalised parameter (or set of parameters) $q$.
 This paper uses the discrete form of these equations in Section \ref{ssec:habiAver} in order to both quantify when a model has reached an stable average (i.e. equilibrium) temperature and for quantifying the habitability of a model which varies in time and latitude.
 % Also in given in Section \ref{ssec:habiAver} are the two habitability functions used throughout this paper.
 
@@ -397,7 +399,7 @@ The general equation for tidal heating is given by
   F_\text{th} = -\frac{21}{8\pi} \text{Im}(k_2) \frac{G^{3/2} M_\text{gas}^{5/2} R_\text{moon}^{3} e_\text{moon}^2}{a_\text{moon}^{15/2}},
   \label{eq:tidalheating_flux}
 \end{equation}
-where the mass, radius, eccentricity, and semimajor axis of the subscripted body are given by $M$, $R$, $e$, and $a$ respectively.
+where the mass, radius, eccentricity, and semi-major axis of the subscripted body are given by $M$, $R$, $e$, and $a$ respectively.
 Specific values for $-\text{Im}(k_2)$ are derived from different rheologies and material compositions of the moon.
 In this paper the Maxwell rheology from Henning et al \cite{Henning2009} is used as well as the material compositions from Dobos and Turner \cite{DobosTurner2015}.
 
@@ -413,7 +415,7 @@ Thus the moon model is, with all modifications made, given by
 % ++ What is done with Moon model
 With this moon model the habitable zones investigated in Sec. \ref{sec:Exoplanets} can be revisited to see how they are affected by the changes (Sec. \ref{ssec:Impact_previous_results}).
 New habitable zones also emerge depending on the moon's parameters.
-The semimajor axis and eccentricity of the moon's orbit are investigated in Sec. \ref{ssec:Exomoon_specific_results}.
+The semi-major axis and eccentricity of the moon's orbit are investigated in Sec. \ref{ssec:Exomoon_specific_results}.
 
 \section{1-D Energy Balance Climate Model}\label{sec:1DEBCM}
 % 1D Energy Balance Climate Model;
@@ -446,7 +448,7 @@ The original equation can be recovered by defining $\alpha / r^2 \equiv D / C$ f
 Then adding incoming solar radiation $S$ (insolation), which is reduced by planetary albedo $A$, and outgoing IR-emission $I$ to the PDE.
 Thus the original form of the 1D EBCM in eqn. \eqref{eq:1DEBCM} is recovered.
 
-\subsection{Earth-like model functions} \label{ssec:EarthLikeModel}
+\subsection{Earth-like Model Functions} \label{ssec:EarthLikeModel}
 %   A: Earth-like model functions;
 %     From WK97
 %     SMS08 -> choose I_2, A_2
@@ -456,7 +458,7 @@ Thus the original form of the 1D EBCM in eqn. \eqref{eq:1DEBCM} is recovered.
 \begin{table*}
   \begin{tabular}{|c|c|c|c|c|c|}
     \hline
-    Semimajoraxis & Eccentricity & Obliquity     & No. spatial nodes & Timestep         & \multirow{2}{*}{Land fraction type} \\
+    Semi-major axis & Eccentricity & Obliquity     & No. spatial nodes & Timestep         & \multirow{2}{*}{Land fraction type} \\
     $a$, au       & $e$          & $\delta$, deg & $S$               & $\Delta t$, days &                                     \\
     \hline
     1             & 0.0167       & 23.5          & 61                & 1                & Uniform 70\% Ocean                  \\
@@ -481,13 +483,14 @@ Thus the original form of the 1D EBCM in eqn. \eqref{eq:1DEBCM} is recovered.
 
 \begin{figure}[t]
   \includegraphics[width=0.8\linewidth]{images_rewrite/Earth_latitude_time_190_192.png}
-  \includegraphics[width=0.8\linewidth]{images_rewrite/Earth_habitabilities_time_190_192.png}
+  % \includegraphics[width=0.8\linewidth]{images_rewrite/Earth_habitabilities_time_190_192.png}
   \caption{
-    Top: The temperature distribution for the Earth model with parameters given in Table \ref{tab:default_params}.
-    The time range is for 2 years, showing the periodicity of the seasons in the model.
-    Bottom: The temperature distribution processed with the LWR habitability (eqn. \eqref{eq:H_LWR}) and then averaged over time (left) or area (right).
+    The temperature distribution for the Earth model with parameters given in Table \ref{tab:default_params}.
+    The time range is for 2 years starting in the 190th year of evolution.
+    There is clear periodicity of the seasons in the model, indicating that the model has reached a stable equilbrium.
+    % Bottom: The temperature distribution processed with the LWR habitability (eqn. \eqref{eq:H_LWR}) and then averaged over time (left) or area (right).
   }
-  \label{fig:Earth_lat_time}
+  \label{fig:Earth_temperature_dist}
 \end{figure}
 
 In order to investigate the Earth and Earth-like planets, the parameters and functions which define the Earth must be established.
@@ -576,7 +579,7 @@ For a 2-body system this distance can be calculated through an iterative method 
   r(t) = a (1 - e \cos E(t)), 
   \label{eq:two_body_distance}
 \end{equation}
-where $a$ and $e$ are semimajor axis and eccentricity respectively, and the eccentricity anomaly $E$ is given by iteration
+where $a$ and $e$ are semi-major axis and eccentricity respectively, and the eccentricity anomaly $E$ is given by iteration
 \begin{equation}
   \begin{split}
     E_0 &= M \\
@@ -592,21 +595,7 @@ Three iterations with an eccentricity of $0.9$ gives an error in $E$ of 5\% (com
 The temperature distribution for the Earth model is shown in Fig. \ref{fig:Earth_lat_time} for 2 years after 190 years of evolution.
 There is clear periodicity in the model corresponding clearly with the seasonal variations experienced by the Earth.
 
-
-%%% MOVE TO BELOW %%%
-Also shown is the LWR habitability of this temperature data which has been time averaged with eqn. \eqref{eq:Q_timeaverage} and area averaged with eqn. \eqref{eq:Q_areaaveraged}.
-The time and area averaged habitability is $H_\text{Earth} = 0.84$, meaning that the Earth is, when using LWR, $84\%$ habitable.
-When using HC habitability this value is slightly reduced but the same to two significant figures.
-
-The time averaged habitability shows how the the equator is habitable all year around.
-The poles are uninhabitable year round.
-Between $65\degrees$ to $45\degrees$ the habitability decreases linearly, representative of the variablity of the frost line.
-
-The area averaged habitability changes in steps as each discrete latitude band becomes habitable or uninhabitable.
-It is periodic, but difficult to predict within each year.
-
-
-\subsection{Discretisation and Time evolution} \label{ssec:DiscretisationPDE}
+\subsection{Discretisation and Time Evolution} \label{ssec:DiscretisationPDE}
 %   B: Discretisation and Time evolution;
 %     d/dλ -> central, 0 at poles
 %     d^2/dλ^2 -> central, forward backward and backward forward at poles
@@ -654,13 +643,24 @@ Furthermore, the treatment imposed for the $m=1$ and $m=S-2$ second order deriva
 %     generalising and discretising the continuous averages
 %     Use of averages in finding equilibrium / globally averaged temperatures
 %     Demonstation of taking temperature data, applying habitability and averages
+
+\begin{figure}
+  \includegraphics[width=0.8\linewidth]{images_rewrite/Earth_habitabilities_time_190_192.png}
+  \caption{
+    A demonstration of the LWR Habitability function with time averaging, eqn. \eqref{eq:Q_timeaverage} (left), and area-weighted averaging, eqn. \eqref{eq:Q_areaaveraged} (right).
+    The time averaged habitability is for a 10 year period, and the area-weighted averaged is over the entire planet and is shown for three years.
+    % The area-weighted habitability is periodic in time but difficult to predict within a year.
+  }
+  \label{fig:time_area_habitability_demonstration}
+\end{figure}
+
 Analysing the data produced requires the use of area-weighted averaging and time averaging from SMS08.
 The original equations are given as continuous integrals, but are discretised in a similar way to the derivatives in \ref{ssec:DiscretisationPDE}.
 Thus the time averaging, area-weighted averaging, and total averaging are given by
 \begin{equation}
   % \begin{split}
     Q^m_{p \to q}  = \frac{\sum_{n=p}^{q} Q^m_n \Delta t} {\sum_{n=p}^{q} \Delta t} 
-                   = \frac{\sum_{n=p}^{q} Q^m_n}{t_q-t_p}
+                   = \frac{\sum_{n=p}^{q} Q^m_n}{t_q-t_p},
   % \end{split},
   \label{eq:Q_timeaverage}
 \end{equation}
@@ -676,54 +676,37 @@ respectively, with the time averaging happening between a time $t_p$ and $t_q$.
 These averages can now be used to evaluate if a model has reached an equilibrium temperature and what the average habitability of a planet is.
 
 % Equilibrium Temperature
-A model is said to reach an equilibrium temperature when the average temperature between 2 averaging periods divided by the average temperature over both periods is less than some tolerance $\epsilon$:
+A model is said to reach an equilibrium temperature when the fractional difference between the average temperature of 2 periods is less than some tolerance $\epsilon$:
 \begin{equation}
-  \frac{\bar{T}_{p \to q} - \bar{T}_{q \to r}}{\bar{T}_{p \to r}} < \epsilon.
+  \left|1 - \frac{\bar{T}_{q \to r}}{\bar{T}_{p \to q}}\right| < \epsilon,
   \label{eq:T_equilb}
 \end{equation}
+for some times $t_r > t_q > t_p$.
 Typically the averaging occurs over an orbital period (i.e. local year), so the equilibrium temperature is when there are no significant variations in temperature between two consecutive orbits.
 The value of $\epsilon$ chosen directly influences how long the model must be run to reach an equilibrium.
 In most cases a value of $\epsilon = 10^{-3}$ is used and results in equilbrium times of between $20$ and $150$ years depending on model parameters.
-It is worth noting for some plots that a value of $\langle T \rangle = -1$ means the model did not reach an equilbrium temperature within the evolution time and value of $\epsilon$.
-This $\langle T \rangle = -1$
+% It is worth noting for some plots that a value of $\langle T \rangle = -1$ means the model did not reach an equilbrium temperature within the evolution time and value of $\epsilon$.
+% This $\langle T \rangle = -1$
 
-%%%%%%%% BAD, DUPLICATE OF INTRODUCTION ::: REPLACE WITH DEMONSTRATION %%%%%%%%
-% Habitability
-The classical habitability function is the Liquid Water Requirement (LWR) given by
-\begin{equation}
-  H_\text{LWR}(T) =
-  \begin{cases}
-    1 & 0\degreesC \le T \le 100\degreesC \\
-    0 & \text{Otherwise}
-  \end{cases},
-  \label{eq:H_LWR_}
-\end{equation}
-Thus a temperature is habitable if it is between the boiling and melting points of water.
+% Demonstration of using functions.
+In fig. \ref{fig:time_area_habitability_demonstration} the use of these functions is demonstrated on the temperature data for the Earth (fig. \ref{fig:Earth_temperature_dist}).
+It is processed using the LWR habitability which has then been time averaged with eqn. \eqref{eq:Q_timeaverage} and area averaged with eqn. \eqref{eq:Q_areaaveraged}.
 
-An alternative is motivated by the limits of human endurance, thus is called Human Compatibility (HC).
-If a human's core temperature is raised above $35\degreesC$ then enzymes esssential for life denature and breakdown.
-This does not mean temperatures above this are lethal as humans can regulate temperature by sweating.
-The wet bulb temperature is defined by wrapping a thermometer bulb with a wet cloth.
-It is designed to take the humidity and ambient temperature into account, essentially mimicking the internal temperature of a human.
-Thus a wetbulb temperature of $35\degreesC$ is lethal if prolonged.
+The time-averaged habitability shows how the the equator is habitable all year around.
+The poles are uninhabitable year round.
+Between $65\degrees$ to $45\degrees$ the habitability decreases linearly, representative of the variablity of the frost line where latitudes close to the pole are very rarely habitable and latitudes in this range closer to the equator are very rarely uninhabitable.
 
-This climate model does not calculate humidity,
-thus a conservative temperature at which habitability reduces is taken to be $30\degreesC$:
-\begin{equation}
-  H_\text{HC}(T) =
-  \begin{cases}
-    1 & 0\degreesC \le T \le 30\degreesC \\
-    0 & \text{Otherwise}
-  \end{cases},
-  \label{eq:H_HC_}
-\end{equation}
-with the additional constraint that temperatures greater than $40\degreesC$ or less than $-10\degreesC$ in a latitude band sets the habitability of the band to 0 for all time.
+The area averaged habitability changes in steps as each discrete latitude band becomes habitable or uninhabitable.
+It is periodic, but difficult to predict within each year.
+
+The total averaged habitability is $H_\text{Earth} = 0.84$, meaning that the Earth is, when using LWR, $84\%$ habitable.
+When using HC habitability this value is slightly reduced but the same to two significant figures.
 
 \section{Investigating Earth-like Exoplanets} \label{sec:Exoplanets}
 % Investigating Earth-like Exoplanets;
 %
-\subsection{Varying semimajoraxis and eccentricity} \label{ssec:InvTimeAveragedSolarFlux}
-%   A: Varying semimajoraxis and eccentricity;
+\subsection{Varying Semi-major Axis and Eccentricity} \label{ssec:InvTimeAveragedSolarFlux}
+%   A: Varying semi-major axis and eccentricity;
 %     Quantitative relationships -> T^4 propto a^-2 (1-e^2)^-1/2
 %     Qualitative relationships -> latitude bands with time averaging 
 %
@@ -731,7 +714,7 @@ with the additional constraint that temperatures greater than $40\degreesC$ or l
 \begin{figure}[t]
   \includegraphics[width=0.8\linewidth]{images_rewrite/convergence_varying_a_0.5to1.5.png}
   \caption{
-    A plot of the equilibrium temperature of the planet when varying its semimajor axis at constant eccentricity of $e=0.0167$.
+    A plot of the equilibrium temperature of the planet when varying its semi-major axis at constant eccentricity of $e=0.0167$.
     Overlaid on the plot are two curves which are fitted to the data by a least squares regression.
     The form of the curve is $\langle T \rangle = p_i a^{q_i}$.
     % It is expected from a 0DEBM (see eq. \eqref{eq:T_propto_a_e}) that $q_i = -0.5$.
@@ -747,7 +730,7 @@ with the additional constraint that temperatures greater than $40\degreesC$ or l
 \begin{figure}[t]
   \includegraphics[width=0.8\linewidth]{images_rewrite/convergence_varying_e_0to0.9.png}
   \caption{
-    A plot of the equilibrium temperature of the planet when varying its eccentricity at constant semimajor axis of $a = 1$ au.
+    A plot of the equilibrium temperature of the planet when varying its eccentricity at constant semi-major axis of $a = 1$ au.
     Overlaid on the plot is a curve which is fitted to the data by a least squares regression.
     The form of the curve is $\langle T \rangle = p(1-e^2)^{-1/8}$.
     % The proportionality constant $p = 292.6 \pm 0.2$ K.
@@ -758,7 +741,7 @@ with the additional constraint that temperatures greater than $40\degreesC$ or l
   \label{fig:planet_eccentricity}
 \end{figure}
 
-%%% Quantitatively investigate semimajor axis and eccentricity wrt temperature %%%
+%%% Quantitatively investigate semi-major axis and eccentricity wrt temperature %%%
 % use 0D model and Mendez to find parameter relations
 General temperature relations for a planet can be found from the 0DEBM.
 Time averaged insolation of an planet in an elliptical orbit is given by
@@ -766,9 +749,9 @@ Time averaged insolation of an planet in an elliptical orbit is given by
   S = \langle F \rangle = \frac{q_0}{a^2 \sqrt{1-e^2}},
   \label{eq:avgInsolation}
 \end{equation}
-where $q_0 = L_{\text{Sun}}/4\pi a_{\text{Earth}}^2 \approx 1360 \ \text{Wm}^{-2}$ is the bolometric solar flux for Earth, $a$ and $e$ are the semimajor axis and eccentricity respectively of the planet \cite{Mendez2017}.
+where $q_0 = L_{\text{Sun}}/4\pi a_{\text{Earth}}^2 \approx 1360 \ \text{Wm}^{-2}$ is the bolometric solar flux for Earth, $a$ and $e$ are the semi-major axis and eccentricity respectively of the planet \cite{Mendez2017}.
 
-By subsituting this relation into equation \eqref{eq:0DEBM}, the temperature of a planet can be related to semimajor axis and eccentricity through
+By subsituting this relation into equation \eqref{eq:0DEBM}, the temperature of a planet can be related to semi-major axis and eccentricity through
 \begin{equation}
   T \propto a^{-\frac{1}{2}} (1-e^2)^{-\frac{1}{8}}, 
   \label{eq:T_propto_a_e}
@@ -778,7 +761,7 @@ with proportionality constant $(q_0 (1-A) / 4\sigma)^{1/4} = 255$ K for an Earth
 
 % > T prop a^-1/2
 % > > talk about powerlaw being obeyed well until snowball
-The validity of this proportionality can be investigated in terms of the semimajor axis by keeping $e = 0.0167$ constant and varying $a$ from just outside Mercury's orbit at $0.5$ au to Mars' orbit at $1.5$ au.
+The validity of this proportionality can be investigated in terms of the semi-major axis by keeping $e = 0.0167$ constant and varying $a$ from just outside Mercury's orbit at $0.5$ au to Mars' orbit at $1.5$ au.
 As seen in Figure \ref{fig:planet_semimajoraxis} there are three main zones of interest to consider.
 
 The first zone with $a < 0.65$ au has temperatures too high to sustain liquid water due to being too close to the Sun.
@@ -800,7 +783,7 @@ Alternatively, $a$ can be fixed at $1$ au and the eccentricity can be varied fro
 Beyond $e > 0.9$ the iteration to find orbital distance converges much less quickly so becomes intractible.
 Additionally planets in extreme orbits with $e > 0.9$ would be extremely unstable and most likely would not be able to retain an atmosphere due to extreme temperatures.
 
-Varying the eccentricity is similar to varying the semimajor axis.
+Varying the eccentricity is similar to varying the semi-major axis.
 There are two main zones of interest in Figure \ref{fig:planet_eccentricity} where the eccentricity of the planet is varied.
 
 The zone with $e > 0.2$ follows the relationship well, and the globally averaged temperature doesn't exceed the boiling point of water.
@@ -811,7 +794,7 @@ Lower eccentricities allow for polar ice caps to form which then significantly l
 
 As seen from the vertical lines in Fig. \ref{fig:planet_eccentricity}, the Earth has moved in this lower eccentricity region for its entire history, suggesting that the presence of the polar caps has been reasonably constant for the recent past.
 
-% \subsection{Semimajor axis and eccentricity} \label{ssec:qualitative_semimajoraxis_eccentricity}
+% \subsection{semi-major axis and eccentricity} \label{ssec:qualitative_semimajoraxis_eccentricity}
 % Qualitative
 \begin{figure}[t]
   % \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_humancomp_time.png}
@@ -819,10 +802,10 @@ As seen from the vertical lines in Fig. \ref{fig:planet_eccentricity}, the Earth
   \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_humancomp_time_zoom.png}
   \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_humancomp_area_zoom.png}
   \caption{
-    Left: A heatmap for area-averaged HC habitability for a 2 years on the y-axis and planet semimajor axis between $0.75$ and $1.05$ au on the x-axis.
+    Left: A heatmap for area-averaged HC habitability for a 2 years on the y-axis and planet semi-major axis between $0.75$ and $1.05$ au on the x-axis.
     % The area-averaged HC habitability for a 2 year period after 180 years of simulation.
     The planet is never 100\% habitable, reaching a maximum of ~85\% when at the Earth-like $1$ au.
-    Right: A heatmap for the 10-year time-averaged HC habitability for each latitude band on the y axis and the same planet semimajor axis values on the x-axis.
+    Right: A heatmap for the 10-year time-averaged HC habitability for each latitude band on the y axis and the same planet semi-major axis values on the x-axis.
     % The 10 year time-averaged HC habitability for each latitude band.
     In this case some latitude bands do reach 100\% habitability.
   }
@@ -846,18 +829,18 @@ As seen from the vertical lines in Fig. \ref{fig:planet_eccentricity}, the Earth
 \end{figure}
 
 \begin{figure}[t]
-  \includegraphics[width=\linewidth]{images_rewrite/dual_gassemajoraxis_0.5_2_gaseccentricity_0_0.9.png}
+  \includegraphics[width=0.6\linewidth]{images_rewrite/dual_gassemajoraxis_0.5_2_gaseccentricity_0_0.9.png}
   \includegraphics[width=0.495\linewidth]{images_rewrite/LWR_gassemimajoraxis_gaseccentricity.png}
   \includegraphics[width=0.495\linewidth]{images_rewrite/humancomp_gassemimajoraxis_gaseccentricity.png}
   \caption{
-    Top: Varying the semimajoraxis and eccentricity of the gas giant to produce a heat map for the equilibrium temperature of the planet.
+    Top: Varying the semi-major axis and eccentricity of the gas giant to produce a heat map for the equilibrium temperature of the planet.
     Left: Processing of the temperature data with eqn. \eqref{eq:H_LWR}.
     Right: Processing of the temperature data with eqn. \eqref{eq:H_HC}.
   }
   \label{fig:qualitative_semimajoraxis_eccentricity}
 \end{figure}
 
-In Fig. \ref{fig:qualitative_semimajoraxis} the semimajor axis of the planet is varied between just outside Mercury's orbit and Mars' orbit at constant eccentricity in order to investigate how HC habitability changes.
+In Fig. \ref{fig:qualitative_semimajoraxis} the semi-major axis of the planet is varied between just outside Mercury's orbit and Mars' orbit at constant eccentricity in order to investigate how HC habitability changes.
 The area-averaged habitability shows slight variations in habitability over time.
 This variation occurs for two main reasons: the growth and recession of the polar icecaps and equatorial desert.
 This growth and recession is shown in the time-averaged habitability where polar and equatorial regions have habitabilities between 0 and 1, indicating they are partially habitable over time.
@@ -886,20 +869,19 @@ However, this represents a small fraction of the surface area of the planet.
 At eccentricites above $e > 0.8$ the poles become too hot for life at certain parts of the year, and eventually are totally uninhabitable.
 
 
-So far the semimajor axis and eccentricity have been varied independently to investigate effects on the time and area habitabilites.
+So far the semi-major axis and eccentricity have been varied independently to investigate effects on the time and area habitabilites.
 Varying both together can illuminate the habitability parameter space for orbits in exoplanet systems.
-This is shown in Fig. \ref{fig:qualitative_semimajoraxis_eccentricity} where the semimajor axis and eccentricity of a planet are varied together.
-The top graph is a heatmap for the equilibrium temperature of the planet, and the bottom graphs are the processing of the temperature data using the LWR habitability and HC habitability which are then time and area averaged.
-
+This is shown in Fig. \ref{fig:qualitative_semimajoraxis_eccentricity} where the semi-major axis and eccentricity of a planet are varied together.
+The top graph is a heatmap for the equilibrium temperature of the planet, and the bottom graphs are the processing of the temperature data using the LWR habitability and HC habitability.
 The temperature heatmap highlights the drop off in temperature when IAB starts and the planet falls into a snowball.
-There exist some above freezing temperatures for high eccentricity and high semimajor axis, likely due to the planets unfreezing when close the Sun, and refreezing when further away.
+There exist some above freezing temperatures for high eccentricity and high semi-major axis, likely due to the planets unfreezing when close the Sun, and refreezing when further away.
 
-Both habitabilites show similar shapes with different widths which is reflective of HC being more restrictive in temperature range than LWR.
+Both habitabilites show similar shapes but different widths which is reflective of HC being more restrictive in temperature range than LWR.
 The differnce in the habitabilites is shown at high eccentricity.
-The LWR habitability suggests that there is a wide range of semimajor axis values where liquid water exists on the surface of the planet year-round at high eccentricities.
-Alternatively, the HC habitability indicates that high eccentricities have extremes of temperature which are not compatible with life, thus the actual habitability is lower.
+The LWR habitability suggests that there is a wide range of semi-major axis values where liquid water exists on the surface of the planet year-round at high eccentricities.
+Alternatively, the HC habitability indicates that these high eccentricities have extremes of temperature which are not compatible with life, thus the actual habitability is likely lower.
 
-\subsection{Varying obliquity} \label{ssec:qualitative_obliquity}
+\subsection{Varying Obliquity} \label{ssec:qualitative_obliquity}
 %   B: Varying obliquity;
 %     latitudes via time averaging -> melting of poles + boiling of poles when direct
 %
@@ -981,7 +963,7 @@ In this range the habitability is fairly constant.
 % > "island of stability" at higher rotation rates
 % > Three plot of obliquity showing the "island" growing / stabilising
 
-\subsection{Varying ocean fraction with eccentricity and obliquity} \label{ssec:qualitative_oceanfraction}
+\subsection{Varying Ocean Fraction with Eccentricity and Obliquity} \label{ssec:qualitative_oceanfraction}
 %   C: Varying ocean fraction with eccentricity and obliquity;
 %     how eccentricity allows for IAF
 %     how obliquity allows for IAF
@@ -1000,7 +982,7 @@ In this range the habitability is fairly constant.
   \label{fig:qualitative_oceanfraction}
 \end{figure}
 
-The snowball state produced by IAB has been seen when varying semimajor axis (Figs. \ref{fig:planet_semimajoraxis} and \ref{fig:qualitative_semimajoraxis}) and partially when varying eccentricity (Fig. \ref{fig:planet_eccentricity}).
+The snowball state produced by IAB has been seen when varying semi-major axis (Figs. \ref{fig:planet_semimajoraxis} and \ref{fig:qualitative_semimajoraxis}) and partially when varying eccentricity (Fig. \ref{fig:planet_eccentricity}).
 A variable which influences susceptibility to IAB is the ocean fraction.
 
 The thermal timescale (eqn. \eqref{eq:ThermalTimescale}) means that ocean, which has a higher heat capacity than land, has a larger thermal inertia.
@@ -1056,7 +1038,7 @@ The minimum ocean fraction in the obliquity case varies with an `S' shape and le
 Similar to the eccentricity case, high obliquities can partially recover from the snowball. In this case it is due to the pole facing the Sun melting for half a year due to constant insolation before refreezing when facing away from the Sun.
 There are nearly no variations due to changing ocean fraction above $f_\text{ocean} = 0.2$ in the eccentricity case, and few variations above $f_\text{ocean} = 0.4$ for the obliquity case.
 
-\section{Earth-like exomoon modifications and results} \label{sec:Exomoons}
+\section{Earth-like Exomoon Modifications and Investigations} \label{sec:Exomoons}
 % Earth-like exomoon modifications and results;
 %
 \subsection{Eclipsing} \label{ssec:eclipsing}
@@ -1086,7 +1068,7 @@ There are nearly no variations due to changing ocean fraction above $f_\text{oce
 \begin{figure}[t]
   \includegraphics[width=0.8\linewidth]{images_rewrite/eclipsedlight_moonsemimajoraxis_with_fit.png}
   \caption{
-    Fraction of light eclipsed by a Jupiter sized gas giant when varying a moon's semimajor axis.
+    Fraction of light eclipsed by a Jupiter sized gas giant when varying a moon's semi-major axis.
     Shown is the Roche limit for Jupiter, as well as the orbital distances of Jupiter's three innermost moons.
     Overlaid on the data is a fit of $\epsilon = \arcsin(p/x)/\pi$ with parameter $p = (4.675\pm0.005)\times 10^{-4}\ \text{au}$.
   }
@@ -1114,8 +1096,8 @@ Varying the 4 orbital parameters in the eclipsing model gives insight into the e
 % a_moon : 0.05 -> 0.4 , 
 % e_moon : 0.0507 -> 0.05 , decreases with increases eccentricity
 Varying the eccentricity of the gas giant between $0$ and $0.9$ has a random effect on the eclipsing between the values $5\%$ and $5.2\%$, and increasing eccentricity of the moon from $e=0$ to $0.1$ decreases the eclipsing from $5.07\%$ to $5.02\%$.
-Varying the gas giant semimajor axis between $0.5$ au and $10$ au caused variation in the eclipsing fraction between $5\%$ and $6\%$. 
-The most important influence to the eclipsing was moon semimajor axis.
+Varying the gas giant semi-major axis between $0.5$ au and $10$ au caused variation in the eclipsing fraction between $5\%$ and $6\%$. 
+The most important influence to the eclipsing was moon semi-major axis.
 Varying between $0.5$ mau and $10.5$ mau caused a decrease in eclipsing from $40\%$ to $2\%$ as seen in Fig. \ref{fig:quantitative_eclipsing_moon_semimajor_axis}.
 
 Knowing that the eccentricity of the orbits makes a negligible contribution to the motivates an analytical model with circular orbits.
@@ -1149,7 +1131,7 @@ The eclipsing fraction, $\epsilon$, can then be found by dividing 2 times the ec
 This relation is investigated in Fig. \ref{fig:quantitative_eclipsing_moon_semimajor_axis} with a free parameter in place of $R_\text{gas}$.
 The value of the free parameter is $(7.013\pm 0.008) \times 10^7 \text{m}$ which is extremely close to the radius of Jupiter, as to be expected.
 
-\subsection{Reflectance and Emission from the Gas giant} \label{ssec:ref_emiss_gg}
+\subsection{Reflectance and Emission from the Gas Giant} \label{ssec:ref_emiss_gg}
 %   B: Reflectance and Emission from the Gas giant;
 %     F_ref, F_gas...
 %     assumption of blackbody for gas giant, use of 0DEBM for gas giant, use of Mendez for time averaged radiation 
@@ -1182,7 +1164,7 @@ For example, Jupiter is still slightly warmer than expected from equilbrium \cit
 This is not accounted for in this model, but could be added by setting the temperature directly instead of using the 0DEBM.
 
 
-\subsection{Tidal heating} \label{ssec:TidalHeating}
+\subsection{Tidal Heating} \label{ssec:TidalHeating}
 %   C: Tidal heating;
 %     Viscoelastic model outline;
 %       How mantle temperature is found with convective cooling balancing tidal heating
@@ -1194,7 +1176,7 @@ This is not accounted for in this model, but could be added by setting the tempe
     \hline
     \multicolumn{4}{|c|}{Moon} && \multicolumn{3}{c|}{Gas Giant} \\
     \hline
-    Semimajor axis & Eccentricity & Radius & Density && Mass & Radius & Albedo \\
+    Semi-major axis & Eccentricity & Radius & Density && Mass & Radius & Albedo \\
     \hline
     $0.03$ au & $0.006$ & $6.4\times 10^6$ m & $5500$ kg m$^{-3}$ && $1.9\times10^{27}$ kg & $7.0 \times 10^7$ m & 0.3 \\
     \hline
@@ -1268,28 +1250,28 @@ The orbital frequency, $\omega$, and other parameters take (or can be derived fr
 The tidal heating can sharply cut off for certain orbital parameters when the tidal heating is less than convective cooling at all mantle temperatures so the core temperature at equilbrium is too low to heat the surface of the planet effectively.
 
 
-\subsection{Impact on previous results} \label{ssec:Impact_previous_results}
+\subsection{Impact on Previous Investigations} \label{ssec:Impact_previous_results}
 %   D: Impact on previous results;
-%     Quantitative change to semimajoraxis / eccentricity relations
+%     Quantitative change to semi-major axis / eccentricity relations
 %       ~> const TH/eclipsing, variable reflectance/emission
 %     qualitative obliquity -> flattening due to TH independent of star
-%     qualitative semimajor axis latitude plot changes
+%     qualitative semi-major axis latitude plot changes
 %
 \begin{figure}[t]
   \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_humancomp_area_combined.png}
   \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_planetary_2_moon.png}
   % \includegraphics[width=0.495\linewidth]{images_rewrite/semimajoraxis_planetary_2_moon_smaller.png}
   \caption{
-    Left: Comparison of the time-averaged (HC) habitability for variable semimajor axis for the planetary model (top) and moon model (bottom). 
+    Left: Comparison of the time-averaged (HC) habitability for variable semi-major axis for the planetary model (top) and moon model (bottom). 
     The moon model has the default parameters in Tab. \ref{tab:default_params_moon}.
-    Right: Comparison of the equilibrium temperatures when varying gas giant semimajor axis for the planetary model (blue), and two moon models with different eccentricity (orange and green).
+    Right: Comparison of the equilibrium temperatures when varying gas giant semi-major axis for the planetary model (blue), and two moon models with different eccentricity (orange and green).
     Also shown are horizontal lines for the freezing and melting points of water.
   }
   \label{fig:semimajoraxiscomparision}
 \end{figure}
 
 With the model appropriately updated, temperature profiles and habitabilities seen previously can be investigated for this moon model.
-Shown in Fig. \ref{fig:semimajoraxiscomparision} is how the time-averaged (HC) habitability for variable semimajor axis changes between the planetary model and moon model (left) and how the equilibrium temperature changes with semimajor axis (right). 
+Shown in Fig. \ref{fig:semimajoraxiscomparision} is how the time-averaged (HC) habitability for variable semi-major axis changes between the planetary model and moon model (left) and how the equilibrium temperature changes with semi-major axis (right). 
 The plot on the left shows how the latitude habitable zone changes between a planetary model and a moon model with the default parameters in Tab. \ref{tab:default_params_moon}.
 And the plot on the right shows how the equilibrium temperature of the planet between the planetary model and two moon models, one with default parameters and one with higher eccentricity.
 
@@ -1316,17 +1298,14 @@ The tidal heating also helps to prevent the planet's temperature from decreasing
   \label{fig:eccentricity_obliquity_comparisions}
 \end{figure}
 
-eccentricity:
-The temperature generally increases.
-The dip at low eccentricity due to IAB is missing from the moon models.
-This is due to the generally higher temperature 
+Similarly, in Fig. \ref{fig:eccentricity_obliquity_comparisions} the equilibrium temperatures when varying gas giant eccentricity (left) and planetary obliquity (right) with different moon eccentricities are shown.
+The dip in temperature at low eccentricity due to IAB is missing from the moon models.
+This is because temperatures are generally higher so the IAB cannot start.
+In the obliquity case the characteristic `S' shape of the temperature with increasing obliquity is reduced in two ways.
+First is that the inflection point of the curve moves to higher obliquities, and second that the range in temperature decreases from the planetary model to the moon models.
+Both these changes indicate that the moon model depends less on the obliquity of the planet to inform it's climate, mostly due to the tidal heating.
 
-obliquity:
-Temperature increases.
-Temperature range decreases due to insolation playing smaller role (proportionally) in determining the planet climate.
-The variations due to obliquity become smaller as any insolation variation across the planet are dampened by the uniform tidal heating.
-
-\subsection{Exomoon specific results} \label{ssec:Exomoon_specific_results}
+\subsection{Exomoon Semi-major Axis and Eccentricity Investigations} \label{ssec:Exomoon_specific_results}
 %   E: Exomoon specific results;
 %     Qualitative latitude plots;
 %       a_moon -> eclipsing, reflectance/emission, TH
@@ -1337,16 +1316,16 @@ The variations due to obliquity become smaller as any insolation variation acros
   \includegraphics[width=0.495\linewidth]{images_rewrite/moonsemimajoraxis_humancomp_area_zoom.png}
   \includegraphics[width=0.495\linewidth]{images_rewrite/mooneccentricity_humancomp_area_zoom.png}
   \caption{
-    Left:  Time-averaged temperature heat map for each latitude band when varying moon semimajoraxis.
+    Left:  Time-averaged temperature heat map for each latitude band when varying moon semi-major axis.
     Right: Time-averaged temperature heat map for each latitude band when varying moon eccentricity.
   }
   \label{fig:moon_semimajoraxis_eccentricity}
 \end{figure}
 
 \ref{fig:moon_semimajoraxis_eccentricity}
-Variable moon semimajoraxis has a similar shape to the variable gas semimajoraxis.
+Variable moon semi-major axis has a similar shape to the variable gas semi-major axis.
 
-At high semimajor axis the tidal heating is less than the convective cooling, so `turns off'.
+At high semi-major axis the tidal heating is less than the convective cooling, so `turns off'.
 It might be expected that the moon at the same distance as the Earth from the Sun would still be warm enough to be habitable.
 The high semimajoraxes and low eccentricities show that this is not the case as they are in snowball states.
 This is because to the reduction of insolation due to eclipsing is larger than the additional light reflected and emitted from the gas giant.
@@ -1390,12 +1369,12 @@ For example: an ocean centered on one of the poles of the planet and increasing 
 
 \appendix
 
-\section{Numerical stability of the 1D EBCM} \label{appx:NumStability}
+\section{Numerical Stability of the 1DEBCM} \label{appx:NumStability}
 % Maths analysis
 % Varying spacedim to check analysis
 % Varying timestep to check analysis
 
-\section{Tidal heating equations and method} \label{appx:TidalHeatingEquationsMethod}
+\section{Tidal Heating Equations and Method} \label{appx:TidalHeatingEquationsMethod}
 % What the equations are
 % How they are combined
 \begin{equation}
