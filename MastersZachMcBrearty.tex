@@ -67,7 +67,7 @@
 %     1DEBCM -> dynamic, resolve latitude bands
 %     ~> both assume heat spread out evenly (0D -> over the entire planet, 1D -> within each latitude band)
 %     Thermal timescale definition τ = CT / I
-%     IAB due to dynamic model ~> relate to thermal timescale
+%     IAF due to dynamic model ~> relate to thermal timescale
 %     Using Earth as a baseline / validation ~> introduce NC79 equation
 %   C: Averaging and Habitability;
 %     LWR and HC habitability functions
@@ -111,7 +111,7 @@
 %   C: Varying ocean fraction with eccentricity and obliquity;
 %     how eccentricity allows for IAF
 %     how obliquity allows for IAF
-%     when model is susceptible to IAB
+%     when model is susceptible to IAF
 %     relation to thermal timescale
 %
 % Earth-like exomoon modifications and results;
@@ -149,11 +149,11 @@
 
 \begin{abstract}
   %%% ABSTRACT %%%
-  A 1-D energy balance climate model is developed in order to investigate how changing certain orbital parameters can result in changes to a planet's habitability.
-  Theoretical relationships between temperature, semi-major axis, and eccentricity are derived from a 0-D energy balance model and are tested against the 1-D model and are found to be correct.
+  A 1-D energy balance climate model is developed in order to investigate how changing certain orbital or planetary parameters can result in changes to a planet's habitability.
+  Theoretical relationships for temperature with respect to semi-major axis and eccentricity are derived from a 0-D energy balance model and are tested against the 1-D model and are found to be correct.
   A qualitative analysis of obliquity shows that there are optimal obliquities to minimise and maximise global temperature.
-  The climates of exomoons orbiting gas giants are also investigated, including reflected light from the gas giant, eclipsing, and tidal heating.
-  It is expected that these additional sources of heat move the habitable zones for the planet outwards.
+  The climates of Earth-like exomoons orbiting gas giants are also investigated, including reflected and emitted light from the gas giant, eclipsing, and tidal heating.
+  The effect of these modifications are contrasted to the planetary model and the effects of varying the orbital parameters of the moon are also investigated and are found to be similar to corresponding planetary parameters but on smaller scales due to larger power laws.
 \end{abstract}
 
 
@@ -254,31 +254,31 @@ It was then further applied by Williams and Kasting 1997 (WK97) \cite{WK97} to s
 Spiegel's work was furthered by Dressing et al 2010 (Dressing10) \cite{Dressing10} where eccentricity dependent habitability was investigated.
 This paper investigates the effects of varying semi-major axis and eccentricity on habitability (Sec. \ref{ssec:InvTimeAveragedSolarFlux}), as well as obliquity dependence of habitability (Sec. \ref{ssec:qualitative_obliquity}), and the minimum ratio of ocean to land for the planet to prevent ice-albedo-feedback (Sec. \ref{ssec:qualitative_oceanfraction}).
 
-%     IAB due to dynamic model ~> relate to thermal timescale
+%     IAF due to dynamic model ~> relate to thermal timescale
 %
-An aspect of the 1DEBCM which is not present in the 0DEBM is ice-albedo-feedback (IAB).
+An aspect of the 1DEBCM which is not present in the 0DEBM is ice-albedo-feedback (IAF).
 It is not present in the 0DEBM because the albedo is constant and the model is not dynamic.
 
 In the 1DEBCM, albedo is a function of temperature where lower temperatures have high albedo and high temperatures have low albedo.
 If temperature decreases, more ice forms thus albedo increases.
 This increased albedo means more insolation is reflected, thus the model has even less input heat and so cools further and forms more ice.
 
-Thus, IAB is positive feedback loop between ice formation and albedo which can result in a `snowball' model which is entirely covered in ice.
-The susceptibility of the model to IAB can be estimated using the thermal timescale,
+Thus, IAF is positive feedback loop between ice formation and albedo which can result in a `snowball' model which is entirely covered in ice.
+The susceptibility of the model to IAF can be estimated using the thermal timescale,
 %     Thermal timescale definition τ = CT / I
 \begin{equation}
   \tau = \frac{C \Delta T}{I},
   \label{eq:ThermalTimescale}
 \end{equation}
 which is the energy change in the model divided by the speed of removal of that heat via IR emission.
-This definition suggests that a larger heat capacity requires a longer time period to change, thus should be less susceptible to IAB.
+This definition suggests that a larger heat capacity requires a longer time period to change, thus should be less susceptible to IAF.
 
-This is reflected in Sec. \ref{ssec:qualitative_oceanfraction} where ocean fraction (thus heat capacity) in the model is varied, and it is found that low ocean fraction (low heat capacity) is much more susceptible to IAB due to the smaller thermal timescale.
+This is reflected in Sec. \ref{ssec:qualitative_oceanfraction} where ocean fraction (thus heat capacity) in the model is varied, and it is found that low ocean fraction (low heat capacity) is much more susceptible to IAF due to the smaller thermal timescale.
 Two main sources of reduced temperatures are investigated.
-The first source is eccentricity, where IAB can happen if the planet spends a long time away from the star and cools to a snowball state.
-The second is obliquity, where IAB can freeze the pole which is facing away from the Sun and then reflect enough light when facing the Sun to allow the entire model to fall into a snowball state.
+The first source is eccentricity, where IAF can happen if the planet spends a long time away from the star and cools to a snowball state.
+The second is obliquity, where IAF can freeze the pole which is facing away from the Sun and then reflect enough light when facing the Sun to allow the entire model to fall into a snowball state.
 
-It is found that obliquity requires higher minimum ocean fraction than eccentricity to avoid IAB and falling into a snowball state, thus is a more powerful constraint on the habitability if the ocean fraction of an exoplanet is known. The disadvantage of this is the eccentricity of the orbit is much easier to observe than the obliquity of the planet relative to the star it orbits.
+It is found that obliquity requires higher minimum ocean fraction than eccentricity to avoid IAF and falling into a snowball state, thus is a more powerful constraint on the habitability if the ocean fraction of an exoplanet is known. The disadvantage of this is the eccentricity of the orbit is much easier to observe than the obliquity of the planet relative to the star it orbits.
 
 %     Using Earth as a baseline / validation ~> introduce NC79 equation
 %
@@ -344,7 +344,7 @@ The motivation for this temperature range and restriction of extreme temperature
 The typical temperature used to assess human survivability is a wet bulb temperature of $T_w = 30\degreesC$.
 However, this value can underestimate the onset of hyperthermia and overestimate lethality \cite{LuRomps2023}.
 This motivates the underestimate of habitability decreasing at $30\degreesC$ and being lethal at the higher $40\degreesC$.
-The minimum temperature is simply a symmetry of the maximum case, and is less important due to cold places staying cold due to IAB.
+The minimum temperature is simply a symmetry of the maximum case, and is less important due to cold places staying cold due to IAF.
 
 SMS08 quantifies habitability in 3 main ways.
 The first is the time-averaged habitability, $f_\text{time}$, which is given in their eqn. (6) as
@@ -365,7 +365,7 @@ Finally, the combination of these two measures results in the total habitability
   \label{eqn:totalaverage}
 \end{equation}
 where in all three cases the semi-major axis $a$ has been replaced by a generalised parameter (or set of parameters) $q$.
-This paper uses the discrete form of these equations in Section \ref{ssec:habiAver} in order to both quantify when a model has reached an stable average (i.e. equilibrium) temperature and for quantifying the habitability of a model which varies in time and latitude.
+This paper uses the discrete form of these equations in Section \ref{ssec:habiAver} in order to both quantify when a model has reached a stable average (i.e. equilibrium) temperature and for quantifying the habitability of a model which varies in time and latitude.
 % Also in given in Section \ref{ssec:habiAver} are the two habitability functions used throughout this paper.
 
 \subsection{Modifications for Exomoons} \label{ssec:ModificationsForExomoons}
@@ -429,14 +429,14 @@ The 1DEBCM can be derived from the standard heat equation given by
 \end{equation}
 where $T(t, r, \theta, \phi)$ is the temperature at time $t$, radius $r$, co-latitude $\theta$, and longitude $\phi$.
 The constant $\alpha$ is related to the heat capacity and diffusion rate of the system.
-Expanding the laplacian in spherical coordinates the equation becomes
+Expanding the Laplacian in spherical coordinates the equation becomes
 \begin{equation}
   \partialderiv{T}{t} = \alpha \left[\frac{1}{r} \partialderivsecnd{}{r} (r T)
     + \frac{1}{r^2 \sin\theta} \partialderiv{}{\theta}\left(\sin\theta \partialderiv{T}{\theta}\right)
     + \frac{1}{r^2 \sin^2\theta} \partialderivsecnd{T}{\theta} \right]. 
     \label{eq:FullyExpandedHeatEqn}
 \end{equation}
-The 1DEBCM is arrived at by first letting $T(t, r, \theta, \phi) = T(t, \lambda)$, with latitude $\lambda = \pi - \theta$. Thus the equation simplifies to
+The 1DEBCM is arrived at by first letting $T(t, r, \theta, \phi) = T(t, \lambda)$, with latitude $\lambda = \pi - \theta$. Thus, the equation simplifies to
 \begin{equation}
   \begin{split}
     \partialderiv{T}{t} & = \frac{\alpha}{r^2 \sin\theta} \partialderiv{}{\theta}\left(\sin\theta \partialderiv{T}{\theta}\right)   \\
@@ -533,7 +533,7 @@ which encapsulates the additional energy requirements of the heat of fusion, and
 % choice of 0.7-uniform
 The ratio of ocean to land for the Earth is 70\% ocean to 30\% land.
 This model assumes this ratio is uniform and constant across the entire planet, thus $f_\text{o} = 0.7$.
-This is a simplification as the Earth has an uneven distribution of land and ocean, with most of the land in the northern hemisphere.
+This is a simplification as the Earth has an uneven distribution of land and ocean, with most of the land in the Northern Hemisphere.
 
 With definitions of diffusion and heat capacity, the time step and latitude step which are numerically stable can be calculated.
 To do this the EBCM is investigated with a plane wave solution and boundaries on the time step and latitude step are found.
@@ -720,7 +720,7 @@ When using HC habitability this value is slightly reduced but the same to two si
     % It is expected from a 0DEBM (see eq. \eqref{eq:T_propto_a_e}) that $q_i = -0.5$.
     % The first zone obeys the expected powerlaw nicely, with $q_1 = -0.505 \pm 0.004$.
     % The other free parameter for the first zone is $p_1 = 293.5 \pm 0.4$.
-    % The ``snowball'' zone after 1 au represents a sudden drop in temperature due to IAB, and follows a very different powerlaw to the first zone.
+    % The ``snowball'' zone after 1 au represents a sudden drop in temperature due to IAF, and follows a very different powerlaw to the first zone.
     % Free parameters for this zone are $p_2 = 210.2 \pm 0.2$ and $q_2 = -0.378 \pm 0.003$.
     Also shown are the orbits of Venus and Mars to highlight the range of values considered.
   }
@@ -736,7 +736,7 @@ When using HC habitability this value is slightly reduced but the same to two si
     % The proportionality constant $p = 292.6 \pm 0.2$ K.
     Also shown are the current and maximum theoretical value of Earth's eccentricity \cite{LA2010}.
     The minimum value is $0$.
-    There is a dip from the model at lower eccentricities due to IAB forming polar icecaps.
+    There is a dip from the model at lower eccentricities due to IAF forming polar icecaps.
   }
   \label{fig:planet_eccentricity}
 \end{figure}
@@ -744,7 +744,7 @@ When using HC habitability this value is slightly reduced but the same to two si
 %%% Quantitatively investigate semi-major axis and eccentricity wrt temperature %%%
 % use 0D model and Mendez to find parameter relations
 General temperature relations for a planet can be found from the 0DEBM.
-Time averaged insolation of an planet in an elliptical orbit is given by
+Time averaged insolation of a planet in an elliptical orbit is given by
 \begin{equation}
   S = \langle F \rangle = \frac{q_0}{a^2 \sqrt{1-e^2}},
   \label{eq:avgInsolation}
@@ -772,7 +772,7 @@ Both the first and second zones are described by $\langle T \rangle = p_1 a^{q_1
 However, the value of $p_1$ is $~38$ K higher than the expected proportionality, most likely due to the additional greenhouse effect present in the 1D model.
 
 The third zone with $a > 1$ au is a sudden departure from this expected power law, with $p_2 = 210.2 \pm 0.2$ and $q_2 = -0.378 \pm 0.003$.
-This is due to IAB which works as follows.
+This is due to IAF which works as follows.
 As the planet cools, ice forms with a higher albedo than the land or ocean.
 This higher albedo means more light is reflected, thus the planet absorbs less heat, so cools more.
 This cycle continues until the planet reaches a much colder equilibrium than is expected by a fixed albedo method.
@@ -788,7 +788,7 @@ There are two main zones of interest in Figure \ref{fig:planet_eccentricity} whe
 
 The zone with $e > 0.2$ follows the relationship well, and the globally averaged temperature doesn't exceed the boiling point of water.
 On the other hand, the zone with $e < 0.2$ is up to $5$ K lower than the relationship.
-This dip is again due to IAB.
+This dip is again due to IAF.
 High eccentricities mean the planet gathers and stores enough thermal energy when close to the Sun to prevent polar ice caps from forming even when further away from the Sun.
 Lower eccentricities allow for polar ice caps to form which then significantly lower the global temperature.
 
@@ -805,7 +805,7 @@ As seen from the vertical lines in Fig. \ref{fig:planet_eccentricity}, the Earth
     Left: A heatmap for area-averaged HC habitability for a 2 years on the y-axis and planet semi-major axis between $0.75$ and $1.05$ au on the x-axis.
     % The area-averaged HC habitability for a 2 year period after 180 years of simulation.
     The planet is never 100\% habitable, reaching a maximum of ~85\% when at the Earth-like $1$ au.
-    Right: A heatmap for the 10-year time-averaged HC habitability for each latitude band on the y axis and the same planet semi-major axis values on the x-axis.
+    Right: A heatmap for the 10-year time-averaged HC habitability for each latitude band on the y-axis and the same planet semi-major axis values on the x-axis.
     % The 10 year time-averaged HC habitability for each latitude band.
     In this case some latitude bands do reach 100\% habitability.
   }
@@ -820,7 +820,7 @@ As seen from the vertical lines in Fig. \ref{fig:planet_eccentricity}, the Earth
     % The area-averaged human habitability for a 2 year period after 180 years of simulation.
     The planet is never 100\% habitable, reaching a maximum of ~85\%.
     % At $t=180$ years the planet is at perihelion, and is at aphelion at $t=180.5$ years.
-    Right: A heatmap for the 10-year time-averaged HC habitability for each latitude band on the y axis and the same planet eccentricity values on the x-axis.
+    Right: A heatmap for the 10-year time-averaged HC habitability for each latitude band on the y-axis and the same planet eccentricity values on the x-axis.
     % The 10 year time-averaged human habitability for each latitude band.
     As eccentricity increases the habitable zones of the planet move outwards towards the poles because they are less directly insolated.
     % Higher eccentricities both melt the poles and cause the equatorial regions to be too hot.
@@ -850,7 +850,7 @@ This higher insolation gives rise to higher temperatures across the planet.
 This melts the poles which are otherwise frozen, and causes the already hot equator to become too hot to sustain life.
 
 Slightly increasing $a$ from $1$ au, the planet experiences a sharp drop in temperature.
-This is due to IAB where a small temperature decrease allows the icecaps to grow, and further decrease insolation until the entire planet is covered in ice.
+This is due to IAF where a small temperature decrease allows the icecaps to grow, and further decrease insolation until the entire planet is covered in ice.
 
 In this case the HC habitability means that an Earth-like planet would not be habitable at the orbits of our closest neighbours, Venus and Mars.
 
@@ -873,7 +873,7 @@ So far the semi-major axis and eccentricity have been varied independently to in
 Varying both together can illuminate the habitability parameter space for orbits in exoplanet systems.
 This is shown in Fig. \ref{fig:qualitative_semimajoraxis_eccentricity} where the semi-major axis and eccentricity of a planet are varied together.
 The top graph is a heatmap for the equilibrium temperature of the planet, and the bottom graphs are the processing of the temperature data using the LWR habitability and HC habitability.
-The temperature heatmap highlights the drop-off in temperature when IAB starts and the planet falls into a snowball.
+The temperature heatmap highlights the drop-off in temperature when IAF starts and the planet falls into a snowball.
 There exist some above freezing temperatures for high eccentricity and high semi-major axis, likely due to the planets unfreezing when close the Sun, and refreezing when further away.
 
 Both habitabilities show similar shapes but different widths which is reflective of HC being more restrictive in temperature range than LWR.
@@ -889,7 +889,7 @@ Alternatively, the HC habitability indicates that these high eccentricities have
   \includegraphics[width=0.495\linewidth]{images_rewrite/obliquity_humancomp_time.png}
   \includegraphics[width=0.495\linewidth]{images_rewrite/obliquity_humancomp_area.png}
   \caption{
-    Left: The area-averaged human habitability for a 2 year period after 150 years of simulation.
+    Left: The area-averaged human habitability for a 2-year period after 150 years of simulation.
     The habitability varies between 70\% and 100\%, with the highest habitabilities being between 20\degrees and 50\degrees
     At lower obliquities polar ice caps form reducing the area habitability.
     Right: The 10 year time-averaged human habitability for each latitude band.
@@ -967,7 +967,7 @@ In this range the habitability is fairly constant.
 %   C: Varying ocean fraction with eccentricity and obliquity;
 %     how eccentricity allows for IAF
 %     how obliquity allows for IAF
-%     when model is susceptible to IAB
+%     when model is susceptible to IAF
 %     relation to thermal timescale
 %
 \begin{figure}[t]
@@ -982,17 +982,17 @@ In this range the habitability is fairly constant.
   \label{fig:qualitative_oceanfraction}
 \end{figure}
 
-The snowball state produced by IAB has been seen when varying semi-major axis (Figs. \ref{fig:planet_semimajoraxis} and \ref{fig:qualitative_semimajoraxis}) and partially when varying eccentricity (Fig. \ref{fig:planet_eccentricity}).
-A variable which influences susceptibility to IAB is the ocean fraction.
+The snowball state produced by IAF has been seen when varying semi-major axis (Figs. \ref{fig:planet_semimajoraxis} and \ref{fig:qualitative_semimajoraxis}) and partially when varying eccentricity (Fig. \ref{fig:planet_eccentricity}).
+A variable which influences susceptibility to IAF is the ocean fraction.
 
 The thermal timescale (eqn. \eqref{eq:ThermalTimescale}) means that ocean, which has a higher heat capacity than land, has a larger thermal inertia.
 Larger thermal inertia means the ocean on the planet helps to reduce temperature variations which the planet experiences.
-Thus, it is expected that planets with low ocean fraction will be susceptible to IAB in shorter timescales or with less forcing than high ocean fraction planets.
+Thus, it is expected that planets with low ocean fraction will be susceptible to IAF in shorter timescales or with less forcing than high ocean fraction planets.
 The main orbital variables influencing this forcing are the eccentricity and obliquity.
 
 In an eccentric orbit the insolation decreases as the planet moves away from the Sun.
 This reduced insolation causes a lower temperature for a portion of the year.
-If the temperature is reduced enough, IAB can kick in and cause the planet to fall into a snowball state that it cannot recover from.
+If the temperature is reduced enough, IAF can kick in and cause the planet to fall into a snowball state that it cannot recover from.
 
 Obliquity can also cause snowball states.
 Obliquity for the Earth means seasons, where winter occurs in a hemisphere when that hemisphere points away the Sun because it is less directly insolated.
@@ -1004,6 +1004,9 @@ To investigate these expectations the ocean fraction of the model is varied in F
 In the left plot ocean fraction is varied against eccentricity with zero obliquity, and in the right plot ocean fraction is varied against obliquity with zero eccentricity.
 
 We see that for eccentricity there as a minimum ocean fraction which increases with eccentricity until a maximum at $e=0.3$ of $f_\text{ocean} = 20\%$.
+Using the average temperature when not in equilibrium ($T=300$ K) and assuming that the planet must drop in temperature to be at least below freezing ($\Delta T = 30$ K) then the thermal timescale for this model at minimum ocean fraction is $\tau = 5.2 \times 10^{6} \text{s} \approx 2 \text{months}$.
+This means that this model is susceptible to IAF on the timescale of $2$ months when at minimum ocean fraction, with shorter time scales at lower ocean fractions.
+The value is approximate as higher eccentricities increase the maximum temperature, thus increasing IR emission, but also increasing the required change in temperature.
 At $e=0$ there is no temperature variation, so the model cannot fall into a snowball state.
 As eccentricity increases the minimum ocean fraction, thus minimum thermal inertia, required to prevent a fall into a snowball state increases as expected.
 Unexpected is the region after $e > 0.4$.
@@ -1017,8 +1020,10 @@ The habitability of this sort of planet is difficult to quantify.
 Humans have survived ice ages in the past by burning fuels and sheltering in caves, to give just two examples.
 We are yet to see if human life will survive extreme heat.
 
-Similarly, when varying obliquity the minimum ocean fraction starts at 0 and increases until a maximum at roughly $\delta = 45\degrees$.
-For $0\degrees < \delta < 10\degrees$ the planet does not fall into a snowball state as the permanent shadow region is not large enough to cause runaway IAB.
+Similarly, when varying obliquity the minimum ocean fraction starts at $0$ and increases until a maximum of $36\%$ at roughly $\delta = 45\degrees$.
+For $0\degrees < \delta < 10\degrees$ the planet does not fall into a snowball state as the permanent shadow region is not large enough to cause runaway IAF.
+The thermal timescale for this obliquity case is roughly twice the eccentricity case, $\tau = 3.9$ months.
+This means that the IAF from obliquity acts over a much longer timescale than the eccentricity case, thus requires that the planet has a higher thermal inertia in the form of oceans to prevent it.
 
 For Earth-like obliquities (between $22\degrees$ and $25\degrees$) the planet is susceptible to a snowball state only if the planet has ocean fraction less than roughly $15\%$.
 
@@ -1032,11 +1037,11 @@ This is likely due to the obliquity having a more localised effect on the polar 
 
 % Stability of the snowballing w.r.t. ocean fraction
 % > a-f_ocean plot showing snowball transition changing?
-Both variables cause the planet to be susceptible to IAB, and both cause full or partial recovery from snowball at extreme values.
+Both variables cause the planet to be susceptible to IAF, and both cause full or partial recovery from snowball at extreme values.
 For eccentricity the minimum ocean fraction varies approximately quadratically with eccentricity until $e = 0.4$ where the eccentricity is high enough to melt the induced snowball meaning the time averaged temperature increases.
-The minimum ocean fraction in the obliquity case varies with an `S' shape and levels out after $\delta = 40\degrees$ to a minimum ocean fraction of $f_\text{ocean, min} = 0.36$.
+The minimum ocean fraction in the obliquity case varies with an `S' shape and levels out after $\delta = 45\degrees$ to a minimum ocean fraction of $f_\text{ocean, min} = 36\%$.
 Similar to the eccentricity case, high obliquities can partially recover from the snowball. In this case it is due to the pole facing the Sun melting for half a year due to constant insolation before refreezing when facing away from the Sun.
-There are nearly no variations due to changing ocean fraction above $f_\text{ocean} = 0.2$ in the eccentricity case, and few variations above $f_\text{ocean} = 0.4$ for the obliquity case.
+There are nearly no variations due to changing ocean fraction above $f_\text{ocean} = 20\%$ in the eccentricity case, and few variations above $f_\text{ocean} = 40\%$ for the obliquity case.
 
 \section{Earth-like Exomoon Modifications and Investigations} \label{sec:Exomoons}
 % Earth-like exomoon modifications and results;
@@ -1158,9 +1163,9 @@ This can be described using the 0DEBM (eqn. \eqref{eq:0DEBM}) as
     = \frac{R_\text{gas}^2 S(1 - A_\text{gas})}{4 a_\text{moon}^2 \sqrt{1-e_\text{moon}^2}},
     \label{eq:emission_flux}
 \end{equation}
-where this flux assumes that the gas giant is in equilibrium as expected by the 0DEBM with the variables given in Table. \ref{tab:default_params_moon}..
+where this flux assumes that the gas giant is in equilibrium as expected by the 0DEBM with the variables given in Table. \ref{tab:default_params_moon}.
 An alternative source is residual heat of formation.
-For example, Jupiter is still slightly warmer than expected from equilbrium \cite{LJW2018}.
+For example, Jupiter is still slightly warmer than expected from equilibrium \cite{LJW2018}.
 This is not accounted for in this model, but could be added by setting the temperature directly instead of using the 0DEBM.
 
 
@@ -1244,10 +1249,10 @@ This paper uses the Maxwell model from Henning et al \cite{Henning2009}, given b
   \label{eq:imk2_maxwell}
 \end{equation}
 where $\beta = \rho g R_\text{moon}$ has been described as gravitational stiffness term with $\rho$ being the density of material in the moon, $g$ being the moon's surface gravity, and $R$ being the radius of the moon.
-The temperature dependent forms of the viscosity, $\eta$, and shear modulus, $\mu$, are given in Henning et al \cite{DobosTurner2015} and in appx. \ref{appx:TidalHeatingEquationsMethod}. 
+The temperature dependent forms of the viscosity, $\eta$, and shear modulus, $\mu$, are given in Henning et al \cite{Henning2009} and in appx. \ref{appx:TidalHeatingEquationsMethod}. 
 The orbital frequency, $\omega$, and other parameters take (or can be derived from) the default values in Tab. \ref{tab:default_params_moon}.
 
-The tidal heating can sharply cut off for certain orbital parameters when the tidal heating is less than convective cooling at all mantle temperatures so the core temperature at equilbrium is too low to heat the surface of the planet effectively.
+The tidal heating can sharply cut off for certain orbital parameters when the tidal heating is less than convective cooling at all mantle temperatures so the core temperature at equilibrium is too low to heat the surface of the planet effectively.
 
 
 \subsection{Impact on Previous Investigations} \label{ssec:Impact_previous_results}
@@ -1273,17 +1278,19 @@ The tidal heating can sharply cut off for certain orbital parameters when the ti
 With the model appropriately updated, temperature profiles and habitabilities seen previously can be investigated for this moon model.
 Shown in Fig. \ref{fig:semimajoraxiscomparision} is how the time-averaged (HC) habitability for variable semi-major axis changes between the planetary model and moon model (left) and how the equilibrium temperature changes with semi-major axis (right). 
 The plot on the left shows how the latitude habitable zone changes between a planetary model and a moon model with the default parameters in Tab. \ref{tab:default_params_moon}.
-And the plot on the right shows how the equilibrium temperature of the planet between the planetary model and two moon models, one with default parameters and one with higher eccentricity.
+And the plot on the right shows how the equilibrium temperature of the planet between the planetary model and two moon models, one with default parameters and one with higher lunar eccentricity.
 
-The habitable zone becomes wider at all latitudes and moves outwards towards Mars' orbit.
+In the latitude plot the habitable zone becomes wider at all latitudes and moves outwards towards Mars' orbit.
 The reason for both these effects is the additional energy flux from tidal heating.
-The habitable zone becomes wider as the moon is less reliant on a specific distance from the Sun to generate habitable temperatures.
-The habitable zone moves further out as the additional energy flux generally raises the temperature of the planet, meaning it is too hot for life at the closer distances.
+The habitable zone becomes wider as the moon is less reliant on a specific distance from the Sun to generate habitable temperatures,
+and the habitable zone moves further out as the additional energy flux generally raises the temperature of the planet, meaning it is too hot for life at the closer distances.
+This means that exomoons which are found at distances further from their host stars than are habitable for planets may still be habitable due to tidal heating.
 
 This is also seen in the equilibrium temperatures, where a wider range of values are within the range for liquid water. 
 Seen in the orange set of data is a more exaggerated curve when falling to the snowball state than for the planetary model in blue.
-This is due to IAB playing less of a role in determining the climate of the planet as the tidal heating is independent of albedo.
-The tidal heating also helps to prevent the planet's temperature from decreasing to the point where IAB can dominate by providing a constant heat source when further from the star.
+This is due to IAF playing less of a role in determining the climate of the planet as the tidal heating is independent of albedo.
+The tidal heating also helps to prevent the planet's temperature from decreasing to the point where IAF can dominate by providing a constant heat source when further from the star.
+At higher lunar eccentricities it is possible for the moon to have completely habitable temperatures without the need for a star, which means that exomoons orbiting a rogue gas giant without a star may have a chance to harbour life. 
 
 \begin{figure}[t]
   \includegraphics[width=0.495\linewidth]{images_rewrite/eccentricity_planetary_2_moon.png}
@@ -1299,11 +1306,11 @@ The tidal heating also helps to prevent the planet's temperature from decreasing
 \end{figure}
 
 Similarly, in Fig. \ref{fig:eccentricity_obliquity_comparisions} the equilibrium temperatures when varying gas giant eccentricity (left) and planetary obliquity (right) with different moon eccentricities are shown.
-The dip in temperature at low eccentricity due to IAB is missing from the moon models.
-This is because temperatures are generally higher so the IAB cannot start.
+The dip in temperature at low eccentricity due to IAF is missing from the moon models.
+This is because temperatures are generally higher so the IAF cannot start.
 In the obliquity case the characteristic `S' shape of the temperature with increasing obliquity is reduced in two ways.
 First is that the inflection point of the curve moves to higher obliquities, and second that the range in temperature decreases from the planetary model to the moon models.
-Both these changes indicate that the moon model depends less on the obliquity of the planet to inform its climate, mostly due to the tidal heating.
+Both these changes indicate that the moon model depends less on the obliquity of the planet to inform its climate, mostly due to the tidal heating meaning that the poles are melted much more easily and have trouble forming without the help of IAF.
 
 \subsection{Exomoon Semi-major Axis and Eccentricity Investigations} \label{ssec:Exomoon_specific_results}
 %   E: Exomoon specific results;
@@ -1322,32 +1329,37 @@ Both these changes indicate that the moon model depends less on the obliquity of
   \label{fig:moon_semimajoraxis_eccentricity}
 \end{figure}
 
-\ref{fig:moon_semimajoraxis_eccentricity}
-Variable moon semi-major axis has a similar shape to the variable gas semi-major axis.
+In Fig. \ref{fig:moon_semimajoraxis_eccentricity} the HC time-averaged habitability for each latitude band is shown when varying the moon's semi-major axis (left) and eccentricity (right).
 
+Variable moon semi-major axis has a similar shape to the variable gas semi-major axis, though the scaling is much sharper due to the insolation scaling as $a_\text{gas}^{-2}$ and the tidal heating scaling as $a_\text{moon}^{-15/2}$.
 At high semi-major axis the tidal heating is less than the convective cooling, so `turns off'.
-It might be expected that the moon at the same distance as the Earth from the Sun would still be warm enough to be habitable.
-The high semi-major axes and low eccentricities show that this is not the case as they are in snowball states.
+It might be expected that a moon in orbit around a gas giant at the same distance as the Earth from the Sun would still be warm enough to be habitable.
+However, these graphs show how when the tidal heating switches off the moon does not receive enough insolation so falls into a snowball state.
 This is because to the reduction of insolation due to eclipsing is larger than the additional light reflected and emitted from the gas giant.
 As shown in Fig. \ref{fig:planet_semimajoraxis} even a small decrease in insolation, such as the decrease due to eclipsing, can lead to a snowball state.
+
+Variable moon eccentricity is quite different to the gas giant eccentricity.
+At very low eccentricity the tidal heating turns off, so the moon falls into a snowball as already described.
+At high eccentricity the tidal heating is strong enough to raise the temperature of the moon by a large amount.
+The key difference is that the gas giant eccentricity must reach $0.8$ before rendering the planet completely uninhabitable, whereas the moon eccentricity can raise temperature to uninhabitable levels at only $e_\text{moon} = 0.01$.
 
 \section{Discussion} \label{sec:Discussion}
 In modelling the habitability of these exoplanets and exomoons a number of assumptions were made.
 
 This model assumes that there is a thick atmosphere capable of transporting heat across the surface of the planet (i.e. between and within latitude bands).
-This may not be true for all exoplanets, but a reasonable expectation of a habitable exoplanet would be a breathable atmosphere, so this assumption is valid.
-Something not considered with the atmospheric dynamics is the effect of high temperature on rate of atmosphere and water loss.
-When looking at the extreme temperature variations caused by a highly eccentric orbit the planet may reach temperatures in excess of $200\degreesC$ when close to the star and reach temperatures of $30\degreesC$ when far from the star.
+This may not be true for all exoplanets, but a reasonable expectation of a habitable exoplanet would be a breathable atmosphere, so this assumption is most likely valid.
+However, something not considered with the atmospheric dynamics is the effect of high temperature on rate of atmosphere loss and water loss.
+When looking at the extreme temperature variations caused by a highly eccentric orbit the planet may reach temperatures in excess of $200\degreesC$ when close to the star and cool to temperatures of $30\degreesC$ when far from the star.
 It would be expected that the high temperature would boil away much of the atmosphere and oceans, however this model does not take this into consideration.
 This is somewhat handled by the HC habitability function not allowing for extreme temperatures, but can lead to misleading average temperatures where the planet looks to be within a habitable temperature when the variation in temperature is very large.
-Future work on the model could include adding a hydrological cycle and carbon-silicate cycle as well as atmospheric loss due to temperature in order to investigate more closely the evolution of the atmosphere and how that impact the habitability of the model.
+Future work on the model could include additional climate modelling beyond just temperature, such as adding a hydrological cycle and carbon-silicate cycle as well as atmospheric loss due to temperature.
+These would investigate more closely the evolution of the atmosphere and how that impact the habitability of the model.
 
 The approximation of a uniform planet could also be probed further.
-Exoplanets may have land-ocean distributions similar to Earth where the northern hemisphere has more land than the southern hemisphere.
+Exoplanets may have land-ocean distributions similar to Earth where the Northern Hemisphere has more land than the Southern Hemisphere.
 The planet could be probed with different fractions of land and ocean.
 For example: an ocean centred on one of the poles of the planet and increasing in size from a desert world with small a polar ocean to ocean world with a small polar continent.
-
-Further, the ocean for the planet is assumed to have the same mixing depth at all points, and the planet is assumed to have uniform altitude across it4560-s entire surface.
+Further, the ocean for the planet is assumed to have the same mixing depth at all points, and the planet is assumed to have uniform altitude across its entire surface.
 These assumptions do not impact the model too much when considering an exoplanet whose surface features are not known, however in the future (or when modelling the Earth for example) these values must be examined for carefully.
 
 Research motivated by climate change suggests that ice melting can release CO$_2$ which is not accounted for in this model.
@@ -1359,8 +1371,7 @@ It would not be correct to assume that all exoplanets have a CO$_2$ rich past bu
 In order to relax the assumption of a diurnally averaged insolation the longitude dimension must be added to the model.
 This would allow for a closer examination of heat flow across the planet, as well as potentially allow for analysis of tidally locked planets or planets with very slow rotation.
 Analysis of tidally locked planets would be of particular relevance due to many exoplanets detected around cooler red stars being tidally locked.
-
-The insolation in the model is dependent on semi-major axis, obliquity, and eccentricity. 
+Also, the insolation in the model is dependent only on semi-major axis, obliquity, and eccentricity. 
 Further work could include varying the insolation to follow the Sun's sunspot cycle to investigate how this could affect the climate.
 For example, a solar minimum may be enough in some cases to cause the planet to fall into a snowball state which is not reflected in the current model.
 
@@ -1372,6 +1383,21 @@ A counter to this is that high eccentricity moons very quickly circularise their
 This means that the only exomoons with stable eccentric orbits which allow for tidal heating are those which have low eccentricities and have orbital resonances to maintain that eccentricity
 Thus, the powerful tidal heating at high eccentricity is important for early formation but not for later evolution.
 
+Eclipsing in the model is independent of eccentricity of the orbit of the gas giant and moon.
+Further work with this model could include eccentricity, either through an analytical approach or by improving the speed and accuracy of the orbit simulation code.
+Another assumption made when modelling the eclipsing was that the star was point-like.
+In most regimes this is an effective assumption but could also be relaxed to further enhance the model.
+
+All the exomoons considered in this paper have eccentric orbits at small semi-major axes.
+These values were chosen to highlight the effect that tidal heating had on the moon and its habitability.
+Further work could focus on exomoons which are not tidally heated as this would allow for the effects of the light from the gas giant and the eclipsing to be more apparent.
+If the orbital code were improved then the time dependent nature of the eclipsing could be investigated to determine any time dependent effects on the habitability of the moon.
+
+Alternatively, the tidal heating of the moon could be focused on more.
+A `depth model' could be devised from the heat equation by allowing radius to vary with the angles constant.
+This would allow for a more rigorous investigation of how the tidal heat flows outwards from the core.
+An application of this depth model would be for a moon like Io or Titan which has a frozen outer shell with potential for a liquid water ocean under which could be melted and maintained by tidal heat.
+The investigation would then follow a similar one to this paper where the potential for habitable temperatures could be investigated by varying the parameters of the model.
 % Problems arising during analysis / method
 % Sources of uncertainty in the method
 % Approximations made and their validity
