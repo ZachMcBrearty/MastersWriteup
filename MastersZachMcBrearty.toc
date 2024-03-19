@@ -1,31 +1,31 @@
 \contentsline {title}{Modelling the Habitability of Exoplanets and Exomoons}{1}{section*.2}%
 \contentsline {abstract}{Abstract}{1}{section*.1}%
 \tocdepth@munge 
-\contentsline {section}{\numberline {}Contents}{2}{section*.3}%
+\contentsline {section}{\numberline {}Contents}{1}{section*.3}%
 \tocdepth@restore 
-\contentsline {section}{\numberline {1}Introduction}{3}{section*.4}%
-\contentsline {subsection}{\numberline {A}Exoplanet and Exomoon Detection}{3}{section*.5}%
+\contentsline {section}{\numberline {1}Introduction}{2}{section*.4}%
+\contentsline {subsection}{\numberline {A}Exoplanet and Exomoon Detection}{2}{section*.5}%
 \contentsline {subsection}{\numberline {B}Energy Balance Models}{3}{section*.6}%
 \contentsline {subsection}{\numberline {C}Habitability}{5}{section*.7}%
 \contentsline {subsection}{\numberline {D}Modifications for Exomoons}{6}{section*.8}%
 \contentsline {section}{\numberline {2}1-D Energy Balance Climate Model}{7}{section*.9}%
-\contentsline {subsection}{\numberline {A}Earth-like Model Functions}{8}{section*.10}%
-\contentsline {subsection}{\numberline {B}Discretisation and Time Evolution}{11}{section*.14}%
-\contentsline {subsection}{\numberline {C}Averaging and Habitability}{12}{section*.15}%
-\contentsline {section}{\numberline {3}Investigating Earth-like Exoplanets}{13}{section*.17}%
-\contentsline {subsection}{\numberline {A}Varying Semi-major Axis and Eccentricity}{13}{section*.18}%
-\contentsline {subsection}{\numberline {B}Varying Obliquity}{18}{section*.24}%
-\contentsline {subsection}{\numberline {C}Varying Ocean Fraction with Eccentricity and Obliquity}{20}{section*.26}%
-\contentsline {section}{\numberline {4}Earth-like Exomoon Modifications and Investigations}{21}{section*.28}%
-\contentsline {subsection}{\numberline {A}Eclipsing}{21}{section*.29}%
-\contentsline {subsection}{\numberline {B}Reflectance and Emission from the Gas Giant}{23}{section*.32}%
-\contentsline {subsection}{\numberline {C}Tidal Heating}{24}{section*.33}%
+\contentsline {subsection}{\numberline {A}Earth-like Model Functions}{7}{section*.10}%
+\contentsline {subsection}{\numberline {B}Discretisation and Time Evolution}{10}{section*.14}%
+\contentsline {subsection}{\numberline {C}Averaging and Habitability}{11}{section*.15}%
+\contentsline {section}{\numberline {3}Investigating Earth-like Exoplanets}{12}{section*.17}%
+\contentsline {subsection}{\numberline {A}Varying Semi-major Axis and Eccentricity}{12}{section*.18}%
+\contentsline {subsection}{\numberline {B}Varying Obliquity}{17}{section*.24}%
+\contentsline {subsection}{\numberline {C}Varying Ocean Fraction with Eccentricity and Obliquity}{18}{section*.26}%
+\contentsline {section}{\numberline {4}Earth-like Exomoon Modifications and Investigations}{20}{section*.28}%
+\contentsline {subsection}{\numberline {A}Eclipsing}{20}{section*.29}%
+\contentsline {subsection}{\numberline {B}Reflectance and Emission from the Gas Giant}{22}{section*.32}%
+\contentsline {subsection}{\numberline {C}Tidal Heating}{23}{section*.33}%
 \contentsline {subsection}{\numberline {D}Impact on Previous Investigations}{24}{section*.35}%
-\contentsline {subsection}{\numberline {E}Exomoon Semi-major Axis and Eccentricity Investigations}{26}{section*.38}%
-\contentsline {section}{\numberline {5}Discussion}{27}{section*.40}%
+\contentsline {subsection}{\numberline {E}Exomoon Semi-major Axis and Eccentricity Investigations}{25}{section*.38}%
+\contentsline {section}{\numberline {5}Discussion}{26}{section*.40}%
 \contentsline {section}{\numberline {6}Conclusion}{27}{section*.41}%
-\contentsline {section}{\numberline {}References}{27}{section*.42}%
+\contentsline {section}{\numberline {}References}{28}{section*.42}%
 \appendix 
-\contentsline {section}{\numberline {A}Numerical Stability of the 1DEBCM}{29}{section*.43}%
-\contentsline {section}{\numberline {B}Tidal Heating Equations and Method}{29}{section*.44}%
-\contentsline {section}{\numberline {}Scientific Summary for a General Audience}{30}{section*.45}%
+\contentsline {section}{\numberline {A}Numerical Stability of the 1DEBCM}{30}{section*.43}%
+\contentsline {section}{\numberline {B}Tidal Heating Equations and Method}{30}{section*.44}%
+\contentsline {section}{\numberline {}Scientific Summary for a General Audience}{31}{section*.45}%

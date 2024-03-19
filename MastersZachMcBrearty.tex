@@ -160,13 +160,13 @@
 \maketitle
 %\thispagestyle{plain} % produces page number for front page
 
-\newpage
+% \newpage
 
 \tableofcontents
 % \let\toc@pre\relax
 % \let\toc@post\relax
 
-\newpage
+% \newpage
 
 %% Generally better titles for sections and subsections %%
 
@@ -184,10 +184,10 @@
 When the first exoplanet was discovered is up for debate depending on classification \cite{ESA_2019}.
 To give a summary:
 The first evidence for an exoplanet came in 1988 but was attributed to stellar activity.
-This was followed up later in 2003 and found to be a exoplanet.
+This was followed up later in 2003 and found to be an exoplanet.
 This confirmation happened many years after 1992 when the first exoplanets were found orbiting a pulsar via the variations in pulsar timings due to those exoplanets.
-However the intensity of radiation from these pulsars make life on these exoplanets impossible.
-Then the first potentially habitable exoplants were found in 1995; potentially habitable because they orbit a Sun-like star.
+However, the intensity of radiation from these pulsars make life on these exoplanets impossible.
+Then the first potentially habitable exoplanets were found in 1995; potentially habitable because they orbit a Sun-like star.
 
 % Methods of detection / Current missions
 Exoplanets are now found in a variety of indirect and direct methods.
@@ -197,9 +197,9 @@ Direct and indirect methods have also been combined to find planets.
 For example Kepler-88c was discovered indirectly due to variation in the transit of Kepler-88b \cite{Nesvorny2013}.
 
 These methods can also be extended to find exomoons around exoplanets.
-The pulsar timing from an exoplanet has additional variations due to a exomoon \cite{Lewis2008} and it has been shown that nearby exomoons may be found using Kepler (or Kelper-class) photometry by analysing variations in transit timing signals \cite{KSG2009}.
+The pulsar timing from an exoplanet has additional variations due to an exomoon \cite{Lewis2008}, and it has been shown that nearby exomoons may be found using Kepler (or Kelper-class) photometry by analysing variations in transit timing signals \cite{KSG2009}.
 
-More recently, it has been shown that exomoons with strong tidal heating could be brighter brighter than the exoplanet they orbit, so are easier to detect than exoplanets in some cases \cite{LimTurn2013}.
+More recently, it has been shown that exomoons with strong tidal heating could be brighter than the exoplanet they orbit, so are easier to detect than exoplanets in some cases \cite{LimTurn2013}.
 Further, the launch of the JWST has enabled the direct detection of earth-sized exomoons with economical use of observation time \cite{Limbach2021}.
 
 The culmination of all these methods is collated by the Encyclopaedia of Exoplanetary Systems \cite{ExoEu} who report a total of 5641 exoplanets confirmed but no exomoons.
@@ -215,7 +215,7 @@ Both these projects will allow for human settlement away from the Earth, and are
 %     0DEBM -> not dynamic, but still useful for establishing relationships between parameters e.g. Mendez
 Analysing the habitability of exoplanets can be difficult.
 The Trappist-1 system is an excellent example. In the system seven Earth-like planets were found within the habitable zone of their host star \cite{GTD2017}.
-However they are not habitable due to a mixture of being tidally-locked to the star and experiencing extreme solar winds which have probably stripped them of any atmosphere long ago \cite{Cohen2024, VanLooveren2024}.
+However, they are not habitable due to a mixture of being tidally-locked to the star and experiencing extreme solar winds which have probably stripped them of any atmosphere long ago \cite{Cohen2024, VanLooveren2024}.
 This suggests that modelling of an exoplanet's habitability requires modelling of the dynamic atmosphere,
 
 One way to model the exoplanets is with an energy balance model, where incoming energy (usually from a star) is equated to outgoing energy (usually blackbody emission).
@@ -263,14 +263,14 @@ In the 1DEBCM, albedo is a function of temperature where lower temperatures have
 If temperature decreases, more ice forms thus albedo increases.
 This increased albedo means more insolation is reflected, thus the model has even less input heat and so cools further and forms more ice.
 
-Thus IAB is positive feedback loop between ice formation and albedo which can result in a `snowball' model which is entirely covered in ice.
+Thus, IAB is positive feedback loop between ice formation and albedo which can result in a `snowball' model which is entirely covered in ice.
 The susceptibility of the model to IAB can be estimated using the thermal timescale,
 %     Thermal timescale definition τ = CT / I
 \begin{equation}
-  \tau = \frac{C T}{I},
+  \tau = \frac{C \Delta T}{I},
   \label{eq:ThermalTimescale}
 \end{equation}
-which is the energy in the model divided by the speed of removal of that heat via IR emission.
+which is the energy change in the model divided by the speed of removal of that heat via IR emission.
 This definition suggests that a larger heat capacity requires a longer time period to change, thus should be less susceptible to IAB.
 
 This is reflected in Sec. \ref{ssec:qualitative_oceanfraction} where ocean fraction (thus heat capacity) in the model is varied, and it is found that low ocean fraction (low heat capacity) is much more susceptible to IAB due to the smaller thermal timescale.
@@ -304,8 +304,8 @@ Taking the time-average of this function over a year period gives
   \end{split}
   \label{eq:NC_timeavg}
 \end{equation}
-where the temperature has been converted to Kelvin, and the second legrendre polynomial is expanded as $P_2(x) =(3x^2-1) / 2$.
-The average of $\cos(\omega t + \phi)$ over an period $T = 2\pi / \omega$ is $0$, so the first legendre polynomial is not needed.
+where the temperature has been converted to Kelvin, and the second Legendre polynomial is expanded as $P_2(x) =(3x^2-1) / 2$.
+The average of $\cos(\omega t + \phi)$ over a period $T = 2\pi / \omega$ is $0$, so the first Legendre polynomial is not needed.
 This time-averaged model is then used to fix the diffusion $D$ for the model in Section \ref{ssec:EarthLikeModel}.
 
 % Exoplanets (i.e. moving Earth around)
@@ -330,7 +330,7 @@ LWR is the more familiar of the two where a temperature between the melting poin
   \end{cases}
   \label{eq:H_LWR}
 \end{equation}
-The alternatively, the HC habitability is defined with a smaller range of values,
+Alternatively, the HC habitability is defined with a smaller range of values,
 \begin{equation}
   H_\text{HC}(T) =
   \begin{cases}
@@ -342,7 +342,7 @@ The alternatively, the HC habitability is defined with a smaller range of values
 with the additional stipulation that if a latitude band experiences a temperature greater than $40\degreesC$ or less than $-10\degreesC$ then the band is considered uninhabitable for all time.
 The motivation for this temperature range and restriction of extreme temperatures comes from the ability for humans to self regulate their internal temperature.
 The typical temperature used to assess human survivability is a wet bulb temperature of $T_w = 30\degreesC$.
-However this value can underestimate the onset of hyperthermia and overestimate lethality \cite{LuRomps2023}.
+However, this value can underestimate the onset of hyperthermia and overestimate lethality \cite{LuRomps2023}.
 This motivates the underestimate of habitability decreasing at $30\degreesC$ and being lethal at the higher $40\degreesC$.
 The minimum temperature is simply a symmetry of the maximum case, and is less important due to cold places staying cold due to IAB.
 
@@ -359,7 +359,7 @@ The second is the area-weighted habitability, $f_\text{area}$, which is given in
   \label{eqn:areaaverage}
 \end{equation}
 where the area weighting occurs as each latitude band has unequal area.
-Finally the combination of these two measures results in the total habitability, $f_\text{total}$, given in their eqn. (8) as
+Finally, the combination of these two measures results in the total habitability, $f_\text{total}$, given in their eqn. (8) as
 \begin{equation}
   f_\text{total}(q) = \frac{1}{2P} \int_{-\pi/2}^{\pi/2} \int_{0}^{P} H(q, \lambda, t) dt \cos(\lambda)d\lambda,
   \label{eqn:totalaverage}
@@ -374,7 +374,7 @@ This paper uses the discrete form of these equations in Section \ref{ssec:habiAv
 In this paper the moon is an Earth-sized moon and the planet is a Jupiter-sized gas giant.
 In our own solar system there are no moons which come close the size of the Earth, which presents the question: do Earth-sized exomoons exist?
 The answer is in two parts.
-First, mass $m > 0.12 M_\text{Earth}$ and a strong magnetic field \cite{WKW1997} would be required for a ``substaintial and long-lived atmosphere'', thus the exomoons must be high mass.
+First, mass $m > 0.12 M_\text{Earth}$ and a strong magnetic field \cite{WKW1997} would be required for a ``substantial and long-lived atmosphere'', thus the exomoons must be high mass.
 Second, mechanisms such as binary capture \cite{Williams2013} can allow for high mass moons where the usual accretion models, such as those that formed the moons seen in the outer solar system, do not. 
 
 In order to investigate exomoons the 1DEBCM must be modified to include three heat sources and a reduction to insolation.
@@ -389,10 +389,10 @@ This eclipsing fraction is added to the model as a reduction to the insolation,
 In section \ref{ssec:ref_emiss_gg} the flux received from the moon due to light from the sun being reflected by the gas giant as well as the emission of light from the gas giant are quantified and added to the model as $F_\text{ref}$ and $F_\text{emiss}$ respectively.
 The reflected light from the gas giant is supposed to be from the light not absorbed by the gas giant, which is just the incident light from the sun times the albedo of the gas giant.
 The emission of the light from the gas giant is then emission of a blackbody in equilibrium given by the 0DEBM.
-The moon model assumes that the gas giant has radiated all of it's heat of formation and thus is in thermal equilibrium with the sun.
+The moon model assumes that the gas giant has radiated all of its heat of formation and thus is in thermal equilibrium with the sun.
 This is not the case for Jupiter in our own solar system, which the model bases the gas giant after \cite{LJW2018}, but the additional heat is small.
 
-In section \ref{ssec:TidalHeating} the tidal heating of the moon due to it's elliptical orbit around the gas giant is quantified.
+In section \ref{ssec:TidalHeating} the tidal heating of the moon due to its elliptical orbit around the gas giant is quantified.
 Tidal heating equations are described in detail for the specific case of Io in \cite{YP1981, Segatz1988} and for general exoplanets in \cite{DobosTurner2015, DHT2017}.
 The general equation for tidal heating is given by
 \begin{equation}
@@ -403,7 +403,7 @@ where the mass, radius, eccentricity, and semi-major axis of the subscripted bod
 Specific values for $-\text{Im}(k_2)$ are derived from different rheologies and material compositions of the moon.
 In this paper the Maxwell rheology from Henning et al \cite{Henning2009} is used as well as the material compositions from Dobos and Turner \cite{DobosTurner2015}.
 
-Thus the moon model is, with all modifications made, given by
+Thus, the moon model is, with all modifications made, given by
 \begin{equation}
   \begin{split}
     C \partialderiv{T}{t} =& D\left[\partialderivsecnd{T}{\lambda} - \tan\lambda\partialderiv{T}{\lambda}\right] - I(T) \\
@@ -446,7 +446,7 @@ The 1DEBCM is arrived at by first letting $T(t, r, \theta, \phi) = T(t, \lambda)
 \end{equation}
 The original equation can be recovered by defining $\alpha / r^2 \equiv D / C$ for diffusion constant $D$ and heat capacity $C$.
 Then adding incoming solar radiation $S$ (insolation), which is reduced by planetary albedo $A$, and outgoing IR-emission $I$ to the PDE.
-Thus the original form of the 1D EBCM in eqn. \eqref{eq:1DEBCM} is recovered.
+Thus, the original form of the 1DEBCM in eqn. \eqref{eq:1DEBCM} is recovered.
 
 \subsection{Earth-like Model Functions} \label{ssec:EarthLikeModel}
 %   A: Earth-like model functions;
@@ -511,7 +511,7 @@ The heat capacity, $c_p$, of the atmosphere is relative to $c_{p,0} = 1\times10^
 Average mass of particles in the atmosphere is given by $m$ and is relative to the nitrogen molecule.
 Rotation rate of the planet, $\Omega$, is relative to Earth's $1$ rotation per day.
 These parameters can be extended to be time variable, such as having CO$_2$ emissions increase pressure, change heat capacity, and change mass of particles.
-However this is beyond the scope of this paper.
+However, this is beyond the scope of this paper.
 % However this paper only considers varying the rotation rate of the planet. %%% does it %%%
 
 % Heat capacity
@@ -535,10 +535,10 @@ The ratio of ocean to land for the Earth is 70\% ocean to 30\% land.
 This model assumes this ratio is uniform and constant across the entire planet, thus $f_\text{o} = 0.7$.
 This is a simplification as the Earth has an uneven distribution of land and ocean, with most of the land in the northern hemisphere.
 
-With definitions of diffusion and heat capacity, the timestep and latitude step which are numerically stable can be calculated.
-To do this the EBCM is investigated with a plane wave solution and boundaries on the timestep and latitude step are found.
-The explicit calculation of this is shown in appx. \ref{appx:NumStability}, with the result that, for constant diffusion and timestep, a lower heat capacity requires a larger latitude step.
-The default values for the model are then taken as a timestep of $\Delta t = 1$ day and $S = 61$ latitude nodes ($\Delta \lambda = 3\degrees$ separation).
+With definitions of diffusion and heat capacity, the time step and latitude step which are numerically stable can be calculated.
+To do this the EBCM is investigated with a plane wave solution and boundaries on the time step and latitude step are found.
+The explicit calculation of this is shown in appx. \ref{appx:NumStability}, with the result that, for constant diffusion and time step, a lower heat capacity requires a larger latitude step.
+The default values for the model are then taken as a time step of $\Delta t = 1$ day and $S = 61$ latitude nodes ($\Delta \lambda = 3\degrees$ separation).
 These parameters give good resolution while being completely numerically stable.
 For planets with $f_\text{o} = 0$ (see Sec. \ref{ssec:qualitative_oceanfraction}) a lower value of $S=31$ is chosen as it is stable for the land-only heat capacity value.
 
@@ -588,7 +588,7 @@ where $a$ and $e$ are semi-major axis and eccentricity respectively, and the ecc
   \label{eq:two_body_angle}
 \end{equation}
 where $M = 2\pi (t + t_0) / T$ for a temporal offset $t_0$ and period of the orbit $T$.
-The error in this function inceases with higher $e$ but reduces with additional iterations.
+The error in this function increases with higher $e$ but reduces with additional iterations.
 Three iterations with an eccentricity of $0.9$ gives an error in $E$ of 5\% (compared to 100 iterations), which is a good compromise between computation time and accuracy, especially as $e=0.9$ is the upper bound for eccentricities considered.
 
 % Show Earth-like model
@@ -610,7 +610,7 @@ Spatially the planet can be split into $S$ latitude bands, separated by
 \end{equation}
 with spatial indexing of each band from $m=0, 1, \dots, S-1$.
 Similarly, a temporal indexing of $n=0, 1, \dots$ is used to discretise time in steps of $\Delta t$.
-Thus $T^m_n$ is the temperature at the $m$\textsuperscript{th} timestep for the $n$\textsuperscript{th} latitude band.
+Thus, $T^m_n$ is the temperature at the $m$\textsuperscript{th} time step for the $n$\textsuperscript{th} latitude band.
 
 % choice of partial derivatives
 The spatial derivatives can then be approximated by the central difference and second order central difference:
@@ -624,7 +624,7 @@ and the temporal derivative can be approximated as a forward difference,
   \label{eq:time_1}
 \end{equation}
 with numerical stability analysed in appendix \ref{appx:NumStability}.
-Evolving the EBCM is performed by solving eqn. \eqref{eq:time_1} for $T^m_{n+1}$ in terms of the parameter and temperature values at timestep $n$.
+Evolving the EBCM is performed by solving eqn. \eqref{eq:time_1} for $T^m_{n+1}$ in terms of the parameter and temperature values at time step $n$.
 
 % choice of edge case partial derivatives
 However, a problem arises at the edges of the model as $m=-2, -1, S, S+1$ are not defined.
@@ -648,7 +648,7 @@ Furthermore, the treatment imposed for the $m=1$ and $m=S-2$ second order deriva
   \includegraphics[width=0.8\linewidth]{images_rewrite/Earth_habitabilities_time_190_192.png}
   \caption{
     A demonstration of the LWR Habitability function with time averaging, eqn. \eqref{eq:Q_timeaverage} (left), and area-weighted averaging, eqn. \eqref{eq:Q_areaaveraged} (right).
-    The time averaged habitability is for a 10 year period, and the area-weighted averaged is over the entire planet and is shown for three years.
+    The time averaged habitability is for a 10-year period, and the area-weighted averaged is over the entire planet and is shown for three years.
     % The area-weighted habitability is periodic in time but difficult to predict within a year.
   }
   \label{fig:time_area_habitability_demonstration}
@@ -656,7 +656,7 @@ Furthermore, the treatment imposed for the $m=1$ and $m=S-2$ second order deriva
 
 Analysing the data produced requires the use of area-weighted averaging and time averaging from SMS08.
 The original equations are given as continuous integrals, but are discretised in a similar way to the derivatives in \ref{ssec:DiscretisationPDE}.
-Thus the time averaging, area-weighted averaging, and total averaging are given by
+Thus, the time averaging, area-weighted averaging, and total averaging are given by
 \begin{equation}
   % \begin{split}
     Q^m_{p \to q}  = \frac{\sum_{n=p}^{q} Q^m_n \Delta t} {\sum_{n=p}^{q} \Delta t} 
@@ -682,9 +682,9 @@ A model is said to reach an equilibrium temperature when the fractional differen
   \label{eq:T_equilb}
 \end{equation}
 for some times $t_r > t_q > t_p$.
-Typically the averaging occurs over an orbital period (i.e. local year), so the equilibrium temperature is when there are no significant variations in temperature between two consecutive orbits.
+Typically, the averaging occurs over an orbital period (i.e. local year), so the equilibrium temperature is when there are no significant variations in temperature between two consecutive orbits.
 The value of $\epsilon$ chosen directly influences how long the model must be run to reach an equilibrium.
-In most cases a value of $\epsilon = 10^{-3}$ is used and results in equilbrium times of between $20$ and $150$ years depending on model parameters.
+In most cases a value of $\epsilon = 10^{-3}$ is used and results in equilibrium times of between $20$ and $150$ years depending on model parameters.
 % It is worth noting for some plots that a value of $\langle T \rangle = -1$ means the model did not reach an equilbrium temperature within the evolution time and value of $\epsilon$.
 % This $\langle T \rangle = -1$
 
@@ -692,9 +692,9 @@ In most cases a value of $\epsilon = 10^{-3}$ is used and results in equilbrium 
 In fig. \ref{fig:time_area_habitability_demonstration} the use of these functions is demonstrated on the temperature data for the Earth (fig. \ref{fig:Earth_temperature_dist}).
 It is processed using the LWR habitability which has then been time averaged with eqn. \eqref{eq:Q_timeaverage} and area averaged with eqn. \eqref{eq:Q_areaaveraged}.
 
-The time-averaged habitability shows how the the equator is habitable all year around.
+The time-averaged habitability shows how the equator is habitable all year around.
 The poles are uninhabitable year round.
-Between $65\degrees$ to $45\degrees$ the habitability decreases linearly, representative of the variablity of the frost line where latitudes close to the pole are very rarely habitable and latitudes in this range closer to the equator are very rarely uninhabitable.
+Between $65\degrees$ to $45\degrees$ the habitability decreases linearly, representative of the variability of the frost line where latitudes close to the pole are very rarely habitable and latitudes in this range closer to the equator are very rarely uninhabitable.
 
 The area averaged habitability changes in steps as each discrete latitude band becomes habitable or uninhabitable.
 It is periodic, but difficult to predict within each year.
@@ -751,7 +751,7 @@ Time averaged insolation of an planet in an elliptical orbit is given by
 \end{equation}
 where $q_0 = L_{\text{Sun}}/4\pi a_{\text{Earth}}^2 \approx 1360 \ \text{Wm}^{-2}$ is the bolometric solar flux for Earth, $a$ and $e$ are the semi-major axis and eccentricity respectively of the planet \cite{Mendez2017}.
 
-By subsituting this relation into equation \eqref{eq:0DEBM}, the temperature of a planet can be related to semi-major axis and eccentricity through
+By substituting this relation into equation \eqref{eq:0DEBM}, the temperature of a planet can be related to semi-major axis and eccentricity through
 \begin{equation}
   T \propto a^{-\frac{1}{2}} (1-e^2)^{-\frac{1}{8}}, 
   \label{eq:T_propto_a_e}
@@ -768,10 +768,10 @@ The first zone with $a < 0.65$ au has temperatures too high to sustain liquid wa
 The second zone with $0.65 < a < 1$ au is much more temperate, and is able to sustain liquid water on the planet's surface.
 % There is a small dip at $1$ au where the planet is marginally colder than expected.
 % This is due to the ice albedo feedback which is very temperature dependent.
-Both the first and second zones are described by $\langle T \rangle = p_1 a^{q_1}$ with $p_1 = 293.5 \pm 0.4$ and $q_1= -0.505 \pm 0.004$. $q_1$ is very close to the expected $-0.5$ powerlaw seen in eq. \eqref{eq:T_propto_a_e}.
+Both the first and second zones are described by $\langle T \rangle = p_1 a^{q_1}$ with $p_1 = 293.5 \pm 0.4$ and $q_1= -0.505 \pm 0.004$. $q_1$ is very close to the expected $-0.5$ power law seen in eqn. \eqref{eq:T_propto_a_e}.
 However, the value of $p_1$ is $~38$ K higher than the expected proportionality, most likely due to the additional greenhouse effect present in the 1D model.
 
-The third zone with $a > 1$ au is a sudden departure from this expected powerlaw, with $p_2 = 210.2 \pm 0.2$ and $q_2 = -0.378 \pm 0.003$.
+The third zone with $a > 1$ au is a sudden departure from this expected power law, with $p_2 = 210.2 \pm 0.2$ and $q_2 = -0.378 \pm 0.003$.
 This is due to IAB which works as follows.
 As the planet cools, ice forms with a higher albedo than the land or ocean.
 This higher albedo means more light is reflected, thus the planet absorbs less heat, so cools more.
@@ -780,8 +780,8 @@ At $1$ au the planet is on a tipping point in terms of this feedback loop, as se
 This, along with the following analysis of eccentricity and obliquity, help show why the Earth has had many ice ages in the past \cite{Emiliani78}.
 
 Alternatively, $a$ can be fixed at $1$ au and the eccentricity can be varied from a perfect circle, $e = 0$, to a very eccentric ellipse, $e = 0.9$.
-Beyond $e > 0.9$ the iteration to find orbital distance converges much less quickly so becomes intractible.
-Additionally planets in extreme orbits with $e > 0.9$ would be extremely unstable and most likely would not be able to retain an atmosphere due to extreme temperatures.
+Beyond $e > 0.9$ the iteration to find orbital distance converges much less quickly so becomes intractable.
+Additionally, planets in extreme orbits with $e > 0.9$ would be extremely unstable and most likely would not be able to retain an atmosphere due to extreme temperatures.
 
 Varying the eccentricity is similar to varying the semi-major axis.
 There are two main zones of interest in Figure \ref{fig:planet_eccentricity} where the eccentricity of the planet is varied.
@@ -849,35 +849,35 @@ As $a$ decreases from $1$ au, the planet experiences higher insolation.
 This higher insolation gives rise to higher temperatures across the planet.
 This melts the poles which are otherwise frozen, and causes the already hot equator to become too hot to sustain life.
 
-Slighty increasing $a$ from $1$ au, the planet experiences a sharp drop in temperature.
+Slightly increasing $a$ from $1$ au, the planet experiences a sharp drop in temperature.
 This is due to IAB where a small temperature decrease allows the icecaps to grow, and further decrease insolation until the entire planet is covered in ice.
 
 In this case the HC habitability means that an Earth-like planet would not be habitable at the orbits of our closest neighbours, Venus and Mars.
 
 
 Similarly, Fig. \ref{fig:qualitative_eccentricity} shows the effects on habitability when the eccentricity of the planet is varied from $0$ to $0.9$.
-At low eccentricities, such as those the Earth has experienced in it's history, there is little variation both in area- and time-averaged habitabilites.
+At low eccentricities, such as those the Earth has experienced in its history, there is little variation both in area- and time-averaged habitabilities.
 
 Increasing eccentricity results in more seasonality.
 For example for $e=0.2$ the planet has an area averaged habitability which starts at 0.5, increases to 0.85, then decreases again at the turn of the year.
 This is because the planet's temperature is too hot in the first half of the year near the Sun, and is temperate all over the planet for the other half of the year as the planet is allowed to cool away from the Sun.
-However for eccentricities $e>0.3$ the hot spike as the planet is close to the Sun exceeds the maximum limit and latitude bands at the equator are considered fully uninhabitable.
-This results in a sizeable decrease in habitability for the other half of the year where the planet is cooling.
+However, for eccentricities $e>0.3$ the hot spike as the planet is close to the Sun exceeds the maximum limit and latitude bands at the equator are considered fully uninhabitable.
+This results in a sizeable decrease in habitability for the other half of the year when the planet is cooling.
 
 At extreme values of eccentricity, only the poles stay cool enough year round to harbour life.
 However, this represents a small fraction of the surface area of the planet.
-At eccentricites above $e > 0.8$ the poles become too hot for life at certain parts of the year, and eventually are totally uninhabitable.
+At eccentricities above $e > 0.8$ the poles become too hot for life at certain parts of the year, and eventually are totally uninhabitable.
 
 
-So far the semi-major axis and eccentricity have been varied independently to investigate effects on the time and area habitabilites.
+So far the semi-major axis and eccentricity have been varied independently to investigate effects on the time and area habitabilities.
 Varying both together can illuminate the habitability parameter space for orbits in exoplanet systems.
 This is shown in Fig. \ref{fig:qualitative_semimajoraxis_eccentricity} where the semi-major axis and eccentricity of a planet are varied together.
 The top graph is a heatmap for the equilibrium temperature of the planet, and the bottom graphs are the processing of the temperature data using the LWR habitability and HC habitability.
-The temperature heatmap highlights the drop off in temperature when IAB starts and the planet falls into a snowball.
+The temperature heatmap highlights the drop-off in temperature when IAB starts and the planet falls into a snowball.
 There exist some above freezing temperatures for high eccentricity and high semi-major axis, likely due to the planets unfreezing when close the Sun, and refreezing when further away.
 
-Both habitabilites show similar shapes but different widths which is reflective of HC being more restrictive in temperature range than LWR.
-The differnce in the habitabilites is shown at high eccentricity.
+Both habitabilities show similar shapes but different widths which is reflective of HC being more restrictive in temperature range than LWR.
+The difference in the habitabilities is shown at high eccentricity.
 The LWR habitability suggests that there is a wide range of semi-major axis values where liquid water exists on the surface of the planet year-round at high eccentricities.
 Alternatively, the HC habitability indicates that these high eccentricities have extremes of temperature which are not compatible with life, thus the actual habitability is likely lower.
 
@@ -905,7 +905,7 @@ Because of this symmetry only values between $0\degrees$ and $90\degrees$ need t
 Varying obliquity is shown in Fig. \ref{fig:qualitative_obliquity}.
 There are three main areas to consider:
 \begin{itemize}
-  \item Low obliquity ($0\degrees - 20\degrees$) where the planet directly presents its equator to the Sun for the majority of it's orbit.
+  \item Low obliquity ($0\degrees - 20\degrees$) where the planet directly presents its equator to the Sun for the majority of its orbit.
   \item Medium obliquity ($20\degrees - 50\degrees$) where the planet presents both the equator and poles to the Sun in roughly equal amounts.
   \item High obliquity ($50\degrees - 90\degrees$) where the planet cycles between presenting a pole to the Sun and presenting the equator (sideways) to the Sun.
 \end{itemize}
@@ -918,7 +918,7 @@ For low obliquities there are small habitability variations.
 These variations are due to the permanent icecaps growing and shrinking.
 As the cap grows more latitude bands are below freezing so area-averaged habitability decreases.
 As the cap shrinks the opposite occurs, and area-averaged habitability increases.
-At especially low obliquities the shrinking and growing is smaller than the width of a latitude band so the habitability is constant.
+At especially low obliquities the shrinking and growing is smaller than the width of a latitude band, so the habitability is constant.
 
 
 % Medium obliquity:
@@ -926,7 +926,7 @@ At especially low obliquities the shrinking and growing is smaller than the widt
 % heat is distributed very equally across the planet
 % entire planet is temperate, so is habitable year-round
 At medium obliquities the icecaps are insolated directly enough to be melted.
-At the lower end of this range the icecaps can reform for the portion of the year that they are facing away from the Sun, and then melt in the portion of the year when facing toward the Sun.
+The lower end of this range has the icecaps reform for the portion of the year that they are facing away from the Sun, and then melt in the portion of the year when facing toward the Sun.
 This results in some seasonal habitability.
 In the middle of this range the poles are melted for the entire year.
 This suggests an optimal range for obliquity where the insolation is spread out evenly across the planet, allowing for the entire surface to be temperate (and thus habitable) for all time.
@@ -987,7 +987,7 @@ A variable which influences susceptibility to IAB is the ocean fraction.
 
 The thermal timescale (eqn. \eqref{eq:ThermalTimescale}) means that ocean, which has a higher heat capacity than land, has a larger thermal inertia.
 Larger thermal inertia means the ocean on the planet helps to reduce temperature variations which the planet experiences.
-Thus it is expected that planets with low ocean fraction will be susceptible to IAB in shorter timescales or with less forcing than high ocean fraction planets.
+Thus, it is expected that planets with low ocean fraction will be susceptible to IAB in shorter timescales or with less forcing than high ocean fraction planets.
 The main orbital variables influencing this forcing are the eccentricity and obliquity.
 
 In an eccentric orbit the insolation decreases as the planet moves away from the Sun.
@@ -1014,10 +1014,10 @@ This insolation can be higher enough to allow the planet to melt and leave the s
 The combination of these two effects is that the planet is very hot half of the year and frozen for the other half of the year, with an average temperature which is habitable.
 
 The habitability of this sort of planet is difficult to quantify.
-Humans have survived iceages in the past by burning fuels and sheltering in caves, to give just two examples.
+Humans have survived ice ages in the past by burning fuels and sheltering in caves, to give just two examples.
 We are yet to see if human life will survive extreme heat.
 
-In a similar way when varying obliquity the minimum ocean fraction starts at 0 and increases until a maximum at roughly $\delta = 45\degrees$.
+Similarly, when varying obliquity the minimum ocean fraction starts at 0 and increases until a maximum at roughly $\delta = 45\degrees$.
 For $0\degrees < \delta < 10\degrees$ the planet does not fall into a snowball state as the permanent shadow region is not large enough to cause runaway IAB.
 
 For Earth-like obliquities (between $22\degrees$ and $25\degrees$) the planet is susceptible to a snowball state only if the planet has ocean fraction less than roughly $15\%$.
@@ -1088,15 +1088,15 @@ The eccentric anomaly, $E$, is related to the true anomaly, $\nu$, by,
 \end{equation}
 where $e$ is the eccentricity of the orbit.
 By finding the x-y coordinates of the gas giant and moon, when the moon is eclipsed can be found.
-Due to the length of the eclipses a timestep of an hour must be used to evolve this eclipsing model.
-This would be impractical to run along side the 1 day timestep of the EBCM especially as the iteration process for finding the eccentric anomaly is time consuming.
-Varying the 4 orbital parameters in the eclipsing model gives insight into the eclipsing however.
+Due to the length of the eclipses a time step of an hour must be used to evolve this eclipsing model.
+This would be impractical to run alongside the 1-day time step of the EBCM especially as the iteration process for finding the eccentric anomaly is time-consuming.
+Varying the 4 orbital parameters in the eclipsing model gives insight into the variables affecting the eclipsing.
 % a_gas : 0.05 -> 0.06
 % e_gas : 0.05 -> 0.052 , very random
 % a_moon : 0.05 -> 0.4 , 
 % e_moon : 0.0507 -> 0.05 , decreases with increases eccentricity
 Varying the eccentricity of the gas giant between $0$ and $0.9$ has a random effect on the eclipsing between the values $5\%$ and $5.2\%$, and increasing eccentricity of the moon from $e=0$ to $0.1$ decreases the eclipsing from $5.07\%$ to $5.02\%$.
-Varying the gas giant semi-major axis between $0.5$ au and $10$ au caused variation in the eclipsing fraction between $5\%$ and $6\%$. 
+Likewise, varying the gas giant semi-major axis between $0.5$ au and $10$ au caused variation in the eclipsing fraction between $5\%$ and $6\%$. 
 The most important influence to the eclipsing was moon semi-major axis.
 Varying between $0.5$ mau and $10.5$ mau caused a decrease in eclipsing from $40\%$ to $2\%$ as seen in Fig. \ref{fig:quantitative_eclipsing_moon_semimajor_axis}.
 
@@ -1303,7 +1303,7 @@ The dip in temperature at low eccentricity due to IAB is missing from the moon m
 This is because temperatures are generally higher so the IAB cannot start.
 In the obliquity case the characteristic `S' shape of the temperature with increasing obliquity is reduced in two ways.
 First is that the inflection point of the curve moves to higher obliquities, and second that the range in temperature decreases from the planetary model to the moon models.
-Both these changes indicate that the moon model depends less on the obliquity of the planet to inform it's climate, mostly due to the tidal heating.
+Both these changes indicate that the moon model depends less on the obliquity of the planet to inform its climate, mostly due to the tidal heating.
 
 \subsection{Exomoon Semi-major Axis and Eccentricity Investigations} \label{ssec:Exomoon_specific_results}
 %   E: Exomoon specific results;
@@ -1327,23 +1327,51 @@ Variable moon semi-major axis has a similar shape to the variable gas semi-major
 
 At high semi-major axis the tidal heating is less than the convective cooling, so `turns off'.
 It might be expected that the moon at the same distance as the Earth from the Sun would still be warm enough to be habitable.
-The high semimajoraxes and low eccentricities show that this is not the case as they are in snowball states.
+The high semi-major axes and low eccentricities show that this is not the case as they are in snowball states.
 This is because to the reduction of insolation due to eclipsing is larger than the additional light reflected and emitted from the gas giant.
 As shown in Fig. \ref{fig:planet_semimajoraxis} even a small decrease in insolation, such as the decrease due to eclipsing, can lead to a snowball state.
 
 \section{Discussion} \label{sec:Discussion}
-Research motivated by climate change suggests that ice melting can release CO$_2$ which is not accounted for in this model.
-This would introduce a ice-temperature feedback where melting ice releases CO$_2$, increasing greenhouse gas effects and feeding back until the temperature is very high.
-This would reduce the habitability at higher temperatures particularly where the icecaps melt due to a higher CO$_2$ fraction in the atmosphere, thus larger greenhouse effect.
-However this effect is very particular for the Earth due to it's CO$_2$ rich past.
-It would not be correct to assume that all exoplanets have a CO$_2$ rich past but could be considered in further research.
+In modelling the habitability of these exoplanets and exomoons a number of assumptions were made.
 
-Ice melting and rising temperatures would also cause the oceans to expand, thus changing the mixing depth (thus heat capacity) of the oceans.
+This model assumes that there is a thick atmosphere capable of transporting heat across the surface of the planet (i.e. between and within latitude bands).
+This may not be true for all exoplanets, but a reasonable expectation of a habitable exoplanet would be a breathable atmosphere, so this assumption is valid.
+Something not considered with the atmospheric dynamics is the effect of high temperature on rate of atmosphere and water loss.
+When looking at the extreme temperature variations caused by a highly eccentric orbit the planet may reach temperatures in excess of $200\degreesC$ when close to the star and reach temperatures of $30\degreesC$ when far from the star.
+It would be expected that the high temperature would boil away much of the atmosphere and oceans, however this model does not take this into consideration.
+This is somewhat handled by the HC habitability function not allowing for extreme temperatures, but can lead to misleading average temperatures where the planet looks to be within a habitable temperature when the variation in temperature is very large.
+Future work on the model could include adding a hydrological cycle and carbon-silicate cycle as well as atmospheric loss due to temperature in order to investigate more closely the evolution of the atmosphere and how that impact the habitability of the model.
 
 The approximation of a uniform planet could also be probed further.
 Exoplanets may have land-ocean distributions similar to Earth where the northern hemisphere has more land than the southern hemisphere.
 The planet could be probed with different fractions of land and ocean.
-For example: an ocean centered on one of the poles of the planet and increasing in size from a desert world with small a polar ocean to ocean world with a small polar continent.
+For example: an ocean centred on one of the poles of the planet and increasing in size from a desert world with small a polar ocean to ocean world with a small polar continent.
+
+Further, the ocean for the planet is assumed to have the same mixing depth at all points, and the planet is assumed to have uniform altitude across it4560-s entire surface.
+These assumptions do not impact the model too much when considering an exoplanet whose surface features are not known, however in the future (or when modelling the Earth for example) these values must be examined for carefully.
+
+Research motivated by climate change suggests that ice melting can release CO$_2$ which is not accounted for in this model.
+This would introduce an ice-temperature feedback where melting ice releases CO$_2$, increasing greenhouse gas effects and feeding back until the temperature is very high.
+This would reduce the habitability at higher temperatures particularly where the icecaps melt due to a higher CO$_2$ fraction in the atmosphere, thus larger greenhouse effect.
+However, this effect is very particular for the Earth due to its CO$_2$ rich past.
+It would not be correct to assume that all exoplanets have a CO$_2$ rich past but could be considered in further research.
+
+In order to relax the assumption of a diurnally averaged insolation the longitude dimension must be added to the model.
+This would allow for a closer examination of heat flow across the planet, as well as potentially allow for analysis of tidally locked planets or planets with very slow rotation.
+Analysis of tidally locked planets would be of particular relevance due to many exoplanets detected around cooler red stars being tidally locked.
+
+The insolation in the model is dependent on semi-major axis, obliquity, and eccentricity. 
+Further work could include varying the insolation to follow the Sun's sunspot cycle to investigate how this could affect the climate.
+For example, a solar minimum may be enough in some cases to cause the planet to fall into a snowball state which is not reflected in the current model.
+
+The tidal heating for the moon model varies slightly with surface temperature but is roughly constant in time.
+This assumption is valid for low eccentricities due to the time taken for heat to travel from core to surface.
+At much higher lunar eccentricities ($e_\text{moon} > 0.1$) the time for heat to be injected to the core (and amount that is injected) means that this assumption no longer holds.
+Modelling this time dependent tidal heating may allow for more in-depth modelling of exomoon systems.
+A counter to this is that high eccentricity moons very quickly circularise their orbits due to orbital energy being transferred to the planet interior via tidal heating.
+This means that the only exomoons with stable eccentric orbits which allow for tidal heating are those which have low eccentricities and have orbital resonances to maintain that eccentricity
+Thus, the powerful tidal heating at high eccentricity is important for early formation but not for later evolution.
+
 % Problems arising during analysis / method
 % Sources of uncertainty in the method
 % Approximations made and their validity
@@ -1356,8 +1384,15 @@ For example: an ocean centered on one of the poles of the planet and increasing 
 % > What the results are
 % > Main problems with results
 % > Main future goals of the research
+The habitability of a latitude band model of Earth-like exoplanets and exomoons has been investigated when varying orbital and planetary parameters.
 
+A relationship derived from average insolation to a planet was found to describe the scaling of average temperature with semi-major axis and eccentricity which can be used to estimate habitability.
+However, it was also shown that eccentricity means the variation in temperature can be too large to sustain life.
+Further, it was investigated how these relationships are influenced when switching to a moon model with tidal heating, eclipsing, and light from the parent body.
 
+The susceptibility of the model to runaway ice-albedo-feedback was also investigated and found to occur for reduced insolation due to sightly larger semi-major axis, as well as variable insolation due to eccentricity and obliquity when at low ocean fraction.
+Obliquity was found to require a higher minimum ocean fraction than eccentricity (40\% to 20\%) to prevent runaway ice-albedo-feedback, indicating that obliquity has the larger role in determining if a planet is in a `snowball state'.
+It was found that Earth's current orbital and planetary parameters mean the planet experiences some ice-albedo-feedback which seen primarily in the frozen poles but also in Earth's history of ice ages.
 % \begin{acknowledgments}
 %     (OPTIONAL) The author would like to thank...
 % \end{acknowledgments}
