@@ -27,5 +27,5 @@
 \contentsline {section}{\numberline {}References}{29}{section*.42}%
 \appendix 
 \contentsline {section}{\numberline {A}Numerical Stability of the 1DEBCM}{31}{section*.43}%
-\contentsline {section}{\numberline {B}Tidal Heating Equations and Method}{31}{section*.44}%
-\contentsline {section}{\numberline {}Scientific Summary for a General Audience}{32}{section*.45}%
+\contentsline {section}{\numberline {B}Tidal Heating Equations and Method}{33}{section*.45}%
+\contentsline {section}{\numberline {}Scientific Summary for a General Audience}{34}{section*.46}%

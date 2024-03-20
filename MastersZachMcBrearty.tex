@@ -1252,7 +1252,7 @@ where $\beta = \rho g R_\text{moon}$ has been described as gravitational stiffne
 The temperature dependent forms of the viscosity, $\eta$, and shear modulus, $\mu$, are given in Henning et al \cite{Henning2009} and in appx. \ref{appx:TidalHeatingEquationsMethod}. 
 The orbital frequency, $\omega$, and other parameters take (or can be derived from) the default values in Tab. \ref{tab:default_params_moon}.
 
-The tidal heating can sharply cut off for certain orbital parameters when the tidal heating is less than convective cooling at all mantle temperatures so the core temperature at equilibrium is too low to heat the surface of the planet effectively.
+The tidal heating can sharply cut off for certain orbital parameters when the tidal heating is less than convective cooling at all mantle temperatures, so the core temperature at equilibrium is too low to heat the surface of the planet effectively.
 
 
 \subsection{Impact on Previous Investigations} \label{ssec:Impact_previous_results}
@@ -1423,7 +1423,7 @@ It was found that Earth's current orbital and planetary parameters mean the plan
 %     (OPTIONAL) The author would like to thank...
 % \end{acknowledgments}
 
-\bibliographystyle{plainurl}
+\bibliographystyle{custom}
 \bibliography{references}
 
 \clearpage
@@ -1434,6 +1434,92 @@ It was found that Earth's current orbital and planetary parameters mean the plan
 % Maths analysis
 % Varying spacedim to check analysis
 % Varying timestep to check analysis
+The general stability of the model can be understood by following the recipe provided in "Numerical Modelling in a nutshell" \cite{NumericalModelling}.
+The model is however quite complex and does not easily yield to the methods provided, so approximations such as requiring an equilibrium state must be used which mean we achieve lower bounds for the instability.
+
+Assume the PDE can be solved with a plane wave solution of the form
+\begin{equation} \label{eq:trial_plane_wave}
+    T^m_n = \xi^n \exp{i k m \Delta\lambda}
+\end{equation}
+where $\xi$ is a (complex) scaling factor which determines the growth characteristics of the plane wave, $n$ and $m$ are the time and space indices respectively, and $k$ is the spatial frequency of the plane wave.
+
+Taking this plane wave solution and substituting it into \eqref{eq:1DEBCM} after being discretised, dividing by the plane wave and using the definition of $\sin(x)$ in terms of exponentials we arrive at,
+
+\begin{equation}
+    \xi(k) = 1 + \Delta t \left\{\frac{f^m_n}{t^m_n} + i g^m_n \tan\lambda_m \frac{\sin(k\Delta\lambda)}{\Delta\lambda} - g^m_n\frac{\sin^2(k\Delta\lambda)}{(\Delta\lambda)^2}\right\}
+\end{equation}
+where $f^m_n = (S(1-A) - I) / C$ and $g^m_n = D / C$.
+
+In an equilibrium system the $f^m_n$ term equals $0$ as the input energy and output energy of the system are equal.
+Of course an equilibrium state will not be reached if the integration is unstable, so this analysis will give a lower bound to where the instabilities of the model should occur.
+
+Instability occurs when the scaling factor has magnitude greater than $1$, $| \xi |^2 > 1$, leading to an instability criterion of
+\begin{equation}
+    g \Delta t \left( \tan^2(\lambda_m) + \frac{\sin^2(k\Delta\lambda)}{(\Delta\lambda)^2}\right) > 2,
+\end{equation}
+suggesting that heat capacity, diffusivity, time step, spatial step, and position on the PDE all contribute to instability.
+
+Considering the equator of the model at $\lambda_m=0$. The $\tan\lambda_m$ term equals $0$, so the instability simplifies to
+\begin{equation}
+    g \Delta t \frac{\sin^2(k\Delta \lambda)}{\Delta\lambda} > 2,
+\end{equation}
+it is known that $\sin^2(x) \in [0, 1]$ so if $g \Delta t / (\Delta\lambda)^2 < 2$ then the model will be stable at the equator for all frequencies.
+
+Solving for $\Delta \lambda$ in this case:
+\begin{equation}
+    \Delta\lambda > \sqrt{\frac{\Delta t g}{2}}
+\end{equation}
+
+We may then use this equation to find the lower bound for the system will be unstable.
+We can set the time step to $\Delta t = 1$ day and $g = D / C$ with $D = 0.56$ Jm$^{-2}$ s$^{-1}$ K$^{-1}$.
+The heat capacity $C$ will however be variable, depending on land-ocean fraction and ocean-ice fraction.
+
+For the land-only system the heat capacity is at it's lowest at $C=5.25\times10^6 \text{J m}^{-2} \text{K}^{-1}$.
+This gives a value for $g$ of $1.07\times10^{-7} \text{s}^{-1}$, thus
+\begin{equation*}
+    \Delta\lambda \ge \sqrt{\frac{24\times60\times60\times1.07\times10^{-7}}{2}} = 0.068 ^{\text{rad}} = 3.9 ^{\circ}
+\end{equation*}
+is always stable.
+The opposite end of the spectrum is the ocean-only system with no ice, where the heat capacity has value $C = 40 C_{\text{land}}$, reducing the tolerance to $\Delta\lambda \ge 0.6 ^{\circ}$.
+The value for the $f_{\text{ocean}} = 0.7$ ocean to land model is roughly $4 \times 0.3 + 0.6 \times 0.7 = 1.62^{\circ}$.
+The instability in the actual model can be found by varying the spatial dimension (thus $\Delta \lambda$), as seen in Figure \ref{fig:conv_spacedim}.
+The instability occurs around $\Delta\lambda \approx 1.23^{\circ}$ which is reasonably close to the calculated value.
+
+\begin{figure}[h]
+    % \includegraphics[width=\linewidth]{convergence_varying_spacedim_140to149.png}
+    \caption{The convergence of a series of Earth-like models with varying spatial dimension (x-axis). Top: The time in years for the system to converge to a steady temperature, Bottom: the temperature converged to.
+        The values of time and temperature of $-1$ and $0$ respectively are when the model breaks and diverges to infinity.
+        The model breaks around 1.23$^{\circ}$ separation (146 spatial nodes) in rough agreement with the calculated value of 1.62$^{\circ}$. }
+    \label{fig:conv_spacedim}
+\end{figure}
+
+The discretisation of the model at the poles is slightly different (see eqns. \eqref{eq:forward_backward} and \eqref{eq:backward_forward}).
+Looking only at the South Pole (though the North Pole is much the same) and plugging in \eqref{eq:trial_plane_wave} into \eqref{eq:forward_backward},
+\begin{equation}
+    \frac{\xi^{n+1} - \xi^{n}}{\Delta t} = g\frac{\xi^n \exp(i k \Delta\lambda) - \xi^n}{(\Delta\lambda)^2}
+\end{equation}
+
+Dividing by \eqref{eq:trial_plane_wave} and solving for $\xi$ we find,
+\begin{equation}
+    \xi = 1 + \frac{g\Delta t}{(\Delta \lambda)^2}\left(\exp(i k \Delta \lambda) - 1\right)
+\end{equation}
+
+Leading to an absolute square magnitude given by
+\begin{equation}
+    |\xi|^2 = 1 + 2 (1-\cos(k\Delta\lambda)) \frac{g \Delta t}{\Delta \lambda ^2}\left(\frac{g\Delta t}{\Delta \lambda ^2} - 1\right)
+\end{equation}
+
+Which means the poles of the model are stable when $|\xi|^2 \le 1$:
+\begin{align*}
+    0              & \ge 2(1-\cos(k\Delta\lambda)) \frac{g \Delta t}{\Delta \lambda ^2}\left(\frac{g\Delta t }{\Delta \lambda ^2} - 1\right) \\
+    0              & \ge \frac{g \Delta t}{\Delta \lambda ^2} - 1                                                                            \\
+    1              & \ge \frac{g \Delta t}{\Delta \lambda ^2}                                                                                \\
+    \Delta \lambda & \ge \sqrt{g \Delta t}
+\end{align*}
+using at first that $\cos(x) \in [-1, 1]$ and that $g \Delta t / \Delta\lambda^2 > 0$.
+This is a stricter stability criteria than for the equator by a factor of $\sqrt{2}$, which is why the poles are usually the issue causing the model to diverge to infinity when the equator is fine.
+It is also true that if $\cos(k\Delta\lambda) = 1$ then the model is always stable at the poles.
+However, this corresponds to a trivial constant state $k = 0$ or a non-computational separation of $0$ so is not of interest.
 
 \section{Tidal Heating Equations and Method} \label{appx:TidalHeatingEquationsMethod}
 % What the equations are
